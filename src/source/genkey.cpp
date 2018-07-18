@@ -16,7 +16,7 @@ char* zToString(NTL::ZZ_p &z) {
 
 void Key::genkey(NTL::ZZ p){
     create_secret_key(sk, p);
-    create_public_key(sk, pk, p);
+    create_public_key(sk, p);
 }
 
 void Key::create_secret_key(SecretKey *key, NTL::ZZ p) {
@@ -37,11 +37,11 @@ SecretKey* Key::get_secret_key(){
     return sk;
 }
 
-void Key::create_public_key(SecretKey* sk, PublicKey *key, NTL::ZZ p) {
+void Key::create_public_key(SecretKey* sk, NTL::ZZ p) {
     try{
-        key = new PublicKey(sk, p);
+        PublicKey *key = new PublicKey(sk, p);
         key->setup_bilinear(sk, key->g1, key->g2);
-
+        pk = key;
         }
     catch (std::exception& e) {
         std::cout<<e.what() << '\n';
@@ -75,7 +75,7 @@ void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
     ZZ_p temp1;
     ZZ_p temp2;
     ZZ_p s = sk->sk;
-    const int q = 3;
+    const int q = 1000;
     for(int i = 0; i < q+1; i++){
         power(temp1, s, i);
         const mie::Vuint temp(zToString(temp1));
@@ -88,11 +88,11 @@ void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
         pubs_g2.push_back(g2 * temp);
     }
 
-    for(int i=0; i < pubs_g1.size(); i++){
-        PUT(pubs_g1[i]);
-    }
-
-    for(int i=0; i < pubs_g2.size(); i++){
-        PUT(pubs_g2[i]);
-    }
+//    for(int i=0; i < pubs_g1.size(); i++){
+//        PUT(pubs_g1[i]);
+//    }
+//
+//    for(int i=0; i < pubs_g2.size(); i++){
+//        PUT(pubs_g2[i]);
+//    }
 }

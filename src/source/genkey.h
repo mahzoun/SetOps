@@ -13,6 +13,7 @@
 #include "bn.h"
 #include "test_point.hpp"
 
+char* zToString(NTL::ZZ_p&);
 
 class SecretKey{
 public:
@@ -41,7 +42,7 @@ public:
 private:
     PublicKey *pk;
     SecretKey *sk;
-    void create_public_key(SecretKey*, PublicKey*, NTL::ZZ);
+    void create_public_key(SecretKey*, NTL::ZZ);
     void create_secret_key(SecretKey*, NTL::ZZ);
 
 };
