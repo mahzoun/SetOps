@@ -88,11 +88,4 @@ void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
         pubs_g2.push_back(g2 * temp);
     }
 
-//    for(int i=0; i < pubs_g1.size(); i++){
-//        PUT(pubs_g1[i]);
-//    }
-//
-//    for(int i=0; i < pubs_g2.size(); i++){
-//        PUT(pubs_g2[i]);
-//    }
 }
