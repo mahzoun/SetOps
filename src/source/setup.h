@@ -14,6 +14,7 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "genkey.h"
+#include "utils.h"
 
 struct ZZ_p_compare {
 public:
@@ -23,7 +24,6 @@ public:
 class DataStructure {
 public:
     static const int m = 2;
-//    std::set<NTL::ZZ_p, ZZ_p_compare> D[m];
     std::set<int> D[m];
     bn::Ec1 AuthD[m];
     void setup(PublicKey*, SecretKey*);

@@ -15,7 +15,6 @@ VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set
 //    this->m = size;
     for(int i = 0; i < m; i++)
         this->AuthD[i] = AuthD[i];
-
 }
 
 bool VerifyIntersection::verify_intersection() {

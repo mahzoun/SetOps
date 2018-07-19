@@ -14,6 +14,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/xbyak
         ${CMAKE_SOURCE_DIR}/ate-pairing/include
         ${CMAKE_SOURCE_DIR}/ate-pairing/test
+        ${CMAKE_SOURCE_DIR}/utils/
 )
 
 link_directories(
@@ -23,6 +24,7 @@ link_directories(
         ${CMAKE_SOURCE_DIR}/xbyak
         ${CMAKE_SOURCE_DIR}/ate-pairing/include
         ${CMAKE_SOURCE_DIR}/ate-pairing/test
+        ${CMAKE_SOURCE_DIR}/utils/
 )
 
 add_executable(

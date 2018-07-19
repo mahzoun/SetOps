@@ -16,10 +16,9 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "../source/setup.h"
-
+#include "utils.h"
 
 class query {
-
 };
 
 class Intersection{
@@ -29,7 +28,7 @@ public:
     DataStructure *dataStructure;
     std::vector<int> indices;
     bn::Ec2 *W1, *W2;
-    bn::Ec1 *Q1, *Q2, *digest_I, *acc1, *acc2;
+    bn::Ec1 *Q1, *Q2, *digest_I;
     NTL::vec_ZZ_p c;
     NTL::ZZ_pX polyA,polyB,polyS,polyT,polyD;
     Intersection();

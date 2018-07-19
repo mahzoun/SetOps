@@ -4,23 +4,21 @@
 
 #include "setup.h"
 
-bn::Ec1 compute_digest_pub1(std::set<int> , const bn::Ec1, PublicKey *);
-
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
+    Utils utils;
     NTL::ZZ_p s = sk->sk;
     bn::Ec1 g1 = pk->g1;
     bn::Ec2 g2 = pk->g2;
-    AuthD[0] = compute_digest_pub1(D[0], pk->g1, pk);
-    AuthD[1] = compute_digest_pub1(D[1], pk->g1, pk);
+    AuthD[0] = utils.compute_digest_pub(D[0], pk->g1, pk);
+    AuthD[1] = utils.compute_digest_pub(D[1], pk->g1, pk);
 }
 
 void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
+    Utils utils;
     //TODO check index :)
-    //insert element in set
-//    std::cout<<index << "\t" << element << "\n";
     D[index].insert(element);
     //TODO this should be just an update not calculation from scratch
-    AuthD[index] = compute_digest_pub1(D[index], pk->g1, pk);
+    AuthD[index] = utils.compute_digest_pub(D[index], pk->g1, pk);
     std::cout<<"AuthD[" << index << "]:\t" << AuthD[index] <<"\n";
 }
 
