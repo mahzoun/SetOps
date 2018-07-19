@@ -33,6 +33,6 @@ add_executable(
         src/source/setup.cpp
         src/source/setup.h
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
-        src/utils/utils.cpp src/utils/utils.h)
+        src/utils/utils.cpp src/utils/utils.h src/server/query.cpp src/server/query.h)
 
 target_link_libraries(bilinear ntl gmp gmpxx m zm crypto)

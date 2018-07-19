@@ -14,5 +14,6 @@ class utils {
 };
 
 //char* zToString(NTL::ZZ_p);
+//TODO: add function to calcuate accumulation value for a given set
 
 #endif //BILINEAR_UTILS_H

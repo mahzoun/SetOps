@@ -20,10 +20,11 @@ public:
 class DataStructure {
 public:
     static const int m = 2;
-    std::set<NTL::ZZ_p, ZZ_p_compare> D[m];
+//    std::set<NTL::ZZ_p, ZZ_p_compare> D[m];
+    std::set<int> D[m];
     bn::Ec1 AuthD[m];
     void setup(PublicKey*, SecretKey*);
-    void insert(int index, NTL::ZZ_p, PublicKey*, SecretKey*);
+    void insert(int, int, PublicKey*, SecretKey*);
 };
 
 

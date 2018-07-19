@@ -25,7 +25,7 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     }
 }
 
-void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKey *sk){
+void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
     //TODO check index :)
     //insert element in set
     std::cout<<"Insert\t"<< element << "\t into the " << index << "(th) set\n";
