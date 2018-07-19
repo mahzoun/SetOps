@@ -7,8 +7,6 @@
 using namespace bn;
 using namespace NTL;
 
-bn::Ec1 compute_digest_pub(std::set<int>, const bn::Ec1, PublicKey*);
-
 Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataStructure* dataStructure){
     this->indices = indices;
     this->pk = pk;
@@ -108,26 +106,3 @@ void Intersection::completeness_witness(){
     PUT(*Q2);
 }
 
-//TODO move this to utils
-//bn::Ec1 compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, PublicKey *pk){
-//    std::vector<double> array(intersection.begin(), intersection.end());
-//    Ec1 digest = g1*0;
-//    if(array.size()==0)
-//        return digest;
-//
-//    ZZ_pX f,poly;
-//    poly=ZZ_pX(INIT_MONO,array.size());
-//    vec_ZZ_p c;
-//    c.SetLength(array.size());
-//    for(int i=0;i<array.size();i++)
-//        c[i] = conv<ZZ_p>(-array[i]);
-//
-//    BuildFromRoots(poly,c);
-//
-//
-//    for(int i=0;i<array.size()+1;i++){
-//        const mie::Vuint temp(zToString(poly[i]));
-//        digest = digest + pk->pubs_g1[i] * temp;
-//    }
-//    return digest;
-//}

@@ -7,12 +7,14 @@
 
 int main() {
 
+    //generate keys
     Key *k = new Key;
     NTL::ZZ p=NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
     NTL::ZZ_p::init(p);
     k->genkey(p);
     PUT(k->get_secret_key()->sk);
 
+    //generate sets
     DataStructure *dataStructure = new DataStructure;
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i < 5; i++) {
@@ -26,6 +28,7 @@ int main() {
         std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
     }
 
+    //query intersection
     std::vector<int> v;
     v.push_back(0);
     v.push_back(1);
@@ -34,6 +37,7 @@ int main() {
     intersection->subset_witness();
     intersection->completeness_witness();
 
+    //verify intersection
     VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W1, intersection->W2, intersection->Q1, intersection->Q2, dataStructure->AuthD, dataStructure->m);
     verifyIntersection->verify_intersection();
     std::cout<<"Intersection result is: \t" << 1;

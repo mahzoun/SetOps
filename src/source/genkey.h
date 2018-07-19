@@ -22,7 +22,6 @@ public:
 
 class PublicKey{
 public:
-    NTL::ZZ order;
     std::vector<bn::Ec1> pubs_g1;
     std::vector<bn::Ec2> pubs_g2;
     bn::Ec1 g1;

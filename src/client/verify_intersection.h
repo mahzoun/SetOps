@@ -18,6 +18,7 @@ class VerifyIntersection {
 public:
     const static int m = 2;
     PublicKey *pk;
+    //TODO calculate digest_I here :)
     bn::Ec1 digest_I;
     std::set<int> I;
     bn::Ec2 *W1, *W2;
