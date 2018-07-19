@@ -7,6 +7,8 @@
 using namespace bn;
 using namespace NTL;
 
+bn::Ec1 compute_digest_pub(std::set<int>, const bn::Ec1, PublicKey*);
+
 Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataStructure* dataStructure){
     this->indices = indices;
     this->pk = pk;
@@ -15,6 +17,9 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataSt
     this->W2 = new bn::Ec2;
     this->Q1 = new bn::Ec1;
     this->Q2 = new bn::Ec1;
+    this->digest_I = new bn::Ec1;
+    this->acc1 = new bn::Ec1;
+    this->acc2 = new bn::Ec1;
     polyA=ZZ_pX(INIT_MONO,0);
     polyB=ZZ_pX(INIT_MONO,0);
     polyS=ZZ_pX(INIT_MONO,0);
@@ -22,6 +27,7 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataSt
     polyD=ZZ_pX(INIT_MONO,0);
 
 }
+
 void Intersection::intersect(){
     std::set<int> intersect;
     std::set<int> s1 = dataStructure->D[0], s2 = dataStructure->D[1];
@@ -31,7 +37,14 @@ void Intersection::intersect(){
     for(auto x:I)
         std::cout<< x << "\t";
     std::cout<< "\n";
+    *digest_I = compute_digest_pub(I, pk->g1, pk);
+    *acc1 = compute_digest_pub(dataStructure->D[0], pk->g1, pk);
+    *acc2 = compute_digest_pub(dataStructure->D[1], pk->g1, pk);
+    std::cout<< "Digest of the intersection set:\n";
+    std::cout<< "Digest of the intersection set:\n";
+    PUT(*digest_I);
 }
+
 void Intersection::subset_witness(){
     std::vector<int> w1, w2;
     std::set<int> s1 = dataStructure->D[0], s2 = dataStructure->D[1];
@@ -70,8 +83,9 @@ void Intersection::subset_witness(){
     std::cout<<"Generated subset witness: \n";
     PUT(*W1);
     PUT(*W2);
-}
 
+
+}
 
 void Intersection::completeness_witness(){
     Ec1 g1 = pk->g1;
@@ -97,4 +111,28 @@ void Intersection::completeness_witness(){
     std::cout<<"Generated completeness witness: \n";
     PUT(*Q1);
     PUT(*Q2);
+}
+
+//TODO move this to utils
+bn::Ec1 compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, PublicKey *pk){
+    std::vector<double> array(intersection.begin(), intersection.end());
+    Ec1 digest = g1*0;
+    if(array.size()==0)
+        return digest;
+
+    ZZ_pX f,poly;
+    poly=ZZ_pX(INIT_MONO,array.size());
+    vec_ZZ_p c;
+    c.SetLength(array.size());
+    for(int i=0;i<array.size();i++)
+        c[i] = conv<ZZ_p>(-array[i]);
+
+    BuildFromRoots(poly,c);
+
+
+    for(int i=0;i<array.size()+1;i++){
+        const mie::Vuint temp(zToString(poly[i]));
+        digest = digest + pk->pubs_g1[i] * temp;
+    }
+    return digest;
 }

@@ -7,6 +7,9 @@
 
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
+#include <NTL/ZZVec.h>
+#include <NTL/ZZ_pX.h>
+#include <NTL/vector.h>
 #include <set>
 #include "bn.h"
 #include "test_point.hpp"
