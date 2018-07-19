@@ -29,5 +29,6 @@ int main() {
     Intersection *intersection = new Intersection(v, k->get_public_key(), dataStructure);
     intersection->intersect();
     intersection->subset_witness();
+    intersection->completeness_witness();
     return 0;
 }
