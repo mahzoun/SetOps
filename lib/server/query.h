@@ -18,7 +18,10 @@
 #include "source/setup.h"
 #include "utils.h"
 
-class query {
+class Node {
+public:
+    Node *parent, *left_child, *right_child;
+    bn::Ec1 *digest;
 };
 
 class Intersection{

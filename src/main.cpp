@@ -13,33 +13,33 @@ void test(int size, Key *k){
     high_resolution_clock::time_point t2;
 
     //generate sets
-    DataStructure *dataStructure = new DataStructure;
+    DataStructure *dataStructure = new DataStructure(4);
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
         int j = rand();
-        dataStructure->insert(0, j, k->get_public_key(), k->get_secret_key());
-        dataStructure->insert(1, j, k->get_public_key(), k->get_secret_key());
-    }
-    for(int i = 1; i <= 9*size/10; i++) {
-        int j = rand();
-        dataStructure->insert(0, j, k->get_public_key(), k->get_secret_key());
-    }
-    for(int i = 1; i < size; i++) {
-        int j = rand();
-        dataStructure->insert(1, j, k->get_public_key(), k->get_secret_key());
+        for(int set_index = 0; set_index < dataStructure->m; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
     }
 
-    std::cout<<"Size of first set:\t" << dataStructure->D[0].size()<<"\n";
-    std::cout<<"Size of second set:\t" << dataStructure->D[1].size()<<"\n";
-//    for(int i = 0; i < dataStructure->m; i++){
-//        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
-//    }
+    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+        for(int i = 1; i <= 9*size/10; i++) {
+            int j = rand();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+
+    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
+    for(int i = 0; i < dataStructure->m; i++){
+        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
+    }
 
     t1 = high_resolution_clock::now();
     //query intersection
     std::vector<int> v;
-    v.push_back(0);
-    v.push_back(1);
+    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+        v.push_back(set_index);
+
     Intersection *intersection = new Intersection(v, k->get_public_key(), dataStructure);
     intersection->intersect();
     intersection->subset_witness();
@@ -57,7 +57,7 @@ void test(int size, Key *k){
     t2 = high_resolution_clock::now();
     duration = duration_cast<microseconds>( t2 - t1 ).count();
     std::cout << "verify time:\t" << duration << "\n";
-    std::cout<<"Intersection result is: \t" << b;
+    std::cout<<"Intersection result is: \t" << b << "\n";
 
 }
 
@@ -73,7 +73,7 @@ int main() {
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << "Key generation time:\t" << duration << "\n";
-
+    
     for(int test_size = 10; test_size <= 10 ; test_size *= 10)
         test(test_size, k);
 

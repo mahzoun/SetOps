@@ -16,6 +16,8 @@
 #include "source/genkey.h"
 #include "utils.h"
 
+#define SETS_MAX_NO 1000
+
 struct ZZ_p_compare {
 public:
     bool operator()(const NTL::ZZ_p&, const NTL::ZZ_p&) const;
@@ -23,9 +25,11 @@ public:
 
 class DataStructure {
 public:
-    static const int m = 2;
-    std::set<int> D[m];
-    bn::Ec1 AuthD[m];
+    static int m;
+    std::set<int> D[SETS_MAX_NO];
+    bn::Ec1 AuthD[SETS_MAX_NO];
+    DataStructure();
+    DataStructure(int);
     void setup(PublicKey*, SecretKey*);
     void insert(int, int, PublicKey*, SecretKey*);
 };

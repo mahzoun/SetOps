@@ -30,10 +30,10 @@ void Intersection::intersect(){
     std::set<int> s1 = dataStructure->D[0], s2 = dataStructure->D[1];
     set_intersection(s1.begin(),s1.end(),s2.begin(),s2.end(), std::inserter(intersect, intersect.begin()));
     this->I = intersect;
-    std::cout<<"Intersection is: \n";
-    for(auto x:I)
-        std::cout<< x << "\t";
-    std::cout<< "\n";
+//    std::cout<<"Intersection is: \n";
+//    for(auto x:I)
+//        std::cout<< x << "\t";
+//    std::cout<< "\n";
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
 //    PUT(*digest_I);
 }
@@ -47,24 +47,25 @@ void Intersection::subset_witness(){
     Ec2 g2 = pk->g2;
     Ec2 *W1 = this->W1;
     Ec2 *W2 = this->W2;
-
     c.SetLength(w1.size());
     for(int i=0;i<w1.size();i++)
         c[i] = -w1[i];
     BuildFromRoots(polyA,c);
-
     c.SetLength(w2.size());
     for(int i=0;i<w2.size();i++)
         c[i] = -w2[i];
     BuildFromRoots(polyB,c);
 
+    std::cout << "fuck0\n";
     Ec2 digest = g2*0;
-    for(int i=0;i<polyA.rep.length();i++){
-        const mie::Vuint temp(zToString(polyA[i]));
+    int size = polyA.rep.length();
+    for(int i = 0; i < size; i++){
+        mie::Vuint temp(zToString(polyA[i]));
+//        std::cout<<i<<"\t" << size << "\t" <<  temp << "\n";
         digest = digest + pk->pubs_g2[i] * temp;
     }
     (*W1) = digest;
-
+    std::cout << "fuck\n";
     digest = g2*0;
     for(int i=0;i<polyB.rep.length();i++){
 
@@ -74,8 +75,8 @@ void Intersection::subset_witness(){
     (*W2) = digest;
 
     std::cout<<"Generated subset witness: \n";
-//    PUT(*W1);
-//    PUT(*W2);
+    PUT(*W1);
+    PUT(*W2);
 
 
 }

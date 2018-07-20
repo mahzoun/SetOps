@@ -4,6 +4,16 @@
 
 #include "source/setup.h"
 
+int DataStructure::m = 2;
+
+DataStructure::DataStructure() {
+    m = 2;
+}
+
+DataStructure::DataStructure(int size){
+    m = size;
+}
+
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
     NTL::ZZ_p s = sk->sk;
