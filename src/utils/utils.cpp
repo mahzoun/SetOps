@@ -38,15 +38,18 @@ bn::Ec1 Utils::compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, 
 
 bn::Ec1 Utils::compute_digest(std::set<int> set, const bn::Ec1 g1, SecretKey *sk){
     std::vector<int> array(set.begin(), set.end());
-    Ec1 digest;
+    Ec1 digest = g1*1;
 
     if(array.size() == 0)
         return digest;
+
     ZZ_p temp1 = conv<ZZ_p>(1);
+
     for(int i = 0; i < array.size(); i++){
         temp1 *= (sk->sk) + array[i];
 
     }
+
     const mie::Vuint temp(zToString(temp1));
     digest = g1 * temp;
     return digest;

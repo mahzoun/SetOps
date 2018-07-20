@@ -57,16 +57,16 @@ PublicKey::PublicKey(SecretKey* sk, NTL::ZZ p){
     CurveParam cp = CurveFp254BNb;
     Param::init(cp);
     NTL::ZZ_p::init(p);
-    PUT(Param::r);
-    PUT(Param::p);
-    PUT(Param::t);
+//    PUT(Param::r);
+//    PUT(Param::p);
+//    PUT(Param::t);
     const Point& pt = selectPoint(cp);
     const Ec2 gt2(Fp2(Fp(pt.g2.aa), Fp(pt.g2.ab)), Fp2(Fp(pt.g2.ba), Fp(pt.g2.bb)));
     const Ec1 gt1(pt.g1.a, pt.g1.b);
     g1 = gt1;
     g2 = gt2;
-    PUT(g1);
-    PUT(g2);
+//    PUT(g1);
+//    PUT(g2);
 }
 
 void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){

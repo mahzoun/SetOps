@@ -35,7 +35,7 @@ void Intersection::intersect(){
         std::cout<< x << "\t";
     std::cout<< "\n";
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
-    PUT(*digest_I);
+//    PUT(*digest_I);
 }
 
 void Intersection::subset_witness(){
@@ -74,8 +74,8 @@ void Intersection::subset_witness(){
     (*W2) = digest;
 
     std::cout<<"Generated subset witness: \n";
-    PUT(*W1);
-    PUT(*W2);
+//    PUT(*W1);
+//    PUT(*W2);
 
 
 }
@@ -102,7 +102,7 @@ void Intersection::completeness_witness(){
     (*Q2) = digest1;
 
     std::cout<<"Generated completeness witness: \n";
-    PUT(*Q1);
-    PUT(*Q2);
+//    PUT(*Q1);
+//    PUT(*Q2);
 }
 
