@@ -15,7 +15,7 @@
 #include <NTL/vector.h>
 #include "bn.h"
 #include "test_point.hpp"
-#include "../source/setup.h"
+#include "source/setup.h"
 #include "utils.h"
 
 class query {

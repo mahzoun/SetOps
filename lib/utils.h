@@ -13,7 +13,7 @@
 #include <string>
 #include <sstream>
 #include <set>
-#include "../source/genkey.h"
+#include "source/genkey.h"
 
 #include "bn.h"
 

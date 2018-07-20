@@ -2,7 +2,7 @@
 // Created by sauron on 7/19/18.
 //
 
-#include "verify_intersection.h"
+#include "client/verify_intersection.h"
 
 VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set<int> I, bn::Ec2 *W1, bn::Ec2 *W2, bn::Ec1 *Q1, bn::Ec1 *Q2, bn::Ec1 AuthD[], int size){
     this->pk = pk;

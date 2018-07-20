@@ -2,7 +2,7 @@
 // Created by sauron on 7/12/18.
 //
 
-#include "setup.h"
+#include "source/setup.h"
 
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;

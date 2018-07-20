@@ -13,7 +13,7 @@
 #include <set>
 #include "bn.h"
 #include "test_point.hpp"
-#include "genkey.h"
+#include "source/genkey.h"
 #include "utils.h"
 
 struct ZZ_p_compare {

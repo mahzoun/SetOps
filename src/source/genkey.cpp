@@ -2,7 +2,7 @@
 // Created by sauron on 7/12/18.
 //
 
-#include "genkey.h"
+#include "source/genkey.h"
 
 // TODO: move this to utils
 char* zToString(NTL::ZZ_p &z) {

@@ -2,7 +2,7 @@
 // Created by sauron on 7/18/18.
 //
 
-#include "query.h"
+#include "server/query.h"
 
 using namespace bn;
 using namespace NTL;
