@@ -14,11 +14,14 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
 }
 
 void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
-    Utils utils;
-    //TODO check index :)
-    D[index].insert(element);
-    //TODO this should be just an update not calculation from scratch
-    AuthD[index] = utils.compute_digest_pub(D[index], pk->g1, pk);
-    std::cout<<"AuthD[" << index << "]:\t" << AuthD[index] <<"\n";
+    try {
+        D[index].insert(element);
+        const mie::Vuint temp(zToString(sk->sk));
+        AuthD[index] = AuthD[index] * (temp) + AuthD[index] * element;
+        std::cout << "AuthD[" << index << "]:\t" << AuthD[index] << "\n";
+    }
+    catch (std::exception& e) {
+        std::cout<<e.what() << '\n';
+    }
 }
 
