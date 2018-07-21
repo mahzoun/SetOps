@@ -12,7 +12,7 @@
 #include "bn.h"
 #include "source/genkey.h"
 #include "server/query.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 class VerifyIntersection {
 public:

@@ -16,13 +16,9 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "source/setup.h"
-#include "utils.h"
+#include "utils/utils.h"
+#include "utils/merkletree.h"
 
-class Node {
-public:
-    Node *parent, *left_child, *right_child;
-    bn::Ec1 *digest;
-};
 
 class Intersection{
 public:

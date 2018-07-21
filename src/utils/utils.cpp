@@ -2,7 +2,7 @@
 // Created by sauron on 7/17/18.
 //
 
-#include "utils.h"
+#include "utils/utils.h"
 
 //
 //char* zToString(NTL::ZZ_p &z) {

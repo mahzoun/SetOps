@@ -14,7 +14,7 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "source/genkey.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #define SETS_MAX_NO 1000
 
