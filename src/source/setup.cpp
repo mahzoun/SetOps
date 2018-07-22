@@ -16,11 +16,13 @@ DataStructure::DataStructure(int size){
 
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
+    MerkleTree *merkleTree = new MerkleTree(m, this, pk, sk);
     NTL::ZZ_p s = sk->sk;
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
 //        std::cout << "AuthD[" << i << "]:\t" << AuthD[i] << "\n";
     }
+    merkleTree->build(this, pk, sk);
 }
 void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
     Utils utils;

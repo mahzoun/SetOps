@@ -15,37 +15,42 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "source/setup.h"
+#include <stdlib.h>
 
+#define SETS_MAX_NO 1000
+
+class DataStructure;
 
 class MerkleNode {
 public:
     int col, row;
     MerkleNode *left_, *right_;
-    char *hash_;
+    unsigned char *hash_;
     bn::Ec1 value_;
-    char *computeHash() const;
+    unsigned char *computeHash() const;
     MerkleNode(bn::Ec1 &value){
         value_ = value;
         left_ = nullptr;
         right_ = nullptr;
-        hash_ = "";
+        hash_ = new unsigned char[SHA256_DIGEST_LENGTH];
     }
 
     MerkleNode(MerkleNode *left, MerkleNode *right) {
             left_ = left;
             right_ = right;
+            hash_ = new unsigned char[SHA256_DIGEST_LENGTH];
     }
 
-    ~MerkleNode() {
-        if (hash_)
-            delete[](hash_);
-    }
+//    ~MerkleNode() {
+//        if (hash_)
+//            delete[](hash_);
+//    }
 
     bool verify();
 
 
-    const char *hash() const {
-        return hash_;
+    char *hash() const {
+        return (char*)hash_;
     }
 
     bool hasChildren() const {
@@ -64,15 +69,15 @@ class MerkleTree{
 public:
     static int size;
     MerkleNode *merkleNode[SETS_MAX_NO][SETS_MAX_NO];
-    DataStructure *dataStructure;
-    PublicKey *pk;
-    SecretKey *sk;
+//    DataStructure *dataStructure;
+//    PublicKey *pk;
+//    SecretKey *sk;
     std::vector<bn::Ec1> leafDigest;
     MerkleTree();
-    MerkleTree(int);
+    MerkleTree(int, DataStructure*, PublicKey*, SecretKey*);
     ~MerkleTree();
-    void build();
-    bool verify();
+    void build(DataStructure*, PublicKey*, SecretKey*);
+    bool verify(DataStructure*, PublicKey*, SecretKey*);
 
 };
 

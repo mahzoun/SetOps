@@ -15,6 +15,14 @@
 using namespace NTL;
 using namespace bn;
 
+
+char* Utils::Ec1ToString(Ec1 z){
+    std::stringstream buffer;
+    buffer << z;
+    return strdup(buffer.str().c_str());
+//    return ec1string;
+}
+
 bn::Ec1 Utils::compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, PublicKey *pk){
     std::vector<int> array(intersection.begin(), intersection.end());
     Ec1 digest = g1*0;

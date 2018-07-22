@@ -43,7 +43,7 @@ void Intersection::subset_witness(){
     std::set<int> s1 = dataStructure->D[0], s2 = dataStructure->D[1];
     set_difference(s1.begin(),s1.end(),I.begin(),I.end(), std::inserter(w1, w1.begin()));
     set_difference(s2.begin(),s2.end(),I.begin(),I.end(), std::inserter(w2, w2.begin()));
-    Ec1 g1 = pk->g1;
+//    Ec1 g1 = pk->g1;
     Ec2 g2 = pk->g2;
     Ec2 *W1 = this->W1;
     Ec2 *W2 = this->W2;

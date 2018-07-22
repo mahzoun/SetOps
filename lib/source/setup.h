@@ -15,6 +15,7 @@
 #include "test_point.hpp"
 #include "source/genkey.h"
 #include "utils/utils.h"
+#include "utils/merkletree.h"
 
 #define SETS_MAX_NO 1000
 
