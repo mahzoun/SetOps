@@ -18,29 +18,33 @@
 #include "source/setup.h"
 #include "utils/utils.h"
 #include "utils/merkletree.h"
+#define SETS_MAX_NO 1000
 
 class Query{
 public:
     int index;
     PublicKey *pk;
     DataStructure *dataStructure;
-    void setup();
-    void beta();
-    void gamma();
+//    virtual void setup();
+//    virtual void Gamma();
+//    virtual void calNodeGamma();
 };
 
 class Intersection: Query{
 public:
     std::set<int> I;
     std::vector<int> indices;
-    bn::Ec2 *W1, *W2;
-    bn::Ec1 *Q1, *Q2, *digest_I;
+    bn::Ec2 *W[SETS_MAX_NO];
+    bn::Ec1 *Q[SETS_MAX_NO], *digest_I;
     NTL::vec_ZZ_p c;
     NTL::ZZ_pX polyA,polyB,polyS,polyT,polyD;
     Intersection();
     Intersection(std::vector<int>, PublicKey*, DataStructure*);
+    void setup();
+    void Gamma(DataStructure*, PublicKey*);
     void intersect();
     void subset_witness();
+    bn::Ec1 calNodeGamma(PublicKey*, bn::Ec1, bn::Ec1, int);
     void completeness_witness();
 };
 
