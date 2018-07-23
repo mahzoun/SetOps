@@ -3,9 +3,6 @@
 //
 #include "utils/merkletree.h"
 
-unsigned char* sha256(char *);
-char* concat(const char*, const char*);
-
 int MerkleTree::size = SETS_MAX_NO;
 
 MerkleTree::MerkleTree(){
@@ -31,7 +28,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         NTL::ZZ_p val = s + i;
         const mie::Vuint temp(zToString(val));
         merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
-        merkleNode[0][i]->hash_ = sha256(utils.Ec1ToString(merkleNode[0][i]->value_));
+        merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(merkleNode[0][i]->value_));
     }
     int len = size;
     int depth = 0;
@@ -39,20 +36,20 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         depth++;
         if(len%2 == 0) {
             for (int i = 0; i < len/2; i++) {
-                std::cout << i << "\t" << len << "\t" << depth << "\n";
+//                std::cout << i << "\t" << len << "\t" << depth << "\n";
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][2 * i], merkleNode[depth - 1][2 * i + 1]);
-                char* temp = concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
-                merkleNode[depth][i]->hash_ = sha256(temp);
+                char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
+                merkleNode[depth][i]->hash_ = utils.sha256(temp);
             }
         }
         else{
             for (int i = 0; i < len/2 - 1; i += 2) {
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
-                char* temp = concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
-                merkleNode[depth][i]->hash_ = sha256(temp);
+                char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
+                merkleNode[depth][i]->hash_ = utils.sha256(temp);
             }
             merkleNode[depth][len/2] = new MerkleNode(nullptr, merkleNode[depth - 1][len - 1]);
-            merkleNode[depth][len/2]->hash_ = sha256(merkleNode[depth - 1][len - 1]->hash());
+            merkleNode[depth][len/2]->hash_ = utils.sha256(merkleNode[depth - 1][len - 1]->hash());
         }
         len/=2;
     }
@@ -83,25 +80,6 @@ NTL::ZZ_p s = sk->sk;
         }
         len/=2;
     }
-}
-
-
-char* concat(const char *s1, const char *s2)
-{
-    char *result = new char[strlen(s1) + strlen(s2) + 1]; // +1 for the null-terminator
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
-
-unsigned char* sha256(char *string)
-{
-    unsigned char *hash = new unsigned char[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, string, strlen(string));
-    SHA256_Final(hash, &sha256);
-    return hash;
 }
 
 bool MerkleNode::verify(){

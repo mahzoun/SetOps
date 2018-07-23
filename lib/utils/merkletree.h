@@ -15,6 +15,7 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "source/setup.h"
+#include "utils/utils.h"
 #include <stdlib.h>
 
 #define SETS_MAX_NO 1000

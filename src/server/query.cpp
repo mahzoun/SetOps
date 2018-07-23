@@ -56,7 +56,6 @@ void Intersection::subset_witness(){
         c[i] = -w2[i];
     BuildFromRoots(polyB,c);
 
-    std::cout << "fuck0\n";
     Ec2 digest = g2*0;
     int size = polyA.rep.length();
     for(int i = 0; i < size; i++){
@@ -65,7 +64,6 @@ void Intersection::subset_witness(){
         digest = digest + pk->pubs_g2[i] * temp;
     }
     (*W1) = digest;
-    std::cout << "fuck\n";
     digest = g2*0;
     for(int i=0;i<polyB.rep.length();i++){
 

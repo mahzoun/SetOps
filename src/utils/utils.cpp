@@ -19,8 +19,8 @@ using namespace bn;
 char* Utils::Ec1ToString(Ec1 z){
     std::stringstream buffer;
     buffer << z;
-    return strdup(buffer.str().c_str());
-//    return ec1string;
+    char *res = strdup(buffer.str().c_str());
+    return res;
 }
 
 bn::Ec1 Utils::compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, PublicKey *pk){
@@ -63,4 +63,39 @@ bn::Ec1 Utils::compute_digest(std::set<int> set, const bn::Ec1 g1, SecretKey *sk
     return digest;
 }
 
+
+char* Utils::concat(const char *s1, const char *s2)
+{
+    char *result = new char[strlen(s1) + strlen(s2) + 1]; // +1 for the null-terminator
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+
+unsigned char* Utils::sha256(char *string)
+{
+    //TODO return value is octect :)
+    unsigned char *outputBuffer = new unsigned char[65];
+    //TODO fix length
+    unsigned char *final = new unsigned char[200];
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, string, strlen(string));
+    SHA256_Final(hash, &sha256);
+    int i = 0;
+    for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    {
+        sprintf((char*)outputBuffer + (i * 2), "%02o", hash[i]);
+    }
+    outputBuffer[64] = 0;
+    return outputBuffer;
+}
+
+
+
+ZZ_p Utils::StringToz(char* str){
+    ZZ temp=conv<ZZ>(str);
+    return conv<ZZ_p>(temp);
+}
 

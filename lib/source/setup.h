@@ -27,11 +27,16 @@ public:
 class DataStructure {
 public:
     static int m;
+    //TODO change set to sorted vector :-?
     std::set<int> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
+    //TODO optimize memory :)
+    bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO], beta[SETS_MAX_NO][SETS_MAX_NO], gamma[SETS_MAX_NO][SETS_MAX_NO];
     DataStructure();
     DataStructure(int);
     void setup(PublicKey*, SecretKey*);
+    void treeDigest(PublicKey*, SecretKey *);
+    bn::Ec1 calNodeDigest(PublicKey *, SecretKey*, bn::Ec1, bn::Ec1);
     void insert(int, int, PublicKey*, SecretKey*);
 };
 

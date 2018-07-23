@@ -19,12 +19,19 @@
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 
-
-class Intersection{
+class Query{
 public:
-    std::set<int> I;
+    int index;
     PublicKey *pk;
     DataStructure *dataStructure;
+    void setup();
+    void beta();
+    void gamma();
+};
+
+class Intersection: Query{
+public:
+    std::set<int> I;
     std::vector<int> indices;
     bn::Ec2 *W1, *W2;
     bn::Ec1 *Q1, *Q2, *digest_I;

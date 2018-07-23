@@ -13,6 +13,7 @@
 #include "source/genkey.h"
 #include "server/query.h"
 #include "utils/utils.h"
+#include "utils/merkletree.h"
 
 class VerifyIntersection {
 public:
@@ -26,6 +27,7 @@ public:
     bn::Ec1 AuthD[m];
     VerifyIntersection(PublicKey*, bn::Ec1, std::set<int>, bn::Ec2*, bn::Ec2*, bn::Ec1*, bn::Ec1*, bn::Ec1[], int);
     bool verify_intersection();
+    bool verify_tree();
 };
 
 
