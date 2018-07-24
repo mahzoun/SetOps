@@ -24,14 +24,8 @@ bool VerifyIntersection::verify_intersection() {
     Fp12 e1, e2, e3, e4, e5, e6, e7;
     std::cout<<"Checking subset witnesses:\t";
     for(int i = 0; i < m; i++) {
-        e1 *= 0;
-        e2 *= 0;
         opt_atePairing(e1, *W[i], digest_I);
         opt_atePairing(e2, pk->g2, AuthD[i]);
-        PUT(*W[i]);
-        PUT(digest_I);
-        PUT(e1);
-        PUT(e2);
         if( e1 != e2){
             std::cout<<"Failed!\n";
             return false;
@@ -49,6 +43,6 @@ bool VerifyIntersection::verify_intersection() {
         std::cout<<"Failed!\n";
         return false;
     }
-    std::cout<<"Passed\n";
+    std::cout<<"Passed!\n";
     return true;
 }

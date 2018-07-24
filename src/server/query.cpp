@@ -65,14 +65,15 @@ bn::Ec1 Intersection::calNodeGamma(PublicKey *pk, bn::Ec1 h1, bn::Ec1 h2, int n)
 
 void Intersection::xgcdTree() {
     std::vector<int> w[SETS_MAX_NO];
+    q[0] = 1;
     for(int i = 0; i < dataStructure->m - 1; i++){
         XGCD(polyD,polyS,polyT, p[i], p[i+1]);
-        q[i] = polyS;
+        q[i] *= polyS;
         q[i+1] = polyT;
         p[i+1] = polyD;
         if(!IsZero(q[i] * q[i+1]))
-            for(int j = i; j >= 0; j--)
-                q[j] *= q[i+1];
+            for(int j = i - 1; j >= 0; j--)
+                q[j] *= q[i];
     }
 
 }
@@ -125,7 +126,7 @@ void Intersection::subset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-        std::cout << "W[" << i << "]:\t" << *W[i] << "\n";
+//        std::cout << "W[" << i << "]:\t" << *W[i] << "\n";
     }
 
 }
@@ -133,7 +134,6 @@ void Intersection::subset_witness(){
 void Intersection::completeness_witness(){
     Ec1 g1 = pk->g1;
     xgcdTree();
-
     for(int i = 0; i < dataStructure->m; i++) {
         Ec1 digest1 = g1 * 0;
         polyS = q[i];
@@ -142,7 +142,7 @@ void Intersection::completeness_witness(){
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[i]) = digest1;
-        std::cout << "Q[" << i << "]:\t" << *Q[i] << "\n";
+//        std::cout << "Q[" << i << "]:\t" << *Q[i] << "\n";
     }
 }
 

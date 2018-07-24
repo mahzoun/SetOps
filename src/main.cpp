@@ -13,11 +13,10 @@ void test(int size, Key *k){
     high_resolution_clock::time_point t2;
 
     //generate sets
-    DataStructure *dataStructure = new DataStructure(4);
+    DataStructure *dataStructure = new DataStructure(32);
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
         int j = rand();
-//        int j = i+1;
         for(int set_index = 0; set_index < dataStructure->m; set_index++) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
@@ -26,7 +25,6 @@ void test(int size, Key *k){
     for(int set_index = 0; set_index < dataStructure->m; set_index++)
         for(int i = 1; i <= 9*size/10; i++) {
             int j = rand();
-//            int j = i + 1;
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
