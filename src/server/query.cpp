@@ -100,7 +100,7 @@ void Intersection::intersect(){
     std::set<int> intersect;
     set_intersection(dataStructure->D[0].begin(), dataStructure->D[0].end(), dataStructure->D[1].begin(), dataStructure->D[1].end(), std::inserter(intersect, intersect.begin()));
     I = intersect;
-    for(int i = 2; i < SETS_MAX_NO; i++) {
+    for(int i = 2; i < dataStructure->m; i++) {
         set_intersection(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()));
         I = intersect;
     }
@@ -108,24 +108,21 @@ void Intersection::intersect(){
 }
 
 void Intersection::subset_witness(){
-    std::vector<int> w[SETS_MAX_NO];
-    for(int i = 0; i < SETS_MAX_NO; i++) {
-        set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w[i], w[i].begin()));
-    }
-
+    std::vector<int> w;
     int len = dataStructure->m;
     for(int i = 0; i < len; i++) {
-        c.SetLength(w[i].size());
-        for(unsigned int j = 0; j < w[i].size(); j++) {
-            c[j] = -w[i][j];
+        w.clear();
+        set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w, w.begin()));
+        c.SetLength(w.size());
+        for(unsigned int j = 0; j < w.size(); j++) {
+            c[j] = -w[j];
         }
-        BuildFromRoots(polyA, c);
+        BuildFromRoots(p[i], c);
         Ec2 digest = pk->g2 * 0;
-        int size = polyA.rep.length();
-        p[i] = polyA;
+        int size = p[i].rep.length();
         for(int j = 0; j < size; j++){
-            mie::Vuint temp(zToString(polyA[i]));
-            digest = digest + pk->pubs_g2[i] * temp;
+            mie::Vuint temp(zToString(p[i][j]));
+            digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
         std::cout << "W[" << i << "]:\t" << *W[i] << "\n";

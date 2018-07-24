@@ -17,6 +17,7 @@ void test(int size, Key *k){
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
         int j = rand();
+//        int j = i+1;
         for(int set_index = 0; set_index < dataStructure->m; set_index++) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
@@ -25,6 +26,7 @@ void test(int size, Key *k){
     for(int set_index = 0; set_index < dataStructure->m; set_index++)
         for(int i = 1; i <= 9*size/10; i++) {
             int j = rand();
+//            int j = i + 1;
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
@@ -52,12 +54,12 @@ void test(int size, Key *k){
     //verify intersection
 
     t1 = high_resolution_clock::now();
-//    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W1, intersection->W2, intersection->Q1, intersection->Q2, dataStructure->AuthD, dataStructure->m);
-//    bool b = verifyIntersection->verify_intersection();
+    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+    bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<microseconds>( t2 - t1 ).count();
-//    std::cout << "verify time:\t" << duration << "\n";
-//    std::cout<<"Intersection result is: \t" << b << "\n";
+    std::cout << "verify time:\t" << duration << "\n";
+    std::cout<<"Intersection result is: \t" << b << "\n";
 
 }
 

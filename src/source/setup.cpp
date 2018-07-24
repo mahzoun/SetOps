@@ -20,6 +20,7 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     NTL::ZZ_p s = sk->sk;
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
+        PUT(AuthD[i]);
     }
     merkleTree->build(this, pk, sk);
     treeDigest(pk, sk);
@@ -72,12 +73,13 @@ bn::Ec1 DataStructure::calNodeDigest(PublicKey *pk, SecretKey *sk, bn::Ec1 h1, b
 void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
     Utils utils;
     try {
+//        PUT(element);
         D[index].insert(element);
         NTL::ZZ_p temp1 = sk->sk + element;
         const mie::Vuint temp(zToString(temp1));
         AuthD[index] *= temp;
 //        std::cout << "AuthD[" << index << "]:\t" << AuthD[index] << "\n";
-//        AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
+        AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
 //        std::cout << "AuthD[" << index << "]:\t" << AuthD[index] << "\n";
     }
     catch (std::exception& e) {
