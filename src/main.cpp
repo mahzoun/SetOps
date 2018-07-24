@@ -52,12 +52,12 @@ void test(int size, Key *k){
     //verify intersection
 
     t1 = high_resolution_clock::now();
-    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W1, intersection->W2, intersection->Q1, intersection->Q2, dataStructure->AuthD, dataStructure->m);
-    bool b = verifyIntersection->verify_intersection();
+//    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W1, intersection->W2, intersection->Q1, intersection->Q2, dataStructure->AuthD, dataStructure->m);
+//    bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<microseconds>( t2 - t1 ).count();
-    std::cout << "verify time:\t" << duration << "\n";
-    std::cout<<"Intersection result is: \t" << b << "\n";
+//    std::cout << "verify time:\t" << duration << "\n";
+//    std::cout<<"Intersection result is: \t" << b << "\n";
 
 }
 

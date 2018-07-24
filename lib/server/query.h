@@ -37,11 +37,12 @@ public:
     bn::Ec2 *W[SETS_MAX_NO];
     bn::Ec1 *Q[SETS_MAX_NO], *digest_I;
     NTL::vec_ZZ_p c;
-    NTL::ZZ_pX polyA,polyB,polyS,polyT,polyD;
+    NTL::ZZ_pX p[SETS_MAX_NO], q[SETS_MAX_NO], polyA, polyB, polyS, polyT, polyD;
     Intersection();
     Intersection(std::vector<int>, PublicKey*, DataStructure*);
     void setup();
-    void Gamma(DataStructure*, PublicKey*);
+    void gamma(DataStructure*, PublicKey*);
+    void xgcdTree();
     void intersect();
     void subset_witness();
     bn::Ec1 calNodeGamma(PublicKey*, bn::Ec1, bn::Ec1, int);
