@@ -17,7 +17,7 @@
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 
-#define SETS_MAX_NO 1000
+#define SETS_MAX_NO 2000
 #define MERKLE_TREE_DEG 2
 
 struct ZZ_p_compare {
@@ -28,6 +28,7 @@ public:
 class DataStructure {
 public:
     static int m;
+    int depth;
     //TODO change set to sorted vector :-?
     std::set<int> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];

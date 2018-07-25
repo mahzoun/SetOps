@@ -6,6 +6,8 @@
 #include "source/genkey.h"
 #include "server/query.h"
 #include "client/verify_intersection.h"
+#include "client/verify_tree.h"
+#define SET_SIZE 10000
 
 void test(int size, Key *k){
     using namespace std::chrono;
@@ -13,7 +15,7 @@ void test(int size, Key *k){
     high_resolution_clock::time_point t2;
 
     //generate sets
-    DataStructure *dataStructure = new DataStructure(32);
+    DataStructure *dataStructure = new DataStructure(2);
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
         int j = rand();
@@ -43,14 +45,17 @@ void test(int size, Key *k){
     Intersection *intersection = new Intersection(v, k->get_public_key(), dataStructure);
     intersection->intersect();
     intersection->subset_witness();
+    PUT("FUCK");
     intersection->completeness_witness();
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     t2 = high_resolution_clock::now();
     duration = duration_cast<microseconds>( t2 - t1 ).count();
     std::cout << "query time:\t" << duration << "\n";
+    //verify tree
+    VerifyTree *verifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
 
     //verify intersection
-
     t1 = high_resolution_clock::now();
     VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
     bool b = verifyIntersection->verify_intersection();
@@ -74,7 +79,7 @@ int main() {
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << "Key generation time:\t" << duration << "\n";
     
-    for(int test_size = 10; test_size <= 10 ; test_size *= 10)
+    for(int test_size = SET_SIZE; test_size <= SET_SIZE ; test_size *= 10)
         test(test_size, k);
 
     return 0;

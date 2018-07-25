@@ -18,7 +18,7 @@
 #include "utils/utils.h"
 #include <stdlib.h>
 
-#define SETS_MAX_NO 1000
+#define SETS_MAX_NO 2000
 
 class DataStructure;
 
@@ -69,10 +69,8 @@ public:
 class MerkleTree{
 public:
     static int size;
+    int depth;
     MerkleNode *merkleNode[SETS_MAX_NO][SETS_MAX_NO];
-//    DataStructure *dataStructure;
-//    PublicKey *pk;
-//    SecretKey *sk;
     std::vector<bn::Ec1> leafDigest;
     MerkleTree();
     MerkleTree(int, DataStructure*, PublicKey*, SecretKey*);

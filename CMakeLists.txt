@@ -33,6 +33,6 @@ add_executable(
         src/source/setup.cpp
         lib/source/setup.h
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
-        src/utils/utils.cpp lib/utils/utils.h src/server/query.cpp lib/server/query.h src/client/verify_intersection.cpp lib/client/verify_intersection.h lib/utils/dbg.h lib/utils/merkletree.h src/utils/merkletree.cpp)
+        src/utils/utils.cpp lib/utils/utils.h src/server/query.cpp lib/server/query.h src/client/verify_intersection.cpp lib/client/verify_intersection.h lib/utils/dbg.h lib/utils/merkletree.h src/utils/merkletree.cpp lib/client/verify_tree.h src/client/verify_tree.cpp)
 
 target_link_libraries(bilinear ntl gmp gmpxx m zm crypto)

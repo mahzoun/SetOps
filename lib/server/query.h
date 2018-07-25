@@ -18,7 +18,7 @@
 #include "source/setup.h"
 #include "utils/utils.h"
 #include "utils/merkletree.h"
-#define SETS_MAX_NO 1000
+#define SETS_MAX_NO 2000
 
 class Query{
 public:

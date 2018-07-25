@@ -3,12 +3,12 @@
 //
 
 #include "source/genkey.h"
+#define SETS_MAX_SIZE 10000
 
 // TODO: move this to utils
 char* zToString(NTL::ZZ_p &z) {
     std::stringstream buffer;
     buffer << z;
-
     char *zzstring = strdup(buffer.str().c_str());
     return zzstring;
 }
@@ -75,14 +75,15 @@ void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
     ZZ_p temp1;
     ZZ_p temp2;
     ZZ_p s = sk->sk;
-    const int q = 1000;
+    const int q = SETS_MAX_SIZE;
+    //TODO optimize following
     for(int i = 0; i < q+1; i++){
         power(temp1, s, i);
         const mie::Vuint temp(zToString(temp1));
         pubs_g1.push_back(g1*temp);
     }
     //g2 pub
-    for(int i=0;i<q+1;i+=1) {
+    for(int i = 0; i < q+1; i++) {
         power(temp1, s, i);
         const mie::Vuint temp(zToString(temp1));
         pubs_g2.push_back(g2 * temp);

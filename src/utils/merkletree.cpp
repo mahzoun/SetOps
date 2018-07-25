@@ -31,7 +31,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(merkleNode[0][i]->value_));
     }
     int len = size;
-    int depth = 0;
+    depth = 0;
     while(len > 0){
         depth++;
         if(len%2 == 0) {

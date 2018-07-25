@@ -10,6 +10,7 @@
 #include <openssl/sha.h>
 #include <exception>
 #include <vector>
+#include <string>
 #include "bn.h"
 #include "test_point.hpp"
 

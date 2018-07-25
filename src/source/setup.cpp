@@ -20,9 +20,11 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     NTL::ZZ_p s = sk->sk;
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
+        std::cout<<i << "\t" << AuthD[i] << "\n";
     }
     merkleTree->build(this, pk, sk);
     treeDigest(pk, sk);
+    this->depth = merkleTree->depth;
 }
 
 void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
@@ -30,6 +32,7 @@ void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
         NTL::ZZ_p temp1 = sk->sk + i;
         const mie::Vuint temp(zToString(temp1));
         digest[0][i] = AuthD[i] * temp;
+        std::cout<< i << "\t" << pk->g2 * temp << "\n";
     }
     int len = m;
     int depth = 0;

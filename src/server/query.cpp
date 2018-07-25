@@ -106,11 +106,14 @@ void Intersection::intersect(){
         I = intersect;
     }
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
+    gamma(dataStructure, pk);
 }
 
 void Intersection::subset_witness(){
     std::vector<int> w;
     int len = dataStructure->m;
+    PUT("HERE");
+    PUT(len);
     for(int i = 0; i < len; i++) {
         w.clear();
         set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w, w.begin()));
@@ -119,6 +122,7 @@ void Intersection::subset_witness(){
             c[j] = -w[j];
         }
         BuildFromRoots(p[i], c);
+
         Ec2 digest = pk->g2 * 0;
         int size = p[i].rep.length();
         for(int j = 0; j < size; j++){
@@ -126,7 +130,6 @@ void Intersection::subset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-//        std::cout << "W[" << i << "]:\t" << *W[i] << "\n";
     }
 
 }
