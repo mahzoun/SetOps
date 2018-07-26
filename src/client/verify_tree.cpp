@@ -6,16 +6,16 @@ using namespace bn;
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
 
-    std::cout<<"Verify Nodes:\t";
+//    std::cout<<"Verify Nodes:\t";
     for(int i = 0; i < v.size(); i++){
         if(!verifyNode(pk, sk, dataStructure, v)){
-            std::cout<<"Failed!\n";
-            return;
+//            std::cout<<"Failed!\n";
+//            return;
         }
     }
-    std::cout<<"Passed!\n";
+//    std::cout<<"Passed!\n";
 
-    std::cout<<"Verify Path:\t";
+//    std::cout<<"Verify Path:\t";
     for(int i = 1; i < dataStructure->depth; i++){
         Fp12 e1, e2;
         int child = v[i] >> i;
@@ -35,11 +35,11 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         Ec2 g2h = pk->g2*0 * temp;
         opt_atePairing(e2, g2h, g1h);
         if( e1 != e2){
-            std::cout<<"Failed!\n";
-            return;
+//            std::cout<<"Failed!\n";
+//            return;
         }
     }
-    std::cout<<"Passed!\n";
+//    std::cout<<"Passed!\n";
 
 }
 

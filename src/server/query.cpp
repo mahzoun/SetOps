@@ -112,8 +112,6 @@ void Intersection::intersect(){
 void Intersection::subset_witness(){
     std::vector<int> w;
     int len = dataStructure->m;
-    PUT("HERE");
-    PUT(len);
     for(int i = 0; i < len; i++) {
         w.clear();
         set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w, w.begin()));

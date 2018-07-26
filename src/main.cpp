@@ -10,6 +10,7 @@
 #define SET_SIZE 10000
 
 void test(int size, Key *k){
+    std::cout<< size << "\t";
     using namespace std::chrono;
     high_resolution_clock::time_point t1;
     high_resolution_clock::time_point t2;
@@ -30,11 +31,11 @@ void test(int size, Key *k){
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
-    for(int set_index = 0; set_index < dataStructure->m; set_index++)
-        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
-    for(int i = 0; i < dataStructure->m; i++){
-        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
-    }
+//    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+//        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
+//    for(int i = 0; i < dataStructure->m; i++){
+//        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
+//    }
 
     t1 = high_resolution_clock::now();
     //query intersection
@@ -45,12 +46,11 @@ void test(int size, Key *k){
     Intersection *intersection = new Intersection(v, k->get_public_key(), dataStructure);
     intersection->intersect();
     intersection->subset_witness();
-    PUT("FUCK");
     intersection->completeness_witness();
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     t2 = high_resolution_clock::now();
-    duration = duration_cast<microseconds>( t2 - t1 ).count();
-    std::cout << "query time:\t" << duration << "\n";
+    duration = duration_cast<milliseconds>( t2 - t1 ).count();
+    std::cout << duration << "\t";
     //verify tree
     VerifyTree *verifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
@@ -60,8 +60,8 @@ void test(int size, Key *k){
     VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
     bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
-    duration = duration_cast<microseconds>( t2 - t1 ).count();
-    std::cout << "verify time:\t" << duration << "\n";
+    duration = duration_cast<milliseconds>( t2 - t1 ).count();
+    std::cout << duration << "\n";
     std::cout<<"Intersection result is: \t" << b << "\n";
 
 }
@@ -79,7 +79,7 @@ int main() {
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << "Key generation time:\t" << duration << "\n";
     
-    for(int test_size = SET_SIZE; test_size <= SET_SIZE ; test_size *= 10)
+    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
         test(test_size, k);
 
     return 0;
