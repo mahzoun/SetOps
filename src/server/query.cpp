@@ -143,7 +143,7 @@ void Intersection::completeness_witness(){
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[i]) = digest1;
-        std::cout << "Q[" << i << "]:\t" << *Q[i] << "\n";
+//        std::cout << "Q[" << i << "]:\t" << *Q[i] << "\n";
     }
 }
 

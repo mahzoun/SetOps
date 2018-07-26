@@ -20,7 +20,7 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     NTL::ZZ_p s = sk->sk;
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
-        std::cout<<i << "\t" << AuthD[i] << "\n";
+//        std::cout<<i << "\t" << AuthD[i] << "\n";
     }
     merkleTree->build(this, pk, sk);
     treeDigest(pk, sk);

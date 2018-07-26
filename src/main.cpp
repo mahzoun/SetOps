@@ -32,11 +32,11 @@ void test(int size, Key *k){
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
-    for(int set_index = 0; set_index < dataStructure->m; set_index++)
-        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
-    for(int i = 0; i < dataStructure->m; i++){
-        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
-    }
+//    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+//        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
+//    for(int i = 0; i < dataStructure->m; i++){
+//        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
+//    }
     t1 = high_resolution_clock::now();
     //query intersection
     std::vector<int> v;
