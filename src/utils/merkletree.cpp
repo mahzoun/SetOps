@@ -36,7 +36,6 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         depth++;
         if(len%2 == 0) {
             for (int i = 0; i < len/2; i++) {
-//                std::cout << i << "\t" << len << "\t" << depth << "\n";
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][2 * i], merkleNode[depth - 1][2 * i + 1]);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);

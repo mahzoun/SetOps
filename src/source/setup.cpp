@@ -16,11 +16,11 @@ DataStructure::DataStructure(int size){
 
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
-    MerkleTree *merkleTree = new MerkleTree(m, this, pk, sk);
+    this->merkleTree = new MerkleTree(m, this, pk, sk);
     NTL::ZZ_p s = sk->sk;
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
-//        std::cout<<i << "\t" << AuthD[i] << "\n";
+        std::cout<<i << "\t" << AuthD[i] << "\n";
     }
     merkleTree->build(this, pk, sk);
     treeDigest(pk, sk);
@@ -32,7 +32,7 @@ void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
         NTL::ZZ_p temp1 = sk->sk + i;
         const mie::Vuint temp(zToString(temp1));
         digest[0][i] = AuthD[i] * temp;
-//        std::cout<< i << "\t" << pk->g2 * temp << "\n";
+//        std::cout<< i << "\t" << digest[0][i] << "\t = \t" << AuthD[i] << " * " << temp << "\n";
     }
     int len = m;
     int depth = 0;
@@ -80,9 +80,11 @@ void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk)
         NTL::ZZ_p temp1 = sk->sk + element;
         const mie::Vuint temp(zToString(temp1));
         AuthD[index] *= temp;
-//        std::cout << "AuthD[" << index << "]:\t" << AuthD[index] << "\n";
         AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
 //        std::cout << "AuthD[" << index << "]:\t" << AuthD[index] << "\n";
+        merkleTree->build(this, pk, sk);
+        treeDigest(pk, sk);
+        this->depth = merkleTree->depth;
     }
     catch (std::exception& e) {
         std::cout<<e.what() << '\n';

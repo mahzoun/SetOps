@@ -8,6 +8,7 @@
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
 #define SET_SIZE 10000
+#define SETS_NO 8
 
 void test(int size, Key *k){
     std::cout<< size << "\t";
@@ -16,7 +17,7 @@ void test(int size, Key *k){
     high_resolution_clock::time_point t2;
 
     //generate sets
-    DataStructure *dataStructure = new DataStructure(2);
+    DataStructure *dataStructure = new DataStructure(SETS_NO);
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
         int j = rand();
@@ -31,12 +32,11 @@ void test(int size, Key *k){
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
-//    for(int set_index = 0; set_index < dataStructure->m; set_index++)
-//        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
-//    for(int i = 0; i < dataStructure->m; i++){
-//        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
-//    }
-
+    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
+    for(int i = 0; i < dataStructure->m; i++){
+        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
+    }
     t1 = high_resolution_clock::now();
     //query intersection
     std::vector<int> v;
@@ -50,7 +50,7 @@ void test(int size, Key *k){
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>( t2 - t1 ).count();
-    std::cout << duration << "\t";
+    std::cout <<"Query Time:\t" << duration << "\n";
     //verify tree
     VerifyTree *verifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
@@ -61,8 +61,8 @@ void test(int size, Key *k){
     bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>( t2 - t1 ).count();
-    std::cout << duration << "\n";
-    std::cout<<"Intersection result is: \t" << b << "\n";
+    std::cout << "Verify Time:\t" << duration << "\n";
+    std::cout << "Intersection result is: \t" << b << "\n";
 
 }
 
@@ -79,8 +79,8 @@ int main() {
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << "Key generation time:\t" << duration << "\n";
     
-    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
-        test(test_size, k);
+//    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
+    test(16, k);
 
     return 0;
 }

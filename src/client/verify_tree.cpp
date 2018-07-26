@@ -6,17 +6,17 @@ using namespace bn;
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
 
-//    std::cout<<"Verify Nodes:\t";
+    std::cout<<"Verify Leaf Nodes:\t";
     for(int i = 0; i < v.size(); i++){
         if(!verifyNode(pk, sk, dataStructure, v)){
-//            std::cout<<"Failed!\n";
-//            return;
+            std::cout<<"Failed!\n";
+            return;
         }
     }
-//    std::cout<<"Passed!\n";
+    std::cout<<"Passed!\n";
 
-//    std::cout<<"Verify Path:\t";
-    for(int i = 1; i < dataStructure->depth; i++){
+    std::cout<<"Verify Path Nodes:\t";
+    for(int i = 2; i < dataStructure->depth; i++){
         Fp12 e1, e2;
         int child = v[i] >> i;
         opt_atePairing(e1, pk->g2, dataStructure->digest[i][child]);
@@ -35,11 +35,11 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         Ec2 g2h = pk->g2*0 * temp;
         opt_atePairing(e2, g2h, g1h);
         if( e1 != e2){
-//            std::cout<<"Failed!\n";
-//            return;
+            std::cout<<"Failed!\n";
+            return;
         }
     }
-//    std::cout<<"Passed!\n";
+    std::cout<<"Passed!\n";
 
 }
 
@@ -48,18 +48,9 @@ bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     for(int i = 0; i < v.size(); i++) {
         Ec1 acci = dataStructure->AuthD[i];
         Ec1 dh = dataStructure->digest[0][v[i]];
-//        NTL::ZZ_p temp1 = sk->sk + i;
-//        const mie::Vuint temp(zToString(temp1));
-//        Ec2 gsgi = pk->g2 * temp;
         Ec2 gsgi = pk->pubs_g2[1] + pk->g2 * v[i];
         opt_atePairing(e1, pk->g2, dh);
         opt_atePairing(e2, gsgi, acci);
-//        PUT(acci);
-//        PUT(gsgi);
-//        PUT(dh);
-//        PUT(pk->g2);
-//        PUT(e1);
-//        PUT(e2);
         if( e1 != e2){
             return false;
         }

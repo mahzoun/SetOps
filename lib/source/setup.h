@@ -25,6 +25,8 @@ public:
     bool operator()(const NTL::ZZ_p&, const NTL::ZZ_p&) const;
 };
 
+class MerkleTree;
+
 class DataStructure {
 public:
     static int m;
@@ -34,6 +36,7 @@ public:
     bn::Ec1 AuthD[SETS_MAX_NO];
     //TODO optimize memory :)
     bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO], gamma[SETS_MAX_NO][SETS_MAX_NO][MERKLE_TREE_DEG];
+    MerkleTree *merkleTree;
     DataStructure();
     DataStructure(int);
     void setup(PublicKey*, SecretKey*);
