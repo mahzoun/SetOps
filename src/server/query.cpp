@@ -7,6 +7,14 @@
 using namespace bn;
 using namespace NTL;
 
+
+bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs)
+{
+    Utils utils;
+    char* x = utils.zToString(rhs);
+    char* y = utils.zToString(lhs);
+    return strcmp(x, y) > 0;
+}
 //void Intersection::gamma(DataStructure *dataStructure, PublicKey *pk) {
 //    int len = dataStructure->m;
 //    int depth = 0;
@@ -98,23 +106,27 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataSt
 
 void Intersection::intersect(){
     Utils utils;
-    std::multiset<int> intersect;
-    set_intersection(dataStructure->D[0].begin(), dataStructure->D[0].end(), dataStructure->D[1].begin(), dataStructure->D[1].end(), std::inserter(intersect, intersect.begin()));
+    std::set<NTL::ZZ_p, ZZ_p_compare> intersect;
+    set_intersection(dataStructure->D[0].begin(), dataStructure->D[0].end(), dataStructure->D[1].begin(), dataStructure->D[1].end(), std::inserter(intersect, intersect.begin()), cmp);
     I = intersect;
     for(int i = 2; i < dataStructure->m; i++) {
-        set_intersection(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()));
+        set_intersection(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()), cmp);
         I = intersect;
     }
+    for(auto x:I)
+        PUT(x);
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
+    PUT(*digest_I);
 //    gamma(dataStructure, pk);
 }
 
 void Intersection::subset_witness(){
-    std::vector<int> w;
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
     int len = dataStructure->m;
     for(int i = 0; i < len; i++) {
         w.clear();
-        set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w, w.begin()));
+        set_difference(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(w, w.begin()), cmp);
         c.SetLength(w.size());
         for(unsigned int j = 0; j < w.size(); j++) {
             c[j] = -w[j];
@@ -124,22 +136,24 @@ void Intersection::subset_witness(){
         Ec2 digest = pk->g2 * 0;
         int size = p[i].rep.length();
         for(int j = 0; j < size; j++){
-            mie::Vuint temp(zToString(p[i][j]));
+            mie::Vuint temp(utils.zToString(p[i][j]));
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
+        std::cout << i << "\t" << *W[i] << "\n";
     }
 
 }
 
 void Intersection::completeness_witness(){
+    Utils utils;
     Ec1 g1 = pk->g1;
     xgcdTree();
     for(int i = 0; i < dataStructure->m; i++) {
         Ec1 digest1 = g1 * 0;
         polyS = q[i];
         for (int j = 0; j < polyS.rep.length(); j++) {
-            const mie::Vuint temp(zToString(polyS[j]));
+            const mie::Vuint temp(utils.zToString(polyS[j]));
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[i]) = digest1;

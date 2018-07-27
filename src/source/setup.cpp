@@ -4,6 +4,7 @@
 
 #include "source/setup.h"
 
+
 int DataStructure::m = 2;
 
 DataStructure::DataStructure() {
@@ -27,9 +28,10 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
 }
 
 void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
+    Utils utils;
     for (int i = 0; i < m; i++) {
         NTL::ZZ_p temp1 = sk->sk + i;
-        const mie::Vuint temp(zToString(temp1));
+        const mie::Vuint temp(utils.zToString(temp1));
         digest[0][i] = AuthD[i] * temp;
     }
     int len = m;
@@ -65,17 +67,18 @@ bn::Ec1 DataStructure::calNodeDigest(PublicKey *pk, SecretKey *sk, bn::Ec1 h1, b
     NTL::ZZ_p x1 = utils.StringToz((char *)H1);
     NTL::ZZ_p x2 = utils.StringToz((char *)H2);
     temp *= (s + x1) * (s + x2);
-    const mie::Vuint temp1(zToString(temp));
+    const mie::Vuint temp1(utils.zToString(temp));
     bn::Ec1 digest = g1 * temp1;
     return digest;
 }
 
-void DataStructure::insert(int index, int element, PublicKey *pk, SecretKey *sk){
+void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKey *sk){
     Utils utils;
     try {
+//        std::cout<<"\n" << index << "\t" << element << "\n";
         D[index].insert(element);
         NTL::ZZ_p temp1 = sk->sk + element;
-        const mie::Vuint temp(zToString(temp1));
+        const mie::Vuint temp(utils.zToString(temp1));
         AuthD[index] *= temp;
         AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
         merkleTree->build(this, pk, sk);

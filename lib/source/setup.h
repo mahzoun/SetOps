@@ -20,10 +20,6 @@
 #define SETS_MAX_NO 2000
 #define MERKLE_TREE_DEG 2
 
-struct ZZ_p_compare {
-public:
-    bool operator()(const NTL::ZZ_p&, const NTL::ZZ_p&) const;
-};
 
 class MerkleTree;
 
@@ -31,10 +27,8 @@ class DataStructure {
 public:
     static int m;
     int depth;
-    //TODO change set to sorted vector :-?
-    std::multiset<int> D[SETS_MAX_NO];
+    std::set<NTL::ZZ_p, ZZ_p_compare> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
-    //TODO optimize memory :)
     bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO]; //, gamma[SETS_MAX_NO][SETS_MAX_NO][MERKLE_TREE_DEG];
     MerkleTree *merkleTree;
 
@@ -43,7 +37,7 @@ public:
     void setup(PublicKey*, SecretKey*);
     void treeDigest(PublicKey*, SecretKey *);
     bn::Ec1 calNodeDigest(PublicKey *, SecretKey*, bn::Ec1, bn::Ec1);
-    void insert(int, int, PublicKey*, SecretKey*);
+    void insert(int, NTL::ZZ_p, PublicKey*, SecretKey*);
 };
 
 

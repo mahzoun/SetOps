@@ -2,16 +2,16 @@
 #include <chrono>
 #include <cstdlib>
 #include <NTL/ZZ.h>
+#include <NTL/ZZ_p.h>
 #include "source/setup.h"
 #include "source/genkey.h"
 #include "server/query.h"
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
 #define SET_SIZE 10000
-#define SETS_NO 8
+#define SETS_NO 16
 
 void test(int size, Key *k){
-    std::cout<< size << "\t";
     using namespace std::chrono;
     high_resolution_clock::time_point t1;
     high_resolution_clock::time_point t2;
@@ -20,7 +20,7 @@ void test(int size, Key *k){
     DataStructure *dataStructure = new DataStructure(SETS_NO);
     dataStructure->setup(k->get_public_key(), k->get_secret_key());
     for(int i = 1; i <= size/10; i++) {
-        int j = rand();
+        NTL::ZZ_p j = NTL::random_ZZ_p();
         for(int set_index = 0; set_index < dataStructure->m; set_index++) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
@@ -28,7 +28,7 @@ void test(int size, Key *k){
 
     for(int set_index = 0; set_index < dataStructure->m; set_index++)
         for(int i = 1; i <= 9*size/10; i++) {
-            int j = rand();
+            NTL::ZZ_p j = NTL::random_ZZ_p();
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
 
@@ -80,7 +80,7 @@ int main() {
     std::cout << "Key generation time:\t" << duration << "\n";
     
 //    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
-    test(16, k);
+    test(128, k);
 
     return 0;
 }

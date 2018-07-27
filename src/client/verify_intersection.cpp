@@ -6,7 +6,7 @@
 
 int VerifyIntersection::m = 2;
 
-VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::multiset<int> I, bn::Ec2 *W[], bn::Ec1 *Q[], bn::Ec1 AuthD[], int size){
+VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set<NTL::ZZ_p, ZZ_p_compare> I, bn::Ec2 *W[], bn::Ec1 *Q[], bn::Ec1 AuthD[], int size){
     Utils utils;
     this->pk = pk;
     bn::Ec1 digest_test = utils.compute_digest_pub(I, pk->g1, pk);

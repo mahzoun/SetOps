@@ -22,7 +22,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     NTL::ZZ_p s = sk->sk;
     for(int i = 0; i < dataStructure->m; i++){
         NTL::ZZ_p val = s + i;
-        const mie::Vuint temp(zToString(val));
+        const mie::Vuint temp(utils.zToString(val));
         tmp->merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
         tmp->merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(tmp->merkleNode[0][i]->value_));
     }

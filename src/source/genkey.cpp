@@ -5,14 +5,6 @@
 #include "source/genkey.h"
 #define SETS_MAX_SIZE 10000
 
-// TODO: move this to utils
-char* zToString(NTL::ZZ_p &z) {
-    std::stringstream buffer;
-    buffer << z;
-    char *zzstring = strdup(buffer.str().c_str());
-    return zzstring;
-}
-
 
 void Key::genkey(NTL::ZZ p){
     create_secret_key(sk, p);
@@ -57,21 +49,17 @@ PublicKey::PublicKey(SecretKey* sk, NTL::ZZ p){
     CurveParam cp = CurveFp254BNb;
     Param::init(cp);
     NTL::ZZ_p::init(p);
-//    PUT(Param::r);
-//    PUT(Param::p);
-//    PUT(Param::t);
     const Point& pt = selectPoint(cp);
     const Ec2 gt2(Fp2(Fp(pt.g2.aa), Fp(pt.g2.ab)), Fp2(Fp(pt.g2.ba), Fp(pt.g2.bb)));
     const Ec1 gt1(pt.g1.a, pt.g1.b);
     g1 = gt1;
     g2 = gt2;
-//    PUT(g1);
-//    PUT(g2);
 }
 
 void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
     using namespace bn;
     using namespace NTL;
+    Utils utils;
     ZZ_p temp1;
     ZZ_p temp2;
     ZZ_p s = sk->sk;
@@ -79,13 +67,13 @@ void PublicKey::setup_bilinear(SecretKey* sk, bn::Ec1, bn::Ec2){
     //TODO optimize following
     for(int i = 0; i < q+1; i++){
         power(temp1, s, i);
-        const mie::Vuint temp(zToString(temp1));
+        const mie::Vuint temp(utils.zToString(temp1));
         pubs_g1.push_back(g1*temp);
     }
     //g2 pub
     for(int i = 0; i < q+1; i++) {
         power(temp1, s, i);
-        const mie::Vuint temp(zToString(temp1));
+        const mie::Vuint temp(utils.zToString(temp1));
         pubs_g2.push_back(g2 * temp);
     }
 

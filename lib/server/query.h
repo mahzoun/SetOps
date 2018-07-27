@@ -32,7 +32,8 @@ public:
 
 class Intersection: Query{
 public:
-    std::multiset<int> I;
+    std::set<NTL::ZZ_p, ZZ_p_compare> I;
+//    std::vector<NTL::ZZ_p> I;
     std::vector<int> indices;
     bn::Ec2 *W[SETS_MAX_NO];
     bn::Ec1 *Q[SETS_MAX_NO], *digest_I;

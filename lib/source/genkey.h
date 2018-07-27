@@ -13,8 +13,7 @@
 #include <string>
 #include "bn.h"
 #include "test_point.hpp"
-
-char* zToString(NTL::ZZ_p&);
+#include "utils/utils.h"
 
 class SecretKey{
 public:

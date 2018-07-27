@@ -26,7 +26,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
     NTL::ZZ_p s = sk->sk;
     for(int i = 0; i < size; i++){
         NTL::ZZ_p val = s + i;
-        const mie::Vuint temp(zToString(val));
+        const mie::Vuint temp(utils.zToString(val));
         merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
         merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(merkleNode[0][i]->value_));
     }
