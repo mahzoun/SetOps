@@ -32,7 +32,7 @@ public:
 
 class Intersection: Query{
 public:
-    std::set<int> I;
+    std::multiset<int> I;
     std::vector<int> indices;
     bn::Ec2 *W[SETS_MAX_NO];
     bn::Ec1 *Q[SETS_MAX_NO], *digest_I;

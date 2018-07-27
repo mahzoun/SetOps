@@ -32,11 +32,12 @@ public:
     static int m;
     int depth;
     //TODO change set to sorted vector :-?
-    std::set<int> D[SETS_MAX_NO];
+    std::multiset<int> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
     //TODO optimize memory :)
-    bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO], gamma[SETS_MAX_NO][SETS_MAX_NO][MERKLE_TREE_DEG];
+    bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO]; //, gamma[SETS_MAX_NO][SETS_MAX_NO][MERKLE_TREE_DEG];
     MerkleTree *merkleTree;
+
     DataStructure();
     DataStructure(int);
     void setup(PublicKey*, SecretKey*);

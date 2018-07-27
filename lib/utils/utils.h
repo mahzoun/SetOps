@@ -19,8 +19,8 @@
 
 class Utils {
 public:
-    bn::Ec1 compute_digest(std::set<int>, const bn::Ec1, SecretKey *);
-    bn::Ec1 compute_digest_pub(std::set<int> , const bn::Ec1, PublicKey *);
+    bn::Ec1 compute_digest(std::multiset<int>, const bn::Ec1, SecretKey *);
+    bn::Ec1 compute_digest_pub(std::multiset<int> , const bn::Ec1, PublicKey *);
     char* Ec1ToString(bn::Ec1);
     char* concat(const char*, const char*);
     unsigned char* sha256(char*);

@@ -23,7 +23,7 @@ char* Utils::Ec1ToString(Ec1 z){
     return res;
 }
 
-bn::Ec1 Utils::compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, PublicKey *pk){
+bn::Ec1 Utils::compute_digest_pub(std::multiset<int> intersection, const bn::Ec1 g1, PublicKey *pk){
     std::vector<int> array(intersection.begin(), intersection.end());
     Ec1 digest = g1*0;
     if(array.size() == 0)
@@ -44,7 +44,7 @@ bn::Ec1 Utils::compute_digest_pub(std::set<int> intersection, const bn::Ec1 g1, 
     return digest;
 }
 
-bn::Ec1 Utils::compute_digest(std::set<int> set, const bn::Ec1 g1, SecretKey *sk){
+bn::Ec1 Utils::compute_digest(std::multiset<int> set, const bn::Ec1 g1, SecretKey *sk){
     std::vector<int> array(set.begin(), set.end());
     Ec1 digest = g1*1;
 

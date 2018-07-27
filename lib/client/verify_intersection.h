@@ -21,11 +21,11 @@ public:
     PublicKey *pk;
     //TODO calculate digest_I here :)
     bn::Ec1 digest_I;
-    std::set<int> I;
+    std::multiset<int> I;
     bn::Ec2 *W[SETS_MAX_NO];
     bn::Ec1 *Q[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
-    VerifyIntersection(PublicKey*, bn::Ec1, std::set<int>, bn::Ec2*[], bn::Ec1*[], bn::Ec1[], int);
+    VerifyIntersection(PublicKey*, bn::Ec1, std::multiset<int>, bn::Ec2*[], bn::Ec1*[], bn::Ec1[], int);
     bool verify_intersection();
     bool verify_tree();
 };

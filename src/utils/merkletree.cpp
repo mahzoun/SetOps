@@ -49,48 +49,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
             }
             merkleNode[depth][len/2] = new MerkleNode(nullptr, merkleNode[depth - 1][len - 1]);
             merkleNode[depth][len/2]->hash_ = utils.sha256(merkleNode[depth - 1][len - 1]->hash());
-//            std::cout<< len/2 << "\t" << depth << "\t" << merkleNode[depth][len/2]->hash_ << "\n";
         }
         len/=2;
     }
-}
-
-bool MerkleTree::verify(DataStructure *dataStructure, PublicKey* pk, SecretKey *sk){
-NTL::ZZ_p s = sk->sk;
-    // check leafs
-    for(int i = 0; i < size; i++){
-    }
-    int len = size;
-    int depth = 0;
-    while(len > 1){
-        depth++;
-        if(len%2 == 0) {
-            for (int i = 0; i < len; i += 2) {
-                merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
-                merkleNode[depth][i]->value_ = merkleNode[depth - 1][i]->value_ + merkleNode[depth - 1][i + 1]->value_;
-            }
-        }
-        else{
-            for (int i = 0; i < len - 1; i += 2) {
-                merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
-                merkleNode[depth][i]->value_ = merkleNode[depth - 1][i]->value_ + merkleNode[depth - 1][i + 1]->value_;
-            }
-            merkleNode[depth][len-1] = new MerkleNode(nullptr, merkleNode[depth-1][len-1]);
-            merkleNode[depth][len-1]->value_ = merkleNode[depth-1][len-1]->value_;
-        }
-        len/=2;
-    }
-}
-
-bool MerkleNode::verify(){
-    // If either child is not valid, the entire subtree is invalid too.
-    if (left_ && !left_->verify()) {
-        return false;
-    }
-    if (right_ && !right_->verify()) {
-        return false;
-    }
-
-//    std::unique_ptr<const char> computedHash(hasChildren() ? computeHash() : hash_func(*value_));
-//    return memcmp(hash_, computedHash.get(), len()) == 0;
 }

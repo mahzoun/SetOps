@@ -45,7 +45,6 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
                 tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][i], tmp->merkleNode[depth - 1][i + 1]);
                 char* temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(), tmp->merkleNode[depth - 1][2 * i + 1]->hash());
                 tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
-//                std::cout<< tmp->merkleNode[depth][i]->hash_ << "\t" << dataStructure->merkleTree->merkleNode[depth][i]->hash_ << "\n";
                 if(strcmp((char*)tmp->merkleNode[depth][i]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][i]->hash_)!= 0){
                     std::cout << "Failed!\n";
                     return;
@@ -53,7 +52,6 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
             }
             tmp->merkleNode[depth][len/2] = new MerkleNode(nullptr, tmp->merkleNode[depth - 1][len - 1]);
             tmp->merkleNode[depth][len/2]->hash_ = utils.sha256(tmp->merkleNode[depth - 1][len - 1]->hash());
-//            std::cout<< len/2 << "\t" << depth << "\t" << tmp->merkleNode[depth][len/2]->hash_ << "\t" << dataStructure->merkleTree->merkleNode[depth][len/2]->hash_ << "\n";
             if(strcmp((char*)tmp->merkleNode[depth][len/2]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][len/2]->hash_) != 0 ){
                 std::cout << "Failed!\n";
                 return;
@@ -63,6 +61,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         }
         len/=2;
     }
+    std::cout<<"Passed!\n";
 //    for(int i = 2; i < dataStructure->depth; i++){
 //        Fp12 e1, e2;
 //        int child = v[i] >> i;
@@ -86,7 +85,6 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
 //            return;
 //        }
 //    }
-    std::cout<<"Passed!\n";
 
 }
 
