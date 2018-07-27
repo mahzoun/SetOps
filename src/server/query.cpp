@@ -113,8 +113,6 @@ void Intersection::intersect(){
         set_intersection(dataStructure->D[i].begin(), dataStructure->D[i].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()), cmp);
         I = intersect;
     }
-    for(auto x:I)
-        PUT(x);
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
     PUT(*digest_I);
 //    gamma(dataStructure, pk);
@@ -140,7 +138,7 @@ void Intersection::subset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-        std::cout << i << "\t" << *W[i] << "\n";
+//        std::cout << i << "\t" << *W[i] << "\n";
     }
 
 }
