@@ -70,11 +70,9 @@ int main() {
     using namespace std::chrono;
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
     //generate keys
-    Key *k = new Key;
     NTL::ZZ p=NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
     NTL::ZZ_p::init(p);
-    k->genkey(p);
-//    PUT(k->get_secret_key()->sk);
+    Key *k = new Key(p);
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << "Key generation time:\t" << duration << "\n";

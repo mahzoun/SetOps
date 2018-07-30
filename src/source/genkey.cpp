@@ -5,6 +5,9 @@
 #include "source/genkey.h"
 #define SETS_MAX_SIZE 10000
 
+Key::Key(NTL::ZZ p) {
+    genkey(p);
+}
 
 void Key::genkey(NTL::ZZ p){
     create_secret_key(sk, p);

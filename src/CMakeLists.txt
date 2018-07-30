@@ -54,3 +54,17 @@ add_executable(
 
 target_link_libraries(bilinear ntl gmp gmpxx m zm crypto)
 
+set(
+        SRC
+        ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
+        source/genkey.cpp
+        ${CMAKE_SOURCE_DIR}/lib/source/genkey.h
+)
+
+add_library(utils STATIC ${CMAKE_SOURCE_DIR}/lib/utils/utils.h utils/utils.cpp)
+target_link_libraries(utils ntl m zm gmp gmpxx ssl crypto)
+
+add_library(setops STATIC ${SRC})
+target_link_libraries(setops ntl gmp gmpxx m zm utils)
+target_include_directories(setops PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
