@@ -14,7 +14,7 @@
 #include <openssl/sha.h>
 #include "bn.h"
 #include "test_point.hpp"
-#include "source/setup.h"
+#include "source/Intersection.h"
 #include "utils/utils.h"
 #include <stdlib.h>
 

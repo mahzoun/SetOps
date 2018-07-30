@@ -3,7 +3,7 @@
 //
 #include "gtest/gtest.h"
 #include "source/genkey.h"
-#include "source/setup.h"
+#include "source/Intersection.h"
 #define SETS_NO 2
 
 TEST (SetupTest, SetupTwoSets) {

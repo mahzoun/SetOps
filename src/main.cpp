@@ -3,13 +3,13 @@
 #include <cstdlib>
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
-#include "source/setup.h"
+#include "source/Intersection.h"
 #include "source/genkey.h"
 #include "server/query.h"
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
 #define SET_SIZE 10000
-#define SETS_NO 16
+#define SETS_NO 2
 
 void test(int size, Key *k){
     using namespace std::chrono;

@@ -37,7 +37,7 @@ add_executable(
         src/source/genkey.cpp
         lib/source/genkey.h
         src/source/setup.cpp
-        lib/source/setup.h
+        lib/source/Intersection.h
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
         src/utils/utils.cpp
         lib/utils/utils.h

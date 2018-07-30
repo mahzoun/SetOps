@@ -2,7 +2,7 @@
 // Created by sauron on 7/12/18.
 //
 
-#include "source/setup.h"
+#include "source/Intersection.h"
 
 
 int DataStructure::m = 2;
