@@ -35,7 +35,7 @@ add_executable(
         source/genkey.cpp
         ${CMAKE_SOURCE_DIR}/lib/source/genkey.h
         source/setup.cpp
-        ${CMAKE_SOURCE_DIR}/lib/source/Intersection.h
+        ${CMAKE_SOURCE_DIR}/lib/source/setup.h
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
         utils/utils.cpp
         ${CMAKE_SOURCE_DIR}/lib/utils/utils.h
@@ -59,6 +59,11 @@ set(
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
         source/genkey.cpp
         ${CMAKE_SOURCE_DIR}/lib/source/genkey.h
+        source/setup.cpp
+        ${CMAKE_SOURCE_DIR}/lib/source/setup.h
+        utils/merkletree.cpp
+        ${CMAKE_SOURCE_DIR}/lib/utils/merkletree.h
+
 )
 
 add_library(utils STATIC ${CMAKE_SOURCE_DIR}/lib/utils/utils.h utils/utils.cpp)

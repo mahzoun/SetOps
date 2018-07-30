@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
-#include "source/Intersection.h"
+#include "source/setup.h"
 #include "source/genkey.h"
 #include "server/query.h"
 #include "client/verify_intersection.h"
@@ -17,8 +17,8 @@ void test(int size, Key *k){
     high_resolution_clock::time_point t2;
 
     //generate sets
-    DataStructure *dataStructure = new DataStructure(SETS_NO);
-    dataStructure->setup(k->get_public_key(), k->get_secret_key());
+    DataStructure *dataStructure = new DataStructure(SETS_NO, k);
+
     for(int i = 1; i <= size/10; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for(int set_index = 0; set_index < dataStructure->m; set_index++) {

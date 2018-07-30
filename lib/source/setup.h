@@ -27,17 +27,17 @@ class DataStructure {
 public:
     static int m;
     int depth;
+    DataStructure();
+    DataStructure(int, Key*);
+    void treeDigest(PublicKey*, SecretKey *);
+    bn::Ec1 calNodeDigest(PublicKey *, SecretKey*, bn::Ec1, bn::Ec1);
+    void insert(int, NTL::ZZ_p, PublicKey*, SecretKey*);
     std::set<NTL::ZZ_p, ZZ_p_compare> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
     bn::Ec1 digest[SETS_MAX_NO][SETS_MAX_NO]; //, gamma[SETS_MAX_NO][SETS_MAX_NO][MERKLE_TREE_DEG];
     MerkleTree *merkleTree;
-
-    DataStructure();
-    DataStructure(int);
+private:
     void setup(PublicKey*, SecretKey*);
-    void treeDigest(PublicKey*, SecretKey *);
-    bn::Ec1 calNodeDigest(PublicKey *, SecretKey*, bn::Ec1, bn::Ec1);
-    void insert(int, NTL::ZZ_p, PublicKey*, SecretKey*);
 };
 
 

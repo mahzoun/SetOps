@@ -35,7 +35,7 @@ link_directories(
 ADD_EXECUTABLE(
         tests
         test.cpp
-        Intersection.cpp
+        setup.cpp
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
 )
 

@@ -15,7 +15,7 @@
 #include <NTL/vector.h>
 #include "bn.h"
 #include "test_point.hpp"
-#include "source/Intersection.h"
+#include "source/setup.h"
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 #define SETS_MAX_NO 2000

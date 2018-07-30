@@ -2,7 +2,7 @@
 // Created by sauron on 7/12/18.
 //
 
-#include "source/Intersection.h"
+#include "source/setup.h"
 
 
 int DataStructure::m = 2;
@@ -11,7 +11,8 @@ DataStructure::DataStructure() {
     m = 2;
 }
 
-DataStructure::DataStructure(int size){
+DataStructure::DataStructure(int size, Key *key){
+    setup(key->get_public_key(), key->get_secret_key());
     m = size;
 }
 
