@@ -20,6 +20,7 @@ public:
     static int m;
     PublicKey *pk;
     std::set<int> I;
+    bool verifiedtree;
     void verifyTree(PublicKey*, SecretKey *sk, DataStructure *, std::vector<int>);
     bool verifyNode(PublicKey*, SecretKey *sk, DataStructure *, std::vector<int>);
 };

@@ -15,61 +15,6 @@ bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs)
     char* y = utils.zToString(lhs);
     return strcmp(x, y) > 0;
 }
-//void Intersection::gamma(DataStructure *dataStructure, PublicKey *pk) {
-//    int len = dataStructure->m;
-//    int depth = 0;
-//    while(len > 0){
-//        depth++;
-//        if(len%2 == 0) {
-//            for (int i = 0; i < len/2; i++) {
-//                dataStructure->gamma[depth][i][0] = calNodeGamma(pk, dataStructure->digest[depth - 1][2 * i], dataStructure->digest[depth - 1][2*i + 1], 1);
-//                dataStructure->gamma[depth][i][1] = calNodeGamma(pk, dataStructure->digest[depth - 1][2 * i], dataStructure->digest[depth - 1][2*i + 1], 0);
-//            }
-//        }
-//        else{
-//            for (int i = 0; i < len/2 - 1; i += 2) {
-//                dataStructure->gamma[depth][i][0] = calNodeGamma(pk, dataStructure->digest[depth - 1][2 * i], dataStructure->digest[depth - 1][2*i + 1], 1);
-//                dataStructure->gamma[depth][i][1] = calNodeGamma(pk, dataStructure->digest[depth - 1][2 * i], dataStructure->digest[depth - 1][2*i + 1], 0);
-//            }
-//            dataStructure->gamma[depth][len/2][0] = calNodeGamma(pk, dataStructure->digest[depth - 1][len - 1], dataStructure->digest[depth - 1][len - 1], 1);
-//            dataStructure->gamma[depth][len/2][1] = calNodeGamma(pk, dataStructure->digest[depth - 1][len - 1], dataStructure->digest[depth - 1][len - 1], 0);
-//        }
-//        len/=2;
-//    }
-//}
-
-////TODO this functions is dirty, refactor it
-//bn::Ec1 Intersection::calNodeGamma(PublicKey *pk, bn::Ec1 h1, bn::Ec1 h2, int n) {
-//    Utils utils;
-//    bn::Ec1 digest = pk->g1 * 0;
-//    if( n == 1) {
-//        NTL::ZZ_p temp = NTL::conv<NTL::ZZ_p>(1);
-//        unsigned char *H1;
-//        H1 = utils.sha256(utils.Ec1ToString(h1));
-//        //TODO 250?!
-//        H1 = (unsigned char *)strndup((char*)H1, 250);
-//        NTL::ZZ_p x1 = utils.StringToz((char *)H1);
-//        temp *= x1;
-//        const mie::Vuint temp1(zToString(temp));
-//        const mie::Vuint X1(zToString(x1));
-//        digest = pk->pubs_g1[1] * temp1 + pk->g1 * X1;
-//        return digest;
-//    }
-//    else if( n == 0){
-//        NTL::ZZ_p temp = NTL::conv<NTL::ZZ_p>(1);
-//        unsigned char *H2;
-//        H2 = utils.sha256(utils.Ec1ToString(h2));
-//        //TODO 250?!
-//        H2 = (unsigned char *)strndup((char*)H2, 250);
-//        NTL::ZZ_p x2 = utils.StringToz((char *)H2);
-//        temp *= x2;
-//        const mie::Vuint X2(zToString(x2));
-//        const mie::Vuint temp1(zToString(temp));
-//        digest = pk->pubs_g1[1] * temp1 + pk->g1 * X2;
-//        return digest;
-//    }
-//   return digest;
-//}
 
 void Intersection::xgcdTree() {
     std::vector<int> w[SETS_MAX_NO];
@@ -87,7 +32,6 @@ void Intersection::xgcdTree() {
 }
 
 Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataStructure* dataStructure){
-//    this->gamma(dataStructure, pk);
     this->indices = indices;
     this->pk = pk;
     this->dataStructure = dataStructure;
@@ -114,8 +58,7 @@ void Intersection::intersect(){
         I = intersect;
     }
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
-    PUT(*digest_I);
-//    gamma(dataStructure, pk);
+//    PUT(*digest_I);
 }
 
 void Intersection::subset_witness(){
@@ -138,7 +81,6 @@ void Intersection::subset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-//        std::cout << i << "\t" << *W[i] << "\n";
     }
 
 }

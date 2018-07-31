@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/CMakeFiles/gtest"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/CMakeFiles/gtest.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/CMakeFiles/gtest-complete.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-install.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-mkdir.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-download.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-update.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-patch.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-configure.rule"
+		},
+		{
+			"file" : "/home/sauron/CLionProjects/bilinear/test/gtest/src/gtest-stamp/gtest-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"gtest"
+		],
+		"name" : "gtest"
+	}
+}

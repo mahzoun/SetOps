@@ -33,7 +33,6 @@ public:
 class Intersection: Query{
 public:
     std::set<NTL::ZZ_p, ZZ_p_compare> I;
-//    std::vector<NTL::ZZ_p> I;
     std::vector<int> indices;
     bn::Ec2 *W[SETS_MAX_NO];
     bn::Ec1 *Q[SETS_MAX_NO], *digest_I;
@@ -41,12 +40,9 @@ public:
     NTL::ZZ_pX p[SETS_MAX_NO], q[SETS_MAX_NO], polyA, polyB, polyS, polyT, polyD;
     Intersection();
     Intersection(std::vector<int>, PublicKey*, DataStructure*);
-    void setup();
-    void gamma(DataStructure*, PublicKey*);
     void xgcdTree();
     void intersect();
     void subset_witness();
-    bn::Ec1 calNodeGamma(PublicKey*, bn::Ec1, bn::Ec1, int);
     void completeness_witness();
 };
 

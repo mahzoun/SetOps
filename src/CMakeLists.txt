@@ -63,7 +63,14 @@ set(
         ${CMAKE_SOURCE_DIR}/lib/source/setup.h
         utils/merkletree.cpp
         ${CMAKE_SOURCE_DIR}/lib/utils/merkletree.h
-
+        source/setup.cpp
+        ${CMAKE_SOURCE_DIR}/lib/source/setup.h
+        server/query.cpp
+        ${CMAKE_SOURCE_DIR}/lib/server/query.h
+        client/verify_tree.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_tree.h
+        client/verify_intersection.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_intersection.h
 )
 
 add_library(utils STATIC ${CMAKE_SOURCE_DIR}/lib/utils/utils.h utils/utils.cpp)

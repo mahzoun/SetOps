@@ -5,16 +5,17 @@
 using namespace bn;
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
-
     std::cout<<"Verify Leaf Nodes:\t";
     for(int i = 0; i < v.size(); i++){
         if(!verifyNode(pk, sk, dataStructure, v)){
             std::cout<<"Failed!\n";
+            PUT(i);
+            verifiedtree = false;
+            PUT(verifiedtree);
             return;
         }
     }
     std::cout<<"Passed!\n";
-
     std::cout<<"Verify Path Nodes:\t";
     int len = dataStructure->m;
     int depth = 0;
@@ -62,30 +63,8 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         len/=2;
     }
     std::cout<<"Passed!\n";
-//    for(int i = 2; i < dataStructure->depth; i++){
-//        Fp12 e1, e2;
-//        int child = v[i] >> i;
-//        opt_atePairing(e1, pk->g2, dataStructure->digest[i][child]);
-//        unsigned char * H1 = utils.sha256(utils.Ec1ToString(dataStructure->gamma[i][child][child & 1]));
-//        Ec1 other_child = dataStructure->digest[i-1][child * 2 + (not child & 1)];
-//        unsigned char * H2 = utils.sha256(utils.Ec1ToString(other_child));
-//        //TODO 250?!
-//        H1 = (unsigned char *)strndup((char*)H1, 250);
-//        H2 = (unsigned char *)strndup((char*)H2, 250);
-//        NTL::ZZ_p x1 = utils.StringToz((char *)H1);
-//        NTL::ZZ_p x2 = utils.StringToz((char *)H2);
-//        const mie::Vuint temp1((char *)H2);
-//        other_child = pk->pubs_g1[1] + pk->g1 * temp1;
-//        Ec1 g1h = other_child;
-//        const mie::Vuint temp((char *)H1);
-//        Ec2 g2h = pk->g2*0 * temp;
-//        opt_atePairing(e2, g2h, g1h);
-//        if( e1 != e2){
-//            std::cout<<"Failed!\n";
-//            return;
-//        }
-//    }
-
+//    verifiedtree = true;
+//    PUT(verifiedtree);
 }
 
 bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
