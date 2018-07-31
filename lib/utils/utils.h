@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 #include <set>
+#include <openssl/sha.h>
 #include "source/genkey.h"
 #include "bn.h"
 

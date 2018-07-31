@@ -37,10 +37,12 @@ class Key{
 public:
     PublicKey* get_public_key();
     SecretKey* get_secret_key();
-    void genkey(NTL::ZZ);
+    Key();
+    Key(NTL::ZZ);
 private:
     PublicKey *pk;
     SecretKey *sk;
+    void genkey(NTL::ZZ);
     void create_public_key(SecretKey*, NTL::ZZ);
     void create_secret_key(SecretKey*, NTL::ZZ);
 

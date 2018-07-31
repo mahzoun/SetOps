@@ -31,6 +31,8 @@
 *.out
 *.app
 
+*.log
+*.bin
 .idea
 
 ate-pairing/
