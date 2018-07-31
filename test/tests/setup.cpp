@@ -47,12 +47,13 @@ protected:
         intersection->completeness_witness();
         verifyTree = new VerifyTree;
         verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+        //verify intersection
+        verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
 
     }
 };
 
 TEST_F(IntersectionTest, TwoSets) {
-    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
     bool b = verifyIntersection->verify_intersection();
     EXPECT_TRUE(b);
     EXPECT_TRUE(verifyIntersection->completenesswitness);
