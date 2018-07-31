@@ -39,3 +39,7 @@ ate-pairing/
 xbyak/
 cmake-build-debug/
 googletest/
+test/CMakeCache.txt
+test/CMakeFiles/
+test/gtest/
+test/tests/CMakeFiles/
