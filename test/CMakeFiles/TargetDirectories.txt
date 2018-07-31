@@ -1,6 +1,0 @@
-/home/sauron/CLionProjects/bilinear/test/CMakeFiles/rebuild_cache.dir
-/home/sauron/CLionProjects/bilinear/test/CMakeFiles/gtest.dir
-/home/sauron/CLionProjects/bilinear/test/CMakeFiles/edit_cache.dir
-/home/sauron/CLionProjects/bilinear/test/tests/CMakeFiles/rebuild_cache.dir
-/home/sauron/CLionProjects/bilinear/test/tests/CMakeFiles/tests.dir
-/home/sauron/CLionProjects/bilinear/test/tests/CMakeFiles/edit_cache.dir
