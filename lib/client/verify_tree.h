@@ -19,8 +19,9 @@ class VerifyTree {
 public:
     static int m;
     PublicKey *pk;
-    std::set<int> I;
     bool verifiedtree;
+    std::set<int> I;
+    VerifyTree();
     void verifyTree(PublicKey*, SecretKey *sk, DataStructure *, std::vector<int>);
     bool verifyNode(PublicKey*, SecretKey *sk, DataStructure *, std::vector<int>);
 };

@@ -52,7 +52,7 @@ void test(int size, Key *k){
     duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout <<"Query Time:\t" << duration << "\n";
     //verify tree
-    VerifyTree *verifyTree;
+    VerifyTree *verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
 
     //verify intersection
