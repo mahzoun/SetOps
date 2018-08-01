@@ -58,7 +58,6 @@ void Intersection::intersect(){
         I = intersect;
     }
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
-//    PUT(*digest_I);
 }
 
 void Intersection::subset_witness(){
@@ -81,6 +80,7 @@ void Intersection::subset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
+//        std::cerr<< "W[" << i << "]\t:" << *W[i] << "\n";
     }
 
 }
@@ -97,6 +97,7 @@ void Intersection::completeness_witness(){
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[i]) = digest1;
+//        std::cerr<< "Q[" << i << "]\t:" << *Q[i] << "\n";
     }
 }
 

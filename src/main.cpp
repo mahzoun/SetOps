@@ -78,7 +78,7 @@ int main() {
     std::cout << "Key generation time:\t" << duration << "\n";
     
 //    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
-    test(128, k);
+//    test(128, k);
 
     return 0;
 }

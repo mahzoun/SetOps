@@ -19,7 +19,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     }
 //    std::cout<<"Passed!\n";
 //    std::cout<<"Verify Path Nodes:\t";
-    PUT(verifiedtree);
+//    PUT(verifiedtree);
     int len = dataStructure->m;
     int depth = 0;
     MerkleTree *tmp = new MerkleTree(dataStructure->m, dataStructure, pk, sk);
