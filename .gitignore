@@ -43,3 +43,5 @@ test/CMakeCache.txt
 test/CMakeFiles/
 test/gtest/
 test/tests/CMakeFiles/
+Makefile
+*.cmake
