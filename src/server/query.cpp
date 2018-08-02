@@ -102,6 +102,81 @@ Union::Union(const std::vector<int> indices, PublicKey* pk, DataStructure* dataS
     this->indices = indices;
     this->pk = pk;
     this->dataStructure = dataStructure;
-    for(int i = 0; i < SETS_MAX_NO; i++)
+    for(int i = 0; i < SETS_MAX_NO; i++) {
         this->W1[i] = new bn::Ec2;
+        this->W2[i] = new bn::Ec2;
+    }
+}
+
+void Union::unionSets() {
+    Utils utils;
+    std::set<NTL::ZZ_p, ZZ_p_compare> setsunion;
+    set_union(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(), dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(), std::inserter(setsunion, setsunion.begin()), cmp);
+    U = setsunion;
+    for(int i = 2; i < indices.size(); i++) {
+        set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(), std::inserter(setsunion, setsunion.begin()), cmp);
+        U = setsunion;
+    }
+}
+
+
+void Union::membership_witness() {
+    Utils utils;
+    std::vector<NTL::ZZ_p> w, U_tmp;
+    int len = dataStructure->m;
+    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
+    for (it = U.begin(); it != U.end(); it++)
+        U_tmp.push_back(*it);
+    for (int i = 0; i < U_tmp.size(); i++) {
+        w.clear();
+        std::vector<NTL::ZZ_p> tmp;
+        int superset = 0;
+        for (int j = 0; j < indices.size(); j++) {
+            if (dataStructure->D[indices[j]].find(U_tmp[i]) != dataStructure->D[indices[j]].end()) {
+                set_indices.push_back(j);
+                superset = indices[j];
+                break;
+            }
+        }
+        set_difference(dataStructure->D[superset].begin(), dataStructure->D[superset].end(), tmp.begin(), tmp.end(),
+                       std::inserter(w, w.begin()), cmp);
+        c.SetLength(w.size());
+        for (unsigned int j = 0; j < w.size(); j++) {
+            c[j] = -w[j];
+        }
+
+        BuildFromRoots(p, c);
+        Ec2 digest = pk->g2 * 0;
+        int size = p.rep.length();
+        for (int j = 0; j < size; j++) {
+            mie::Vuint temp(utils.zToString(p[j]));
+            digest = digest + pk->pubs_g2[j] * temp;
+        }
+        *W1[i] = digest;
+        std::cout<<"W1[" << i << "]\t" << *W1[i] << "\n";
+    }
+}
+
+void Union::superset_witness(){
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
+    int len = dataStructure->m;
+    for(int i = 0; i < indices.size(); i++) {
+        w.clear();
+        set_difference(U.begin(), U.end(), dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), std::inserter(w, w.begin()), cmp);
+        c.SetLength(w.size());
+        for(unsigned int j = 0; j < w.size(); j++) {
+            c[j] = -w[j];
+        }
+        BuildFromRoots(p, c);
+
+        Ec2 digest = pk->g2 * 0;
+        int size = p.rep.length();
+        for(int j = 0; j < size; j++){
+            mie::Vuint temp(utils.zToString(p[j]));
+            digest = digest + pk->pubs_g2[j] * temp;
+        }
+        *W2[indices[i]] = digest;
+        std::cout<<"W2[" << i << "]\t" << *W2[i] << "\n";
+    }
 }

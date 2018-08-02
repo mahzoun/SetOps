@@ -64,6 +64,11 @@ void test(int size, Key *k){
     std::cout << "Verify Time:\t" << duration << "\n";
     std::cout << "Intersection result is: \t" << b << "\n";
 
+    Union *anUnion = new Union(v, k->get_public_key(), dataStructure);
+    anUnion->unionSets();
+    anUnion->membership_witness();
+    anUnion->superset_witness();
+
 }
 
 int main() {
