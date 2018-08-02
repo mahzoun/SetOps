@@ -4,16 +4,9 @@
 
 #include "source/setup.h"
 
-
-int DataStructure::m = 2;
-
-DataStructure::DataStructure() {
-    m = 2;
-}
-
 DataStructure::DataStructure(int size, Key *key){
+    this->m = size;
     setup(key->get_public_key(), key->get_secret_key());
-    m = size;
 }
 
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
@@ -45,7 +38,7 @@ void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
             }
         }
         else{
-            for (int i = 0; i < len/2 - 1; i += 2) {
+            for (int i = 0; i < len/2; i++) {
                 digest[depth][i] = calNodeDigest(pk, sk, digest[depth - 1][2 * i], digest[depth - 1][2*i + 1]);
             }
             digest[depth][len/2] = calNodeDigest(pk, sk, digest[depth - 1][len - 1], digest[depth - 1][len - 1]);
@@ -76,12 +69,12 @@ bn::Ec1 DataStructure::calNodeDigest(PublicKey *pk, SecretKey *sk, bn::Ec1 h1, b
 void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKey *sk){
     Utils utils;
     try {
-//        std::cout<<"\n" << index << "\t" << element << "\n";
         D[index].insert(element);
         NTL::ZZ_p temp1 = sk->sk + element;
         const mie::Vuint temp(utils.zToString(temp1));
         AuthD[index] *= temp;
         AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
+        //TODO update :)
         merkleTree->build(this, pk, sk);
         treeDigest(pk, sk);
         this->depth = merkleTree->depth;

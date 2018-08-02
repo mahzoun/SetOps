@@ -9,7 +9,7 @@
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
 #define SET_SIZE 10000
-#define SETS_NO 2
+#define SETS_NO 10
 
 void test(int size, Key *k){
     using namespace std::chrono;
@@ -57,7 +57,7 @@ void test(int size, Key *k){
 
     //verify intersection
     t1 = high_resolution_clock::now();
-    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, v);
     bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>( t2 - t1 ).count();
@@ -78,7 +78,7 @@ int main() {
     std::cout << "Key generation time:\t" << duration << "\n";
     
 //    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
-//    test(128, k);
+    test(10, k);
 
     return 0;
 }

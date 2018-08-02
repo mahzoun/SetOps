@@ -9,17 +9,12 @@ VerifyTree::VerifyTree() {
 
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
-//    std::cout<<"Verify Leaf Nodes:\t";
     for(int i = 0; i < v.size(); i++){
         if(!verifyNode(pk, sk, dataStructure, v)){
-//            std::cout<<"Failed!\n";
             verifiedtree = false;
             return;
         }
     }
-//    std::cout<<"Passed!\n";
-//    std::cout<<"Verify Path Nodes:\t";
-//    PUT(verifiedtree);
     int len = dataStructure->m;
     int depth = 0;
     MerkleTree *tmp = new MerkleTree(dataStructure->m, dataStructure, pk, sk);
@@ -38,26 +33,23 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
                 char* temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(), tmp->merkleNode[depth - 1][2 * i + 1]->hash());
                 tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
                 if(strcmp((char*)tmp->merkleNode[depth][i]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0){
-//                    std::cout << "Failed!\n";
                     return;
                 }
 
             }
         }
         else{
-            for (int i = 0; i < len/2 - 1; i += 2) {
+            for (int i = 0; i < len/2; i++) {
                 tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][i], tmp->merkleNode[depth - 1][i + 1]);
                 char* temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(), tmp->merkleNode[depth - 1][2 * i + 1]->hash());
                 tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
                 if(strcmp((char*)tmp->merkleNode[depth][i]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][i]->hash_)!= 0){
-//                    std::cout << "Failed!\n";
                     return;
                 }
             }
             tmp->merkleNode[depth][len/2] = new MerkleNode(nullptr, tmp->merkleNode[depth - 1][len - 1]);
             tmp->merkleNode[depth][len/2]->hash_ = utils.sha256(tmp->merkleNode[depth - 1][len - 1]->hash());
             if(strcmp((char*)tmp->merkleNode[depth][len/2]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][len/2]->hash_) != 0 ){
-//                std::cout << "Failed!\n";
                 return;
             }
 
@@ -65,7 +57,6 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         }
         len/=2;
     }
-//    std::cout<<"Passed!\n";
     verifiedtree = true;
 }
 

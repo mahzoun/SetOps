@@ -68,7 +68,7 @@ public:
 
 class MerkleTree{
 public:
-    static int size;
+    int size;
     int depth;
     MerkleNode *merkleNode[SETS_MAX_NO][SETS_MAX_NO];
     std::vector<bn::Ec1> leafDigest;

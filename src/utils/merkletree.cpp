@@ -3,7 +3,7 @@
 //
 #include "utils/merkletree.h"
 
-int MerkleTree::size = SETS_MAX_NO;
+//int MerkleTree::size = SETS_MAX_NO;
 
 MerkleTree::MerkleTree(){
    this->size = SETS_MAX_NO;
@@ -24,6 +24,7 @@ MerkleTree::~MerkleTree(){
 void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk){
     Utils utils;
     NTL::ZZ_p s = sk->sk;
+    this->size = dataStructure->m;
     for(int i = 0; i < size; i++){
         NTL::ZZ_p val = s + i;
         const mie::Vuint temp(utils.zToString(val));
@@ -36,16 +37,19 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         depth++;
         if(len%2 == 0) {
             for (int i = 0; i < len/2; i++) {
+//                std::cout<< depth <<"\t" << i<<"\t" << merkleNode[depth-1][2*i+1]->hash_ << "\n";
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][2 * i], merkleNode[depth - 1][2 * i + 1]);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
+//                std::cout<< len << " \t" << depth <<"\t" << i<<"\t" << merkleNode[depth][i]->hash_ << "\n";
             }
         }
         else{
-            for (int i = 0; i < len/2 - 1; i += 2) {
+            for (int i = 0; i < len/2; i++) {
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
+//                std::cout<< len << " \t" << depth <<"\t" << i<<"\t" << merkleNode[depth][i]->hash_ << "\n";
             }
             merkleNode[depth][len/2] = new MerkleNode(nullptr, merkleNode[depth - 1][len - 1]);
             merkleNode[depth][len/2]->hash_ = utils.sha256(merkleNode[depth - 1][len - 1]->hash());

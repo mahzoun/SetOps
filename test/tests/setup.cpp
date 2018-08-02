@@ -9,7 +9,7 @@
 #include <NTL/ZZ_p.h>
 #include <NTL/ZZ.h>
 
-#define SETS_NO 2
+#define SETS_NUM 2
 #define size 100
 
 
@@ -21,11 +21,11 @@ protected:
     Intersection *intersection;
     VerifyTree *verifyTree;
     VerifyIntersection *verifyIntersection;
-    void SetUp(int intersectionSize) {
+    void SetUp(int intersectionSize, int sets_no) {
         NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
         NTL::ZZ_p::init(p);
         k = new Key(p);
-        dataStructure = new DataStructure(SETS_NO, k);
+        dataStructure = new DataStructure(sets_no, k);
         for(int i = 1; i <= intersectionSize; i++) {
             NTL::ZZ_p j = NTL::random_ZZ_p();
             for(int set_index = 0; set_index < dataStructure->m; set_index++) {
@@ -48,13 +48,13 @@ protected:
         verifyTree = new VerifyTree;
         verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
         //verify intersection
-        verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+        verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
 
     }
 };
 
 TEST_F(IntersectionTest, TwoSets) {
-    SetUp(size/10);
+    SetUp(size/10, SETS_NUM);
     bool b = verifyIntersection->verify_intersection();
     EXPECT_TRUE(b);
     EXPECT_TRUE(verifyIntersection->completenesswitness);
@@ -63,9 +63,9 @@ TEST_F(IntersectionTest, TwoSets) {
 }
 
 TEST_F(IntersectionTest, WrongsubsetWitness) {
-    SetUp(size/10);
+    SetUp(size/10, SETS_NUM);
     intersection->W[0] += 1;
-    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
     bool b = verifyIntersection->verify_intersection();
     EXPECT_FALSE(b);
     EXPECT_FALSE(verifyIntersection->completenesswitness);
@@ -74,9 +74,9 @@ TEST_F(IntersectionTest, WrongsubsetWitness) {
 }
 
 TEST_F(IntersectionTest, WrongCompletenessWitness) {
-    SetUp(size/10);
+    SetUp(size/10, SETS_NUM);
     intersection->Q[0] += 1;
-    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
     bool b = verifyIntersection->verify_intersection();
     EXPECT_FALSE(b);
     EXPECT_FALSE(verifyIntersection->completenesswitness);
@@ -84,9 +84,19 @@ TEST_F(IntersectionTest, WrongCompletenessWitness) {
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
-TEST_F(IntersectionTest, EmptySet){
-    SetUp(0);
-    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m);
+TEST_F(IntersectionTest, EmptyIntersection){
+    SetUp(0, SETS_NUM);
+    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
+    bool b = verifyIntersection->verify_intersection();
+    EXPECT_TRUE(b);
+    EXPECT_TRUE(verifyIntersection->completenesswitness);
+    EXPECT_TRUE(verifyIntersection->subsetwitness);
+    EXPECT_TRUE(verifyTree->verifiedtree);
+}
+
+TEST_F(IntersectionTest, MultipleSets){
+    SetUp(size/10, 10);
+    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I, intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
     bool b = verifyIntersection->verify_intersection();
     EXPECT_TRUE(b);
     EXPECT_TRUE(verifyIntersection->completenesswitness);

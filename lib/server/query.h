@@ -19,15 +19,13 @@
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 #define SETS_MAX_NO 2000
+#define SETS_MAX_SIZE 10000
 
 class Query{
 public:
     int index;
     PublicKey *pk;
     DataStructure *dataStructure;
-//    virtual void setup();
-//    virtual void Gamma();
-//    virtual void calNodeGamma();
 };
 
 class Intersection: Query{
@@ -44,6 +42,18 @@ public:
     void intersect();
     void subset_witness();
     void completeness_witness();
+};
+
+class Union: Query {
+    std::set<NTL::ZZ_p, ZZ_p_compare> U;
+    std::vector<int> indices, set_indices;
+    bn::Ec2 *W1[SETS_MAX_NO];
+    bn::Ec2 *W2[SETS_MAX_SIZE];
+    Union();
+    Union(std::vector<int>, PublicKey*, DataStructure*);
+    void unionSets();
+    void membership_witness();
+    void superset_witness();
 };
 
 #endif //BILINEAR_QUERY_H

@@ -25,7 +25,7 @@ class MerkleTree;
 
 class DataStructure {
 public:
-    static int m;
+    int m;
     int depth;
     DataStructure();
     DataStructure(int, Key*);
