@@ -49,8 +49,8 @@ public:
     std::set<NTL::ZZ_p, ZZ_p_compare> U;
     std::vector<int> indices, set_indices;
     NTL::vec_ZZ_p c;
-    bn::Ec2 *W1[SETS_MAX_NO];
-    bn::Ec2 *W2[SETS_MAX_SIZE];
+    bn::Ec2 *W1[SETS_MAX_SIZE];
+    bn::Ec2 *W2[SETS_MAX_NO];
     Union();
     Union(std::vector<int>, PublicKey*, DataStructure*);
     NTL::ZZ_pX p;

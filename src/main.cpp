@@ -8,6 +8,7 @@
 #include "server/query.h"
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
+#include "client/verify_union.h"
 #define SET_SIZE 10000
 #define SETS_NO 10
 
@@ -69,6 +70,9 @@ void test(int size, Key *k){
     anUnion->membership_witness();
     anUnion->superset_witness();
 
+    VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), anUnion->U, anUnion->W1, anUnion->W2, dataStructure->AuthD, dataStructure->m, v, anUnion->set_indices);
+    verifyUnion->verify_union();
+    std::cout << "Union result is: \t" << verifyUnion->membershipwitness << "\t" << verifyUnion->membershipwitness << "\n";
 }
 
 int main() {

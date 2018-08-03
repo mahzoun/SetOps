@@ -25,19 +25,15 @@ VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set
 bool VerifyIntersection::verify_intersection() {
     using namespace::bn;
     Fp12 e1, e2, e3, e4, e5, e6, e7;
-//    std::cout<<"Checking subset witnesses:\t";
     for(int i = 0; i < indices.size(); i++) {
         opt_atePairing(e1, *W[indices[i]], digest_I);
         opt_atePairing(e2, pk->g2, AuthD[indices[i]]);
         if( e1 != e2){
-//            std::cout<<"Failed!\n";
             subsetwitness = false;
             return false;
         }
     }
     subsetwitness = true;
-//    std::cout<<"Passed!\n";
-//    std::cout<<"Checking completeness witnesses:\t";
     e3 = 1;
     opt_atePairing(e5, pk->g2, pk->g1);
     for(int i = 0; i < indices.size(); i++) {
@@ -45,11 +41,9 @@ bool VerifyIntersection::verify_intersection() {
         e3 *= e4;
     }
     if( e3 != e5){
-//        std::cout<<"Failed!\n";
         completenesswitness = false;
         return false;
     }
-//    std::cout<<"Passed!\n";
     completenesswitness = true;
-    return true;
+    return subsetwitness and completenesswitness;
 }

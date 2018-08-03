@@ -130,6 +130,7 @@ void Union::membership_witness() {
     for (int i = 0; i < U_tmp.size(); i++) {
         w.clear();
         std::vector<NTL::ZZ_p> tmp;
+        tmp.push_back(U_tmp[i]);
         int superset = 0;
         for (int j = 0; j < indices.size(); j++) {
             if (dataStructure->D[indices[j]].find(U_tmp[i]) != dataStructure->D[indices[j]].end()) {
@@ -153,7 +154,7 @@ void Union::membership_witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W1[i] = digest;
-        std::cout<<"W1[" << i << "]\t" << *W1[i] << "\n";
+//        std::cout<<"W1[" << i << "]\t" << *W1[i] << "\n";
     }
 }
 
@@ -177,6 +178,6 @@ void Union::superset_witness(){
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W2[indices[i]] = digest;
-        std::cout<<"W2[" << i << "]\t" << *W2[i] << "\n";
+//        std::cout<<"W2[" << i << "]\t" << *W2[i] << "\n";
     }
 }
