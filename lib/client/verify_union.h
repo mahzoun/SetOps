@@ -17,7 +17,7 @@
 
 class VerifyUnion {
 public:
-    static int m;
+    int m;
     PublicKey *pk;
     std::vector<int> indices, set_indices;
     bn::Ec1 digest_U;
