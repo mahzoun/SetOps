@@ -9,10 +9,8 @@
 #include <NTL/ZZ_p.h>
 #include <NTL/ZZ.h>
 #include <exception>
-
 #define SETS_NUM 2
-#define size 10
-
+#define SIZE 10
 
 class UnionTest: public ::testing::Test{
 protected:
@@ -28,14 +26,14 @@ protected:
             NTL::ZZ_p::init(p);
             k = new Key(p);
             dataStructure = new DataStructure(sets_no, k);
-            for (int i = 1; i <= size; i++) {
+            for (int i = 1; i <= SIZE; i++) {
                 NTL::ZZ_p j = NTL::random_ZZ_p();
                 for (int set_index = 0; set_index < dataStructure->m; set_index++) {
                     dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
                 }
             }
             for (int set_index = 0; set_index < dataStructure->m; set_index++)
-                for (int i = 1; i <= 9 * size / 10; i++) {
+                for (int i = 1; i <= 9 * SIZE / 10; i++) {
                     NTL::ZZ_p j = NTL::random_ZZ_p();
                     dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
                 }
@@ -106,6 +104,8 @@ TEST_F(UnionTest, MultipleSets){
     v.clear();
     for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
         v.push_back(set_index);
+    verifyTree = new VerifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();

@@ -10,6 +10,7 @@ VerifyTree::VerifyTree() {
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
     for(int i = 0; i < v.size(); i++){
+//        std::cout<<"fuck at \t" << i << "\n";
         if(!verifyNode(pk, sk, dataStructure, v)){
             verifiedtree = false;
             return;
@@ -24,6 +25,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         const mie::Vuint temp(utils.zToString(val));
         tmp->merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
         tmp->merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(tmp->merkleNode[0][i]->value_));
+//        std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
     }
     while(len > 0){
         depth++;
@@ -32,6 +34,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
                 tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][2 * i], tmp->merkleNode[depth - 1][2 * i + 1]);
                 char* temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(), tmp->merkleNode[depth - 1][2 * i + 1]->hash());
                 tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
+//                std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
                 if(strcmp((char*)tmp->merkleNode[depth][i]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0){
                     return;
                 }
@@ -43,6 +46,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
                 tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][i], tmp->merkleNode[depth - 1][i + 1]);
                 char* temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(), tmp->merkleNode[depth - 1][2 * i + 1]->hash());
                 tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
+//                std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
                 if(strcmp((char*)tmp->merkleNode[depth][i]->hash_, (char*)dataStructure->merkleTree->merkleNode[depth][i]->hash_)!= 0){
                     return;
                 }
@@ -63,11 +67,17 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
 bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Fp12 e1, e2;
     for(int i = 0; i < v.size(); i++) {
-        Ec1 acci = dataStructure->AuthD[i];
+        Ec1 acci = dataStructure->AuthD[v[i]];
         Ec1 dh = dataStructure->digest[0][v[i]];
         Ec2 gsgi = pk->pubs_g2[1] + pk->g2 * v[i];
+//        PUT(i);
+//        PUT(acci);
+//        PUT(dh);
+//        PUT(gsgi);
         opt_atePairing(e1, pk->g2, dh);
         opt_atePairing(e2, gsgi, acci);
+//        PUT(e1);
+//        PUT(e2);
         if( e1 != e2){
             return false;
         }

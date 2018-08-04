@@ -7,6 +7,7 @@
 VerifyUnion::VerifyUnion(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> union_ans, bn::Ec2 *W1[], bn::Ec2 *W2[], bn::Ec1 AuthD[], int size, std::vector<int> indices, std::vector<int> set_indices){
     Utils utils;
     this->pk = pk;
+//    PUT("fuck");
     bn::Ec1 digest_test = utils.compute_digest_pub(union_ans, pk->g1, pk);
     this->digest_U = digest_test;
     this->union_ans = union_ans;
@@ -21,7 +22,6 @@ VerifyUnion::VerifyUnion(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> union_
     for(int i = 0; i < m; i++)
         this->AuthD[i] = AuthD[i];
     this->indices = indices;
-//    PUT(indices.size());
     this->set_indices = set_indices;
 }
 
@@ -29,7 +29,6 @@ bool VerifyUnion::verify_union() {
     using namespace::bn;
     Utils utils;
     Fp12 e1, e2, e3, e4;
-//    PUT(U.size());
     for(int i = 0; i < U.size(); i++) {
         const mie::Vuint temp(utils.zToString(U[i]));
         Ec1 gsgi = pk->pubs_g1[1] + pk->g1 * temp;
@@ -65,5 +64,6 @@ bool VerifyUnion::verify_union() {
         }
     }
     supersetnesswitness = true;
+//    PUT(supersetnesswitness);
     return membershipwitness and supersetnesswitness;
 }

@@ -58,6 +58,14 @@ protected:
             std::cerr << e.what() << "\n";
         }
     }
+
+    void TearDown(){
+//        delete(k);
+//        delete(dataStructure);
+//        delete(intersection);
+//        delete(verifyIntersection);
+//        delete(verifyTree);
+    }
 };
 
 TEST_F(IntersectionTest, TwoSets) {
@@ -118,3 +126,19 @@ TEST_F(IntersectionTest, MultipleSets){
     EXPECT_TRUE(verifyIntersection->subsetwitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
+
+TEST_F(IntersectionTest, MultipleSetsEmptyResult){
+    SetUp(size/10, 10);
+    v.clear();
+    for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
+        v.push_back(set_index);
+
+    verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I, intersection->I,
+                                                intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
+    bool b = verifyIntersection->verify_intersection();
+    EXPECT_TRUE(b);
+    EXPECT_TRUE(verifyIntersection->completenesswitness);
+    EXPECT_TRUE(verifyIntersection->subsetwitness);
+    EXPECT_TRUE(verifyTree->verifiedtree);
+}
+
