@@ -101,6 +101,19 @@ TEST_F(UnionTest, WrongSupersetWitness) {
 
 TEST_F(UnionTest, MultipleSets){
     SetUp(6);
+    delete(dataStructure);
+    dataStructure = new DataStructure(6, k);
+    for (int i = 1; i <= SIZE; i++) {
+        NTL::ZZ_p j = NTL::random_ZZ_p();
+        for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+    for (int set_index = 0; set_index < dataStructure->m; set_index++)
+        for (int i = 1; i <= 9 * SIZE / 10; i++) {
+            NTL::ZZ_p j = NTL::random_ZZ_p();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
     v.clear();
     for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
         v.push_back(set_index);
