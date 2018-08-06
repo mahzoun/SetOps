@@ -52,7 +52,9 @@ void Intersection::intersect(){
     std::set<NTL::ZZ_p, ZZ_p_compare> intersect;
     set_intersection(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(), dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(), std::inserter(intersect, intersect.begin()), cmp);
     I = intersect;
+    PUT(I.size());
     for(int i = 2; i < indices.size(); i++) {
+        intersect.clear();
         set_intersection(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()), cmp);
         I = intersect;
     }
@@ -188,6 +190,10 @@ Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure)
     this->pk = publicKey;
     this->dataStructure = dataStructure;
     this->answer = 0;
+    this->W = new bn::Ec2;
+    for(int i = 0; i < 2; i++)
+        this->Q[i] = new bn::Ec1;
+
 }
 
 void Subset::subset() {

@@ -27,10 +27,11 @@ void test(int size, Key *k){
         }
     }
 
-    for(int set_index = 0; set_index < dataStructure->m; set_index++)
+    for(int set_index = 1; set_index < dataStructure->m; set_index++)
         for(int i = 1; i <= 9*size/10; i++) {
             NTL::ZZ_p j = NTL::random_ZZ_p();
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+            dataStructure->insert(0, j, k->get_public_key(), k->get_secret_key());
         }
 
 //    for(int set_index = 0; set_index < dataStructure->m; set_index++)
@@ -73,6 +74,13 @@ void test(int size, Key *k){
     VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v, un->set_indices);
     verifyUnion->verify_union();
     std::cout << "Union result is: \t" << (verifyUnion->membershipwitness and verifyUnion->membershipwitness) << "\n";
+
+    Subset *subset = new Subset(0, 3, k->get_public_key(), dataStructure);
+    subset->subset();
+    if(subset->answer)
+        subset->positiveWitness();
+    else
+        subset->negativeWitness();
 }
 
 int main() {

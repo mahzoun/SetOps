@@ -59,6 +59,7 @@ public:
 };
 
 class Subset: Query{
+public:
     bool answer;
     int index[2];
     bn::Ec2 *W;
