@@ -9,6 +9,7 @@
 #include "client/verify_intersection.h"
 #include "client/verify_tree.h"
 #include "client/verify_union.h"
+#include "client/verify_subset.h"
 #define SET_SIZE 10000
 #define SETS_NO 10
 
@@ -36,9 +37,9 @@ void test(int size, Key *k){
 
 //    for(int set_index = 0; set_index < dataStructure->m; set_index++)
 //        std::cout<<"Size of set " << set_index << " :\t" << dataStructure->D[set_index].size()<<"\n";
-//    for(int i = 0; i < dataStructure->m; i++){
-//        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
-//    }
+    for(int i = 0; i < dataStructure->m; i++){
+        std::cout<<"AuthD[" << i <<"]:\t" << dataStructure->AuthD[i] << "\n";
+    }
     t1 = high_resolution_clock::now();
     //query intersection
     std::vector<int> v;
@@ -75,12 +76,17 @@ void test(int size, Key *k){
     verifyUnion->verify_union();
     std::cout << "Union result is: \t" << (verifyUnion->membershipwitness and verifyUnion->membershipwitness) << "\n";
 
-    Subset *subset = new Subset(0, 3, k->get_public_key(), dataStructure);
+    Subset *subset = new Subset(2, 3, k->get_public_key(), dataStructure);
     subset->subset();
     if(subset->answer)
         subset->positiveWitness();
     else
         subset->negativeWitness();
+
+    VerifySubset *verifySubset = new VerifySubset(k->get_public_key(), dataStructure, subset->Q, subset->W, subset->answer,
+            subset->index[0], subset->index[1], subset->y);
+    verifySubset->verify_subset();
+    std::cout << "Subset result is: \t" << verifySubset->verified_subset << "\n";
 }
 
 int main() {

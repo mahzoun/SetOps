@@ -52,7 +52,6 @@ void Intersection::intersect(){
     std::set<NTL::ZZ_p, ZZ_p_compare> intersect;
     set_intersection(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(), dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(), std::inserter(intersect, intersect.begin()), cmp);
     I = intersect;
-    PUT(I.size());
     for(int i = 2; i < indices.size(); i++) {
         intersect.clear();
         set_intersection(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), I.begin(), I.end(), std::inserter(intersect, intersect.begin()), cmp);
@@ -192,7 +191,7 @@ Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure)
     this->answer = 0;
     this->W = new bn::Ec2;
     for(int i = 0; i < 2; i++)
-        this->Q[i] = new bn::Ec1;
+        this->Q[i] = new bn::Ec2;
 
 }
 
@@ -260,17 +259,26 @@ void Subset::negativeWitness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *W = digest;
+
+    w.clear();
+    for(auto p:dataStructure->D[index[0]])
+        w.push_back(p);
+    c.SetLength((w.size()));
+    for (unsigned int j = 0; j < w.size(); j++) {
+        c[j] = -w[j];
+    }
+    BuildFromRoots(p[0], c);
+
     tmp_c.SetLength(1);
-    tmp_c[0] = y;
+    tmp_c[0] = -y;
     BuildFromRoots(p[1], tmp_c);
-    digest = pk->g2 * 0;
-    XGCD(polyD, polyS, polyT, q[0], q[1]);
+    XGCD(polyD, q[0], q[1], p[0], p[1]);
     for(int i = 0; i < 2; i++) {
-        Ec1 digest1 = pk->g1 * 0;
+        Ec2 digest1 = pk->g2 * 0;
         int poly_size = q[i].rep.length();
         for (int j = 0; j < poly_size; j++) {
             const mie::Vuint temp(utils.zToString(q[i][j]));
-            digest1 = digest1 + pk->pubs_g1[j] * temp;
+            digest1 = digest1 + pk->pubs_g2[j] * temp;
         }
         *Q[i] = digest1;
     }

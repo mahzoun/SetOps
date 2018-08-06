@@ -63,10 +63,10 @@ public:
     bool answer;
     int index[2];
     bn::Ec2 *W;
-    bn::Ec1 *Q[2];
+    bn::Ec2 *Q[2];
     NTL::vec_ZZ_p c, tmp_c;
     NTL::ZZ_p y;
-    NTL::ZZ_pX p[2], q[2], polyS, polyT, polyD;
+    NTL::ZZ_pX p[2], q[2], polyD;
     Subset();
     Subset(int, int, PublicKey*, DataStructure*);
     void subset();
