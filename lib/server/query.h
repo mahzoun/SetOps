@@ -23,7 +23,6 @@
 
 class Query{
 public:
-    int index;
     PublicKey *pk;
     DataStructure *dataStructure;
 };
@@ -51,12 +50,27 @@ public:
     NTL::vec_ZZ_p c;
     bn::Ec2 *W1[SETS_MAX_SIZE];
     bn::Ec2 *W2[SETS_MAX_NO];
+    NTL::ZZ_pX p;
     Union();
     Union(std::vector<int>, PublicKey*, DataStructure*);
-    NTL::ZZ_pX p;
     void unionSets();
     void membership_witness();
     void superset_witness();
 };
 
+class Subset: Query{
+public:
+    bool answer;
+    int index[2];
+    bn::Ec2 *W;
+    bn::Ec2 *Q[2];
+    NTL::vec_ZZ_p c, tmp_c;
+    NTL::ZZ_p y;
+    NTL::ZZ_pX p[2], q[2], polyD;
+    Subset();
+    Subset(int, int, PublicKey*, DataStructure*);
+    void subset();
+    void positiveWitness();
+    void negativeWitness();
+};
 #endif //BILINEAR_QUERY_H
