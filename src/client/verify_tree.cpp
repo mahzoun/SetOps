@@ -78,8 +78,9 @@ bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         opt_atePairing(e2, gsgi, acci);
 //        PUT(e1);
 //        PUT(e2);
-        if( e1 != e2){
+        if(e1 != e2) {
             return false;
         }
     }
+    return true;
 }

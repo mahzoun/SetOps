@@ -90,7 +90,8 @@ void Intersection::completeness_witness(){
     for(int i = 0; i < indices.size(); i++) {
         Ec1 digest1 = g1 * 0;
         polyS = q[indices[i]];
-        for (int j = 0; j < polyS.rep.length(); j++) {
+        int poly_size = polyS.rep.length();
+        for (int j = 0; j < poly_size; j++) {
             const mie::Vuint temp(utils.zToString(polyS[j]));
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
@@ -109,7 +110,6 @@ Union::Union(const std::vector<int> indices, PublicKey* pk, DataStructure* dataS
 }
 
 void Union::unionSets() {
-    Utils utils;
     std::set<NTL::ZZ_p, ZZ_p_compare> setsunion;
     set_union(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(), dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(), std::inserter(setsunion, setsunion.begin()), cmp);
     U = setsunion;
@@ -179,5 +179,93 @@ void Union::superset_witness(){
         }
         *W2[indices[i]] = digest;
 //        std::cout<<"W2[" << i << "]\t" << *W2[i] << "\n";
+    }
+}
+
+Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure) {
+    this->index[0] = I;
+    this->index[1] = J;
+    this->pk = publicKey;
+    this->dataStructure = dataStructure;
+    this->answer = 0;
+}
+
+void Subset::subset() {
+    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator first1, last1, first2, last2;
+    first1 = dataStructure->D[index[0]].begin();
+    last1 = dataStructure->D[index[0]].end();
+    first2 = dataStructure->D[index[1]].begin();
+    last2 = dataStructure->D[index[1]].end();
+    while (first2!=last2) {
+        if (first1==last1 || cmp(*first2, *first1)) {
+            answer = false;
+            y = *first2;
+            return;
+        }
+        if (!cmp(*first1, *first2))
+            ++first2;
+        ++first1;
+    }
+    answer = true;
+}
+
+void Subset::positiveWitness() {
+    if(!answer)
+        return;
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
+    w.clear();
+    set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
+                   dataStructure->D[index[1]].begin(), dataStructure->D[index[1]].end(), std::inserter(w, w.begin()), cmp);
+    c.SetLength(w.size());
+    for(unsigned int j = 0; j < w.size(); j++) {
+        c[j] = -w[j];
+    }
+    BuildFromRoots(p[1], c);
+    Ec2 digest = pk->g2 * 0;
+    int size = p[1].rep.length();
+    for(int j = 0; j < size; j++){
+        mie::Vuint temp(utils.zToString(p[1][j]));
+        digest = digest + pk->pubs_g2[j] * temp;
+    }
+    *W = digest;
+}
+
+void Subset::negativeWitness() {
+    if(answer)
+        return;
+
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
+    w.clear();
+    std::vector<NTL::ZZ_p> tmp;
+    tmp.push_back(this->y);
+    set_difference(dataStructure->D[index[1]].begin(), dataStructure->D[index[1]].end(), tmp.begin(), tmp.end(),
+                   std::inserter(w, w.begin()), cmp);
+    c.SetLength(w.size());
+    for (unsigned int j = 0; j < w.size(); j++) {
+        c[j] = -w[j];
+    }
+    BuildFromRoots(p[0], c);
+    Ec2 digest = pk->g2 * 0;
+    int size = p[0].rep.length();
+    for (int j = 0; j < size; j++) {
+        mie::Vuint temp(utils.zToString(p[0][j]));
+        digest = digest + pk->pubs_g2[j] * temp;
+    }
+    *W = digest;
+    tmp_c.SetLength(1);
+    tmp_c[0] = y;
+    BuildFromRoots(p[1], tmp_c);
+    digest = pk->g2 * 0;
+    XGCD(polyD, polyS, polyT, q[0], q[1]);
+    for(int i = 0; i < 2; i++) {
+        Ec1 digest1 = pk->g1 * 0;
+        int poly_size = q[i].rep.length();
+        for (int j = 0; j < poly_size; j++) {
+            const mie::Vuint temp(utils.zToString(q[i][j]));
+            digest1 = digest1 + pk->pubs_g1[j] * temp;
+        }
+        *Q[i] = digest1;
     }
 }
