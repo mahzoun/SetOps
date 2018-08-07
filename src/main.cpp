@@ -87,6 +87,12 @@ void test(int size, Key *k){
             subset->index[0], subset->index[1], subset->y);
     verifySubset->verify_subset();
     std::cout << "Subset result is: \t" << verifySubset->verified_subset << "\n";
+    int index[2];
+    index[0] = 0;
+    index[1] = 1;
+    Difference *difference = new Difference(index, k->get_public_key(), dataStructure);
+    difference->difference();
+    difference->witness();
 }
 
 int main() {
