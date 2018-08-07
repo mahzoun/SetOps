@@ -20,7 +20,7 @@
 #include "utils/merkletree.h"
 #define SETS_MAX_NO 2000
 #define SETS_MAX_SIZE 10000
-
+#define SMALL_QUERY_SIZE 2
 class Query{
 public:
     PublicKey *pk;
@@ -58,19 +58,34 @@ public:
     void superset_witness();
 };
 
-class Subset: Query{
+class Subset: Query {
 public:
     bool answer;
-    int index[2];
+    int index[SMALL_QUERY_SIZE];
     bn::Ec2 *W;
-    bn::Ec2 *Q[2];
+    bn::Ec2 *Q[SMALL_QUERY_SIZE];
     NTL::vec_ZZ_p c, tmp_c;
     NTL::ZZ_p y;
-    NTL::ZZ_pX p[2], q[2], polyD;
+    NTL::ZZ_pX p[SMALL_QUERY_SIZE], q[SMALL_QUERY_SIZE], polyD;
     Subset();
     Subset(int, int, PublicKey*, DataStructure*);
     void subset();
     void positiveWitness();
     void negativeWitness();
 };
+
+class Difference: Query {
+public:
+    std::set<NTL::ZZ_p, ZZ_p_compare> D, I;
+    int index[2];
+    bn::Ec2 *W[SMALL_QUERY_SIZE], *Wd;
+    bn::Ec1 *Q[SMALL_QUERY_SIZE], *digest_D;
+    NTL::vec_ZZ_p c;
+    NTL::ZZ_pX p[SMALL_QUERY_SIZE], q[SMALL_QUERY_SIZE], polyD;
+    Difference();
+    Difference(int[], PublicKey*, DataStructure*);
+    void difference();
+    void witness();
+};
+
 #endif //BILINEAR_QUERY_H

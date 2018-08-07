@@ -6,7 +6,7 @@
 
 int VerifyIntersection::m = 2;
 
-VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set<NTL::ZZ_p, ZZ_p_compare> I, bn::Ec2 *W[], bn::Ec1 *Q[], bn::Ec1 AuthD[], int size, std::vector<int> indices){
+VerifyIntersection::VerifyIntersection(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> I, bn::Ec2 *W[], bn::Ec1 *Q[], bn::Ec1 AuthD[], int size, std::vector<int> indices){
     Utils utils;
     this->indices = indices;
     this->pk = pk;
@@ -25,7 +25,7 @@ VerifyIntersection::VerifyIntersection(PublicKey *pk, bn::Ec1 digest_I, std::set
 bool VerifyIntersection::verify_intersection() {
     using namespace::bn;
     Fp12 e1, e2, e3, e4, e5, e6, e7;
-    for(int i = 0; i < indices.size(); i++) {
+    for(unsigned int i = 0; i < indices.size(); i++) {
         opt_atePairing(e1, *W[indices[i]], digest_I);
         opt_atePairing(e2, pk->g2, AuthD[indices[i]]);
         if( e1 != e2){
@@ -36,7 +36,7 @@ bool VerifyIntersection::verify_intersection() {
     subsetwitness = true;
     e3 = 1;
     opt_atePairing(e5, pk->g2, pk->g1);
-    for(int i = 0; i < indices.size(); i++) {
+    for(unsigned int i = 0; i < indices.size(); i++) {
         opt_atePairing(e4, *W[indices[i]], *Q[indices[i]]);
         e3 *= e4;
     }

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(main)
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -pthread -march=native -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -pthread -march=native -Wall -Wextra")
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib
@@ -52,6 +52,8 @@ add_executable(
         client/verify_union.cpp
         ${CMAKE_SOURCE_DIR}/lib/client/verify_subset.h
         client/verify_subset.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_difference.h
+        client/verify_difference.cpp
 )
 
 
@@ -79,6 +81,8 @@ set(
         ${CMAKE_SOURCE_DIR}/lib/client/verify_union.h
         client/verify_subset.cpp
         ${CMAKE_SOURCE_DIR}/lib/client/verify_subset.h
+        client/verify_difference.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_difference.h
 )
 
 add_library(utils STATIC ${CMAKE_SOURCE_DIR}/lib/utils/utils.h utils/utils.cpp)
