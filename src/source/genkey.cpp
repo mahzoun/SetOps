@@ -34,7 +34,7 @@ SecretKey* Key::get_secret_key(){
 
 void Key::create_public_key(SecretKey* sk, NTL::ZZ p) {
     try{
-        PublicKey *key = new PublicKey(sk, p);
+        PublicKey *key = new PublicKey(p);
         key->setup_bilinear(sk, key->g1, key->g2);
         pk = key;
         }
@@ -47,7 +47,7 @@ PublicKey* Key::get_public_key() {
     return pk;
 }
 
-PublicKey::PublicKey(SecretKey* sk, NTL::ZZ p){
+PublicKey::PublicKey(NTL::ZZ p){
     using namespace bn;
     CurveParam cp = CurveFp254BNb;
     Param::init(cp);

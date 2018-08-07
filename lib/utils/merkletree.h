@@ -71,13 +71,10 @@ public:
     int size;
     int depth;
     MerkleNode *merkleNode[SETS_MAX_NO][SETS_MAX_NO];
-    std::vector<bn::Ec1> leafDigest;
     MerkleTree();
     MerkleTree(int, DataStructure*, PublicKey*, SecretKey*);
     ~MerkleTree();
     void build(DataStructure*, PublicKey*, SecretKey*);
-    bool verify(DataStructure*, PublicKey*, SecretKey*);
-
 };
 
 

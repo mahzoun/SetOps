@@ -32,11 +32,11 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     poly=ZZ_pX(INIT_MONO, array.size());
     vec_ZZ_p c;
     c.SetLength(array.size());
-    for(int i = 0 ; i < array.size(); i++)
+    for(unsigned int i = 0 ; i < array.size(); i++)
         c[i] = conv<ZZ_p>(-array[i]);
 
     BuildFromRoots(poly, c);
-    for(int i = 0; i < array.size() + 1; i++){
+    for(unsigned int i = 0; i < array.size() + 1; i++){
         const mie::Vuint temp(zToString(poly[i]));
         digest = digest + pk->pubs_g1[i] * temp;
     }
@@ -52,7 +52,7 @@ bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::E
 
     ZZ_p temp1 = conv<ZZ_p>(1);
 
-    for(int i = 0; i < array.size(); i++){
+    for(unsigned int i = 0; i < array.size(); i++){
         temp1 *= (sk->sk) + array[i];
 
     }
@@ -71,11 +71,11 @@ bn::Ec1 Utils::compute_digest_pub(std::vector<NTL::ZZ_p> array, const bn::Ec1 g1
     poly=ZZ_pX(INIT_MONO, array.size());
     vec_ZZ_p c;
     c.SetLength(array.size());
-    for(int i = 0 ; i < array.size(); i++)
+    for(unsigned int i = 0 ; i < array.size(); i++)
         c[i] = conv<ZZ_p>(-array[i]);
 
     BuildFromRoots(poly, c);
-    for(int i = 0; i < array.size() + 1; i++){
+    for(unsigned int i = 0; i < array.size() + 1; i++){
         const mie::Vuint temp(zToString(poly[i]));
         digest = digest + pk->pubs_g1[i] * temp;
     }
@@ -90,7 +90,7 @@ bn::Ec1 Utils::compute_digest(std::vector<NTL::ZZ_p> array, const bn::Ec1 g1, Se
 
     ZZ_p temp1 = conv<ZZ_p>(1);
 
-    for(int i = 0; i < array.size(); i++){
+    for(unsigned int i = 0; i < array.size(); i++){
         temp1 *= (sk->sk) + array[i];
 
     }
@@ -113,7 +113,6 @@ unsigned char* Utils::sha256(char *string)
     //TODO return value is octect :)
     unsigned char *outputBuffer = new unsigned char[65];
     //TODO fix length
-    unsigned char *final = new unsigned char[200];
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     SHA256_Init(&sha256);

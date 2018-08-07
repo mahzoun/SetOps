@@ -60,7 +60,7 @@ void test(int size, Key *k) {
 
     //verify intersection
     t1 = high_resolution_clock::now();
-    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(), *intersection->digest_I,
+    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(),
                                                                     intersection->I, intersection->W, intersection->Q,
                                                                     dataStructure->AuthD, dataStructure->m, v);
     bool b = verifyIntersection->verify_intersection();

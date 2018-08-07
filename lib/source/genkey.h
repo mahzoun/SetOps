@@ -26,7 +26,7 @@ public:
     std::vector<bn::Ec2> pubs_g2;
     bn::Ec1 g1;
     bn::Ec2 g2;
-    PublicKey(SecretKey*, NTL::ZZ p);
+    PublicKey(NTL::ZZ p);
     void setup_bilinear(SecretKey*, bn::Ec1, bn::Ec2);
     //NTL::ZZ_p h(bn::Ec1);
 

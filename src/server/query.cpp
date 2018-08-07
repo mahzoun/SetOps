@@ -53,7 +53,7 @@ void Intersection::intersect() {
                      dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
                      std::inserter(intersect, intersect.begin()), cmp);
     I = intersect;
-    for (int i = 2; i < indices.size(); i++) {
+    for (unsigned int i = 2; i < indices.size(); i++) {
         intersect.clear();
         set_intersection(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), I.begin(), I.end(),
                          std::inserter(intersect, intersect.begin()), cmp);
@@ -65,8 +65,7 @@ void Intersection::intersect() {
 void Intersection::subset_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w;
-    int len = dataStructure->m;
-    for (int i = 0; i < indices.size(); i++) {
+    for (unsigned int i = 0; i < indices.size(); i++) {
         w.clear();
         set_difference(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), I.begin(), I.end(),
                        std::inserter(w, w.begin()), cmp);
@@ -90,7 +89,7 @@ void Intersection::completeness_witness() {
     Utils utils;
     Ec1 g1 = pk->g1;
     xgcdTree();
-    for (int i = 0; i < indices.size(); i++) {
+    for (unsigned int i = 0; i < indices.size(); i++) {
         Ec1 digest1 = g1 * 0;
         polyS = q[indices[i]];
         int poly_size = polyS.rep.length();
@@ -118,7 +117,7 @@ void Union::unionSets() {
               dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
               std::inserter(setsunion, setsunion.begin()), cmp);
     U = setsunion;
-    for (int i = 2; i < indices.size(); i++) {
+    for (unsigned int i = 2; i < indices.size(); i++) {
         set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(),
                   std::inserter(setsunion, setsunion.begin()), cmp);
         U = setsunion;
@@ -129,16 +128,15 @@ void Union::unionSets() {
 void Union::membership_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w, U_tmp;
-    int len = dataStructure->m;
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
     for (it = U.begin(); it != U.end(); it++)
         U_tmp.push_back(*it);
-    for (int i = 0; i < U_tmp.size(); i++) {
+    for (unsigned int i = 0; i < U_tmp.size(); i++) {
         w.clear();
         std::vector<NTL::ZZ_p> tmp;
         tmp.push_back(U_tmp[i]);
         int superset = 0;
-        for (int j = 0; j < indices.size(); j++) {
+        for (unsigned int j = 0; j < indices.size(); j++) {
             if (dataStructure->D[indices[j]].find(U_tmp[i]) != dataStructure->D[indices[j]].end()) {
                 set_indices.push_back(j);
                 superset = indices[j];
@@ -167,8 +165,7 @@ void Union::membership_witness() {
 void Union::superset_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w;
-    int len = dataStructure->m;
-    for (int i = 0; i < indices.size(); i++) {
+    for (unsigned int i = 0; i < indices.size(); i++) {
         w.clear();
         set_difference(U.begin(), U.end(), dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(),
                        std::inserter(w, w.begin()), cmp);
@@ -305,7 +302,6 @@ Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructur
 }
 
 void Difference::difference() {
-    Utils utils;
     set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
                    dataStructure->D[index[1]].begin(), dataStructure->D[index[1]].end(),
                    std::inserter(D, D.begin()), cmp);
