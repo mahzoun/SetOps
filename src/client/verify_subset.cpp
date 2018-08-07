@@ -4,11 +4,12 @@
 #include <client/verify_subset.h>
 
 
-VerifySubset::VerifySubset(PublicKey *publicKey, DataStructure *dataStructure, bn::Ec2 *Q[], bn::Ec2 *W, bool answer, int I, int J, NTL::ZZ_p y) {
+VerifySubset::VerifySubset(PublicKey *publicKey, DataStructure *dataStructure, bn::Ec2 *Q[], bn::Ec2 *W, bool answer,
+                           int I, int J, NTL::ZZ_p y) {
     this->pk = publicKey;
     this->dataStructure = dataStructure;
     this->W = W;
-    for(int i = 0; i < 2; i++)
+    for (int i = 0; i < 2; i++)
         this->Q[i] = Q[i];
     this->answer = answer;
     this->y = y;
@@ -17,7 +18,7 @@ VerifySubset::VerifySubset(PublicKey *publicKey, DataStructure *dataStructure, b
 }
 
 void VerifySubset::verify_subset() {
-    if(answer)
+    if (answer)
         verified_subset = verifyPositive();
     else
         verified_subset = verifyNegetive();
@@ -50,6 +51,9 @@ bool VerifySubset::verifyNegetive() {
     Ec1 gygs = pk->pubs_g1[1] + pk->g1 * temp;
     opt_atePairing(e1, *W, gygs);
     opt_atePairing(e2, pk->g2, dataStructure->AuthD[J]);
+//    PUT(e1);
+//    PUT(e2);
+//    PUT(gygs);
     if (e1 != e2) {
         verified_subset = false;
         return false;
@@ -62,7 +66,7 @@ bool VerifySubset::verifyNegetive() {
 //    PUT(*Q[0]);
 //    PUT(*Q[1]);
 //    PUT(gygs);
-    if (e3 * e4 != e5){
+    if (e3 * e4 != e5) {
         verified_subset = false;
         return false;
     }

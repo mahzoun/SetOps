@@ -18,6 +18,8 @@
 class SecretKey{
 public:
     NTL::ZZ_p sk;
+    SecretKey();
+    SecretKey(NTL::ZZ_p);
 };
 
 class PublicKey{
@@ -44,8 +46,6 @@ private:
     SecretKey *sk;
     void genkey(NTL::ZZ);
     void create_public_key(SecretKey*, NTL::ZZ);
-    void create_secret_key(SecretKey*, NTL::ZZ);
-
 };
 
 

@@ -9,8 +9,7 @@ VerifyTree::VerifyTree() {
 
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
-    for(int i = 0; i < v.size(); i++){
-//        std::cout<<"fuck at \t" << i << "\n";
+    for(unsigned int i = 0; i < v.size(); i++){
         if(!verifyNode(pk, sk, dataStructure, v)){
             verifiedtree = false;
             return;
@@ -66,7 +65,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
 
 bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Fp12 e1, e2;
-    for(int i = 0; i < v.size(); i++) {
+    for(unsigned int i = 0; i < v.size(); i++) {
         Ec1 acci = dataStructure->AuthD[v[i]];
         Ec1 dh = dataStructure->digest[0][v[i]];
         Ec2 gsgi = pk->pubs_g2[1] + pk->g2 * v[i];

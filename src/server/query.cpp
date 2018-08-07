@@ -121,6 +121,7 @@ void Union::unionSets() {
         set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(),
                   std::inserter(setsunion, setsunion.begin()), cmp);
         U = setsunion;
+//        std::cerr << "Size of Union at\t" << i << "\t" << U.size() << "\n";
     }
 }
 
@@ -129,6 +130,7 @@ void Union::membership_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w, U_tmp;
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
+    U_tmp.clear();
     for (it = U.begin(); it != U.end(); it++)
         U_tmp.push_back(*it);
     for (unsigned int i = 0; i < U_tmp.size(); i++) {
@@ -306,9 +308,11 @@ void Difference::difference() {
                    dataStructure->D[index[1]].begin(), dataStructure->D[index[1]].end(),
                    std::inserter(D, D.begin()), cmp);
 
+//    PUT(D.size());
     set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
                    D.begin(), D.end(),
                    std::inserter(I, I.begin()), cmp);
+//    PUT(I.size());
 }
 
 void Difference::witness() {

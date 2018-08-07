@@ -3,16 +3,13 @@
 //
 #include "gtest/gtest.h"
 #include "server/query.h"
-#include "source/genkey.h"
 #include "client/verify_union.h"
 #include "client/verify_tree.h"
-#include <NTL/ZZ_p.h>
-#include <NTL/ZZ.h>
-#include <exception>
+
 #define SETS_NUM 2
 #define SIZE 10
 
-class UnionTest: public ::testing::Test{
+class UnionTest : public ::testing::Test {
 protected:
     Key *k;
     DataStructure *dataStructure;
@@ -20,9 +17,11 @@ protected:
     Union *un;
     VerifyTree *verifyTree;
     VerifyUnion *verifyUnion;
+
     void SetUp(int sets_no) {
         try {
-            NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
+            NTL::ZZ p = NTL::conv<NTL::ZZ>(
+                    "16798108731015832284940804142231733909759579603404752749028378864165570215949");
             NTL::ZZ_p::init(p);
             k = new Key(p);
             dataStructure = new DataStructure(sets_no, k);
@@ -41,8 +40,8 @@ protected:
             for (int set_index = 0; set_index < dataStructure->m; set_index++)
                 v.push_back(set_index);
         }
-        catch(std::exception& e){
-            std::cerr<< e.what() << "\n";
+        catch (std::exception &e) {
+            std::cerr << e.what() << "\n";
         }
 
 
@@ -57,7 +56,8 @@ TEST_F(UnionTest, TwoSets) {
     un->superset_witness();
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v, un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
     EXPECT_TRUE(verifyUnion->membershipwitness);
@@ -74,7 +74,8 @@ TEST_F(UnionTest, WrongMembershipWitness) {
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un->W1[0] += 1;
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v, un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_FALSE(b);
     EXPECT_FALSE(verifyUnion->membershipwitness);
@@ -91,7 +92,8 @@ TEST_F(UnionTest, WrongSupersetWitness) {
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un->W2[0] += 1;
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v, un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_FALSE(b);
     EXPECT_TRUE(verifyUnion->membershipwitness);
@@ -99,31 +101,114 @@ TEST_F(UnionTest, WrongSupersetWitness) {
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
-TEST_F(UnionTest, MultipleSets){
+TEST_F(UnionTest, MultipleSetsEvenindices) {
     SetUp(6);
-    delete(dataStructure);
-    dataStructure = new DataStructure(6, k);
+    delete (dataStructure);
+    DataStructure *dataStructure = new DataStructure(6, k);
     for (int i = 1; i <= SIZE; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
     }
-    for (int set_index = 0; set_index < dataStructure->m; set_index++)
+    for (int set_index = 0; set_index < dataStructure->m; set_index++) {
         for (int i = 1; i <= 9 * SIZE / 10; i++) {
             NTL::ZZ_p j = NTL::random_ZZ_p();
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
+    }
+//    for (int i = 0; i < 6; i++)
+//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
     v.clear();
-    for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
+    for (int set_index = 0; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
+//    std::cout<< "Tree Verification:\n";
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+//    std::cout<< "Union Verification:\n";
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
     un->superset_witness();
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v, un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
+    bool b = verifyUnion->verify_union();
+    EXPECT_TRUE(b);
+    EXPECT_TRUE(verifyUnion->membershipwitness);
+    EXPECT_TRUE(verifyUnion->supersetnesswitness);
+    EXPECT_TRUE(verifyTree->verifiedtree);
+}
+
+
+TEST_F(UnionTest, MultipleSetsOddindices) {
+    SetUp(6);
+    delete (dataStructure);
+    DataStructure *dataStructure = new DataStructure(6, k);
+    for (int i = 1; i <= SIZE; i++) {
+        NTL::ZZ_p j = NTL::random_ZZ_p();
+        for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+    for (int set_index = 0; set_index < dataStructure->m; set_index++) {
+        for (int i = 1; i <= 9 * SIZE / 10; i++) {
+            NTL::ZZ_p j = NTL::random_ZZ_p();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+//    for (int i = 0; i < 6; i++)
+//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
+    v.clear();
+    for (int set_index = 1; set_index < dataStructure->m; set_index += 2)
+        v.push_back(set_index);
+//    std::cout<< "Tree Verification:\n";
+    verifyTree = new VerifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+//    std::cout<< "Union Verification:\n";
+    un = new Union(v, k->get_public_key(), dataStructure);
+    un->unionSets();
+    un->membership_witness();
+    un->superset_witness();
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
+    bool b = verifyUnion->verify_union();
+    EXPECT_TRUE(b);
+    EXPECT_TRUE(verifyUnion->membershipwitness);
+    EXPECT_TRUE(verifyUnion->supersetnesswitness);
+    EXPECT_TRUE(verifyTree->verifiedtree);
+}
+
+TEST_F(UnionTest, MultipleSets3kIndices) {
+    SetUp(6);
+    delete (dataStructure);
+    DataStructure *dataStructure = new DataStructure(6, k);
+    for (int i = 1; i <= SIZE; i++) {
+        NTL::ZZ_p j = NTL::random_ZZ_p();
+        for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+    for (int set_index = 0; set_index < dataStructure->m; set_index++) {
+        for (int i = 1; i <= 9 * SIZE / 10; i++) {
+            NTL::ZZ_p j = NTL::random_ZZ_p();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+//    for (int i = 0; i < 6; i++)
+//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
+    v.clear();
+    for (int set_index = 0; set_index < dataStructure->m; set_index += 3)
+        v.push_back(set_index);
+//    std::cout<< "Tree Verification:\n";
+    verifyTree = new VerifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+//    std::cout<< "Union Verification:\n";
+    un = new Union(v, k->get_public_key(), dataStructure);
+    un->unionSets();
+    un->membership_witness();
+    un->superset_witness();
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
+                                  un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
     EXPECT_TRUE(verifyUnion->membershipwitness);
