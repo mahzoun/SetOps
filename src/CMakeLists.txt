@@ -52,6 +52,8 @@ add_executable(
         client/verify_union.cpp
         ${CMAKE_SOURCE_DIR}/lib/client/verify_subset.h
         client/verify_subset.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_difference.h
+        client/verify_difference.cpp
 )
 
 
@@ -79,6 +81,8 @@ set(
         ${CMAKE_SOURCE_DIR}/lib/client/verify_union.h
         client/verify_subset.cpp
         ${CMAKE_SOURCE_DIR}/lib/client/verify_subset.h
+        client/verify_difference.cpp
+        ${CMAKE_SOURCE_DIR}/lib/client/verify_difference.h
 )
 
 add_library(utils STATIC ${CMAKE_SOURCE_DIR}/lib/utils/utils.h utils/utils.cpp)

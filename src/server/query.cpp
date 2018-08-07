@@ -8,30 +8,29 @@ using namespace bn;
 using namespace NTL;
 
 
-bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs)
-{
+bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs) {
     Utils utils;
-    char* x = utils.zToString(rhs);
-    char* y = utils.zToString(lhs);
+    char *x = utils.zToString(rhs);
+    char *y = utils.zToString(lhs);
     return strcmp(x, y) > 0;
 }
 
 void Intersection::xgcdTree() {
     std::vector<int> w[SETS_MAX_NO];
     q[0] = 1;
-    for(int i = 0; i < dataStructure->m - 1; i++){
-        XGCD(polyD,polyS,polyT, p[i], p[i+1]);
+    for (int i = 0; i < dataStructure->m - 1; i++) {
+        XGCD(polyD, polyS, polyT, p[i], p[i + 1]);
         q[i] *= polyS;
-        q[i+1] = polyT;
-        p[i+1] = polyD;
-        if(!IsZero(q[i] * q[i+1]))
-            for(int j = i - 1; j >= 0; j--)
+        q[i + 1] = polyT;
+        p[i + 1] = polyD;
+        if (!IsZero(q[i] * q[i + 1]))
+            for (int j = i - 1; j >= 0; j--)
                 q[j] *= q[i];
     }
 
 }
 
-Intersection::Intersection(const std::vector<int> indices, PublicKey* pk, DataStructure* dataStructure) {
+Intersection::Intersection(const std::vector<int> indices, PublicKey *pk, DataStructure *dataStructure) {
     this->indices = indices;
     this->pk = pk;
     this->dataStructure = dataStructure;
@@ -103,7 +102,7 @@ void Intersection::completeness_witness() {
     }
 }
 
-Union::Union(const std::vector<int> indices, PublicKey* pk, DataStructure* dataStructure) {
+Union::Union(const std::vector<int> indices, PublicKey *pk, DataStructure *dataStructure) {
     this->indices = indices;
     this->pk = pk;
     this->dataStructure = dataStructure;
@@ -291,7 +290,7 @@ void Subset::negativeWitness() {
     }
 }
 
-Difference::Difference(int indices[], PublicKey* pk, DataStructure* dataStructure) {
+Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructure) {
     for (int i = 0; i < SMALL_QUERY_SIZE; i++)
         this->index[i] = indices[i];
     this->pk = pk;
@@ -334,7 +333,7 @@ void Difference::witness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *Wd = digest;
-    PUT(*Wd);
+//    PUT(*Wd);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
         w.clear();
         set_difference(dataStructure->D[index[i]].begin(), dataStructure->D[index[i]].end(),
@@ -353,7 +352,7 @@ void Difference::witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-        PUT(*W[i]);
+//        PUT(*W[i]);
     }
     XGCD(polyD, q[0], q[1], p[0], p[1]);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
@@ -364,7 +363,7 @@ void Difference::witness() {
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         *Q[i] = digest1;
-        PUT(*Q[i]);
+//        PUT(*Q[i]);
     }
 }
 
