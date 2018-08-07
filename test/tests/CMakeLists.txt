@@ -38,8 +38,9 @@ ADD_EXECUTABLE(
         intersection.cpp
         union.cpp
         subset.cpp
+        difference.cpp
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
-        )
+)
 
 TARGET_LINK_LIBRARIES(tests libgtest libgmock ntl gmp gmpxx m zm crypto setops)
 
