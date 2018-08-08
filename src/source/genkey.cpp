@@ -4,17 +4,20 @@
 
 #include "source/genkey.h"
 #define SETS_MAX_SIZE 10000
+#define NODEBUG
 
 Key::Key(NTL::ZZ p) {
     NTL::ZZ_p::init(p);
     NTL::ZZ_p temp(0);
     random(temp);
     this->sk = new SecretKey(temp);
+    log_info("Secret Key Generated");
     genkey(p);
 }
 
 void Key::genkey(NTL::ZZ p){
     create_public_key(sk, p);
+    log_info("Public Key Generated");
 }
 
 SecretKey* Key::get_secret_key(){

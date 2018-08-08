@@ -14,6 +14,7 @@
 #include "bn.h"
 #include "test_point.hpp"
 #include "utils/utils.h"
+#include "utils/dbg.h"
 
 class SecretKey{
 public:

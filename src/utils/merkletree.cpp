@@ -15,6 +15,7 @@ MerkleTree::MerkleTree(int size, DataStructure *dataStructure, PublicKey *pk, Se
         bn::Ec1 x = pk->g1;
         merkleNode[0][i] = new MerkleNode(x);
     }
+    debug("MerkleTree Created successfully with %d leafs", size);
 }
 
 MerkleTree::~MerkleTree(){
@@ -35,13 +36,13 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
     depth = 0;
     while(len > 0){
         depth++;
+        debug("Initializing depth:\t%d with the len of:\t%d", depth, len);
         if(len%2 == 0) {
             for (int i = 0; i < len/2; i++) {
-//                std::cout<< depth <<"\t" << i<<"\t" << merkleNode[depth-1][2*i+1]->hash_ << "\n";
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][2 * i], merkleNode[depth - 1][2 * i + 1]);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
-//                std::cout<< len << " \t" << depth <<"\t" << i<<"\t" << merkleNode[depth][i]->hash_ << "\n";
+                debug("Hash value of node %d in depth %d is %s", i, depth, merkleNode[depth][i]->hash_);
             }
         }
         else{
@@ -49,10 +50,11 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
-//                std::cout<< len << " \t" << depth <<"\t" << i<<"\t" << merkleNode[depth][i]->hash_ << "\n";
+                debug("Hash value of node %d in depth %d is %s", i, depth, merkleNode[depth][i]->hash_);
             }
             merkleNode[depth][len/2] = new MerkleNode(nullptr, merkleNode[depth - 1][len - 1]);
             merkleNode[depth][len/2]->hash_ = utils.sha256(merkleNode[depth - 1][len - 1]->hash());
+            debug("Hash value of node %d in depth %d is %s", len, depth, merkleNode[depth][len/2]->hash_);
         }
         len/=2;
     }
