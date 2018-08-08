@@ -18,6 +18,7 @@
 #include "source/setup.h"
 #include "utils/utils.h"
 #include "utils/merkletree.h"
+#include "utils/dbg.h"
 #define SETS_MAX_NO 2000
 #define SETS_MAX_SIZE 10000
 #define SMALL_QUERY_SIZE 2

@@ -12,14 +12,16 @@ using namespace std;
 
 #ifdef NODEBUG
 #define debug(M, ...)
+#define DEBUG(M, V)
 #define DEBUGINDEX(M, i, V)
 #define DEBUG2INDEX(M, i, j, V)
 #else
 #define debug(M, ...) fprintf(stderr, "[DEBUG] %s:%d: " M "\n", __FILE__, \
         __LINE__,  ##__VA_ARGS__)
-#define DEBUG(M, V) cerr << "DEBUG :" << __FILE__ << ":" << __LINE__ << M << "\t" << V << endl;
-#define DEBUGINDEX(M, i, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << "\t" << i << "\t" << V << endl;
-#define DEBUG2INDEX(M, i, j, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << "\t" << i <<"\t" << j << "\t" << V << endl;
+#define DEBUG(M, V) cerr << "DEBUG :" << __FILE__ << ":" << __LINE__ << M << " " << V << endl;
+#define DEBUG(M, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << V << endl;
+#define DEBUGINDEX(M, i, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << i << " " << V << endl;
+#define DEBUG2INDEX(M, i, j, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << i <<" " << j << " " << V << endl;
 #endif
 
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
