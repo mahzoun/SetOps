@@ -11,7 +11,7 @@
 #include "client/verify_difference.h"
 #define NODEBUG
 #define SET_SIZE 10000
-#define SETS_NO 10
+#define SETS_NO 8
 
 void test(int size, Key *k) {
     using namespace std::chrono;
@@ -57,7 +57,7 @@ void test(int size, Key *k) {
     //verify tree
     VerifyTree *verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-
+    log_info("Tree verification result:\t%x", verifyTree->verifiedtree);
     //verify intersection
     t1 = high_resolution_clock::now();
     VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(),
@@ -135,7 +135,6 @@ void test(int size, Key *k) {
 int main() {
     using namespace std::chrono;
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    //generate keys
     NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
     NTL::ZZ_p::init(p);
     Key *k = new Key(p);

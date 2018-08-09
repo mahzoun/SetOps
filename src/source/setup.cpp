@@ -34,23 +34,22 @@ void DataStructure::treeDigest(PublicKey *pk, SecretKey *sk) {
     }
     int len = m;
     int depth = 0;
-    while(len > 0){
+    while (len > 1) {
         depth++;
-        if(len%2 == 0) {
-            for (int i = 0; i < len/2; i++) {
-                digest[depth][i] = calNodeDigest(pk, sk, digest[depth - 1][2 * i], digest[depth - 1][2*i + 1]);
+        if (len % 2 == 0) {
+            for (int i = 0; i < len / 2; i++) {
+                digest[depth][i] = calNodeDigest(pk, sk, digest[depth - 1][2 * i], digest[depth - 1][2 * i + 1]);
                 DEBUG2INDEX("Tree digest of ", i, depth, digest[depth][i]);
             }
-        }
-        else{
-            for (int i = 0; i < len/2; i++) {
-                digest[depth][i] = calNodeDigest(pk, sk, digest[depth - 1][2 * i], digest[depth - 1][2*i + 1]);
+        } else {
+            for (int i = 0; i < len / 2; i++) {
+                digest[depth][i] = calNodeDigest(pk, sk, digest[depth - 1][2 * i], digest[depth - 1][2 * i + 1]);
                 DEBUG2INDEX("Tree digest of ", i, depth, digest[depth][i]);
             }
-            digest[depth][len/2] = calNodeDigest(pk, sk, digest[depth - 1][len - 1], digest[depth - 1][len - 1]);
-            DEBUG2INDEX("Tree digest of ", len/2, depth, digest[depth][len/2]);
+            digest[depth][len / 2] = calNodeDigest(pk, sk, digest[depth - 1][len - 1], digest[depth - 1][len - 1]);
+            DEBUG2INDEX("Tree digest of ", len / 2, depth, digest[depth][len / 2]);
         }
-        len/=2;
+        len /= 2;
     }
 }
 
@@ -83,8 +82,7 @@ void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKe
         AuthD[index] *= temp;
         AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
         DEBUGINDEX("Authenticated value of ", index, AuthD[index]);
-        //TODO update :)
-        merkleTree->build(this, pk, sk);
+        merkleTree->update(this, pk, sk, index);
         treeDigest(pk, sk);
         this->depth = merkleTree->depth;
     }

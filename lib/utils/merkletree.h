@@ -76,6 +76,7 @@ public:
     MerkleTree(int, DataStructure*, PublicKey*, SecretKey*);
     ~MerkleTree();
     void build(DataStructure*, PublicKey*, SecretKey*);
+    void update(DataStructure*, PublicKey*, SecretKey*, int);
 };
 
 

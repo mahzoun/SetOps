@@ -4,6 +4,7 @@
 
 #ifndef BILINEAR_UTILS_H
 #define BILINEAR_UTILS_H
+#define NODEBUG
 
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>

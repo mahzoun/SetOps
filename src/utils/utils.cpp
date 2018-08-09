@@ -43,20 +43,16 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     return digest;
 }
 
-bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::Ec1 g1, SecretKey *sk){
-    std::vector<NTL::ZZ_p> array(set.begin(), set.end());
-    Ec1 digest = g1*1;
-
-    if(array.size() == 0)
+bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::Ec1 g1, SecretKey *sk) {
+    Ec1 digest = g1 * 1;
+    if (set.size() == 0)
         return digest;
 
+    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
     ZZ_p temp1 = conv<ZZ_p>(1);
 
-    for(unsigned int i = 0; i < array.size(); i++){
-        temp1 *= (sk->sk) + array[i];
-
-    }
-
+    for (it = set.begin(); it != set.end(); it++)
+        temp1 *= (sk->sk) + *it;
     const mie::Vuint temp(zToString(temp1));
     digest = g1 * temp;
     return digest;
@@ -102,6 +98,7 @@ bn::Ec1 Utils::compute_digest(std::vector<NTL::ZZ_p> array, const bn::Ec1 g1, Se
 
 char* Utils::concat(const char *s1, const char *s2)
 {
+    debug("concating %s and %s", s1, s2);
     char *result = new char[strlen(s1) + strlen(s2) + 1]; // +1 for the null-terminator
     strcpy(result, s1);
     strcat(result, s2);

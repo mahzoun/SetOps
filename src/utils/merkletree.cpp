@@ -34,7 +34,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
     }
     int len = size;
     depth = 0;
-    while(len > 0){
+    while(len > 1){
         depth++;
         debug("Initializing depth:\t%d with the len of:\t%d", depth, len);
         if(len%2 == 0) {
@@ -57,5 +57,27 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
             debug("Hash value of node %d in depth %d is %s", len, depth, merkleNode[depth][len/2]->hash_);
         }
         len/=2;
+    }
+}
+
+void MerkleTree::update(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk, int index) {
+    Utils utils;
+    NTL::ZZ_p s = sk->sk;
+    this->size = dataStructure->m;
+    NTL::ZZ_p val = s + index;
+    const mie::Vuint temp(utils.zToString(val));
+    merkleNode[0][index]->value_ = dataStructure->AuthD[index] * temp;
+    merkleNode[0][index]->hash_ = utils.sha256(utils.Ec1ToString(merkleNode[0][index]->value_));
+    debug("Hash value of leaf %d in depth %d is updated to %s", index, depth, merkleNode[0][index]->hash_);
+    int len = size;
+    depth = 0;
+    while (len > 1) {
+        depth++;
+        index /= 2;
+        char *temp = utils.concat(merkleNode[depth - 1][2 * index]->hash(),
+                                  merkleNode[depth - 1][2 * index + 1]->hash());
+        merkleNode[depth][index]->hash_ = utils.sha256(temp);
+        debug("Hash value of node %d in depth %d is %s", index, depth, merkleNode[depth][index]->hash_);
+        len /= 2;
     }
 }
