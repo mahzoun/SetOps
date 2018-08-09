@@ -5,7 +5,7 @@
 
 // AllTests.cpp
 #include "gtest/gtest.h"
-#define NODEBUG
+//#define NODEBUG
 
 int main(int argc, char **argv)
 {

@@ -20,7 +20,6 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
         DEBUGINDEX("Authenticated value for set ", i , AuthD[i]);
     }
     merkleTree->build(this, pk, sk);
-//    treeDigest(pk, sk);
     this->depth = merkleTree->depth;
 }
 
@@ -34,7 +33,6 @@ void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKe
         AuthD[index] *= temp;
         DEBUGINDEX("Authenticated value of ", index, AuthD[index]);
         merkleTree->update(this, pk, sk, index);
-//        treeDigest(pk, sk);
         this->depth = merkleTree->depth;
     }
     catch (std::exception& e) {

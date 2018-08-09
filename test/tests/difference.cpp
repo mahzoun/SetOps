@@ -6,7 +6,7 @@
 #include "server/query.h"
 #include "client/verify_difference.h"
 
-#define SETS_NUM 10
+#define SETS_NUM 16
 #define SIZE 10
 
 class DifferenceTest : public ::testing::Test {

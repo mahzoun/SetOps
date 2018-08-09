@@ -113,7 +113,7 @@ TEST_F(IntersectionTest, EmptyIntersection){
 }
 
 TEST_F(IntersectionTest, MultipleSets){
-    SetUp(size/10, 10);
+    SetUp(size/10, 16);
     v.clear();
     for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
         v.push_back(set_index);
@@ -128,7 +128,7 @@ TEST_F(IntersectionTest, MultipleSets){
 }
 
 TEST_F(IntersectionTest, MultipleSetsEmptyResult){
-    SetUp(size/10, 10);
+    SetUp(size/10, 16);
     v.clear();
     for(int set_index = 0; set_index < dataStructure->m; set_index+=2)
         v.push_back(set_index);

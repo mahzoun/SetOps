@@ -9,7 +9,7 @@
 #include <NTL/ZZ_p.h>
 #include <NTL/ZZ.h>
 #include <exception>
-#define SETS_NUM 10
+#define SETS_NUM 16
 #define SIZE 10
 
 class SubsetTest: public ::testing::Test{

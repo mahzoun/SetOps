@@ -102,9 +102,9 @@ TEST_F(UnionTest, WrongSupersetWitness) {
 }
 
 TEST_F(UnionTest, MultipleSetsEvenindices) {
-    SetUp(6);
+    SetUp(16);
     delete (dataStructure);
-    DataStructure *dataStructure = new DataStructure(6, k);
+    DataStructure *dataStructure = new DataStructure(16, k);
     for (int i = 1; i <= SIZE; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
@@ -141,9 +141,9 @@ TEST_F(UnionTest, MultipleSetsEvenindices) {
 
 
 TEST_F(UnionTest, MultipleSetsOddindices) {
-    SetUp(6);
+    SetUp(16);
     delete (dataStructure);
-    DataStructure *dataStructure = new DataStructure(6, k);
+    DataStructure *dataStructure = new DataStructure(16, k);
     for (int i = 1; i <= SIZE; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
@@ -179,9 +179,9 @@ TEST_F(UnionTest, MultipleSetsOddindices) {
 }
 
 TEST_F(UnionTest, MultipleSets3kIndices) {
-    SetUp(6);
+    SetUp(16);
     delete (dataStructure);
-    DataStructure *dataStructure = new DataStructure(6, k);
+    DataStructure *dataStructure = new DataStructure(16, k);
     for (int i = 1; i <= SIZE; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for (int set_index = 0; set_index < dataStructure->m - 1; set_index++) {
