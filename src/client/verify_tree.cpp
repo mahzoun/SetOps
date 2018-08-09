@@ -71,7 +71,7 @@ bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     Fp12 e1, e2;
     for(unsigned int i = 0; i < v.size(); i++) {
         Ec1 acci = dataStructure->AuthD[v[i]];
-        Ec1 dh = dataStructure->digest[0][v[i]];
+        Ec1 dh = dataStructure->merkleTree->merkleNode[0][v[i]]->value_;
         Ec2 gsgi = pk->pubs_g2[1] + pk->g2 * v[i];
         opt_atePairing(e1, pk->g2, dh);
         opt_atePairing(e2, gsgi, acci);

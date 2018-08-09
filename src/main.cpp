@@ -9,9 +9,78 @@
 #include "client/verify_union.h"
 #include "client/verify_subset.h"
 #include "client/verify_difference.h"
+
 #define NODEBUG
 #define SET_SIZE 10000
-#define SETS_NO 8
+#define SETS_NO 2
+
+void test_intersection(int size, int intersection_size, Key *k) {
+    using namespace std::chrono;
+    high_resolution_clock::time_point t1, t3;
+    high_resolution_clock::time_point t2, t4;
+
+    t3 = high_resolution_clock::now();
+    //generate sets
+    DataStructure *dataStructure = new DataStructure(SETS_NO, k);
+
+    for (int i = 1; i <= intersection_size; i++) {
+        NTL::ZZ_p j = NTL::random_ZZ_p();
+        for (int set_index = 0; set_index < dataStructure->m; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+
+    std::cout << size << "\t";
+    for (int set_index = 1; set_index < dataStructure->m; set_index++)
+        for (int i = 1; i <= size - intersection_size; i++) {
+            NTL::ZZ_p j = NTL::random_ZZ_p();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+            dataStructure->insert(0, j, k->get_public_key(), k->get_secret_key());
+        }
+
+    t4 = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(t4 - t3).count();
+    std::cout << duration << "\t";
+
+    //query intersection
+    std::vector<int> v;
+    for (int set_index = 0; set_index < dataStructure->m; set_index++)
+        v.push_back(set_index);
+
+    t3 = high_resolution_clock::now();
+    Intersection *intersection = new Intersection(v, k->get_public_key(), dataStructure);
+    intersection->intersect();
+    t1 = high_resolution_clock::now();
+    intersection->subset_witness();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(t2 - t1).count();
+    std::cout << duration << "\t";
+
+    t1 = high_resolution_clock::now();
+    intersection->completeness_witness();
+    t2 = high_resolution_clock::now();
+    t4 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(t2 - t1).count();
+    std::cout << duration << "\t";
+    duration = duration_cast<microseconds>(t4 - t3).count();
+    std::cout << duration << "\n";
+//    log_info("Intersection query time:\t%d", duration);
+    //verify tree
+    VerifyTree *verifyTree = new VerifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+//    log_info("Tree verification result:\t%x", verifyTree->verifiedtree);
+    //verify intersection
+    t1 = high_resolution_clock::now();
+    VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(),
+                                                                    intersection->I, intersection->W, intersection->Q,
+                                                                    dataStructure->AuthD, dataStructure->m, v);
+    bool b = verifyIntersection->verify_intersection();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+//    log_info("Intersection verification time:\t%d", duration);
+//    log_info("Intersection verification result:\t%x", b);
+
+}
 
 void test(int size, Key *k) {
     using namespace std::chrono;
@@ -142,8 +211,10 @@ int main() {
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     log_info("Key generation time:\t%d", duration);
 
-//    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
-    test(10, k);
+    for (int test_size = 10; test_size <= SET_SIZE; test_size *= 2)
+        test_intersection(test_size, test_size / 10, k);
+
+//    test(10000, k);
 
     return 0;
 }
