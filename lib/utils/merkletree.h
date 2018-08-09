@@ -5,6 +5,7 @@
 
 #ifndef BILINEAR_MERKLETREE_H
 #define BILINEAR_MERKLETREE_H
+#define NODEBUG
 
 #include <iostream>
 #include <memory>

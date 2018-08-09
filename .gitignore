@@ -45,3 +45,8 @@ test/gtest/
 test/tests/CMakeFiles/
 Makefile
 *.cmake
+CMakeCache.txt
+CMakeFiles/
+src/CMakeFiles/
+src/bilinear
+test/tests/tests

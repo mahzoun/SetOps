@@ -1,40 +1,48 @@
 //
 // Created by sauron on 7/20/18.
-// All credit goes to Zed A. Shaw from the course Learn C The Hard Way
 
 #ifndef __dbg_h__
 #define __dbg_h__
 
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+#include <iostream>
+using namespace std;
 
-#ifdef NDEBUG
+#ifdef NODEBUG
 #define debug(M, ...)
+#define DEBUG(M, V)
+#define DEBUGINDEX(M, i, V)
+#define DEBUG2INDEX(M, i, j, V)
 #else
-#define debug(M, ...) fprintf(stderr, "DEBUG %s:%d: " M "\n", __FILE__, \
-		__LINE__,  ##__VA_ARGS__)
+#define debug(M, ...) fprintf(stderr, "[DEBUG] %s:%d: " M "\n", __FILE__, \
+        __LINE__,  ##__VA_ARGS__)
+#define DEBUG(M, V) cerr << "DEBUG :" << __FILE__ << ":" << __LINE__ << M << " " << V << endl;
+#define DEBUG(M, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << V << endl;
+#define DEBUGINDEX(M, i, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << i << " " << V << endl;
+#define DEBUG2INDEX(M, i, j, V) cerr << "[DEBUG] " << __FILE__ << ":" << __LINE__ <<": " << M << " " << i <<" " << j << " " << V << endl;
 #endif
 
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 
 #define log_err(M, ...) fprintf(stderr, "[ERROR] (%s:%d: errno: %s) " M "\n", \
-		__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+        __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
 
 #define log_warn(M, ...) fprintf(stderr, "[WARN] (%s:%d: errno: %s) " M "\n", \
-		__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+        __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
 
-#define log_info(M, ...) fprintf(stderr, "[INFO] (%s:%d:) " M "\n", \
-		__FILE__, __LINE__, ##__VA_ARGS__)
+#define log_info(M, ...) fprintf(stdout, "[INFO] (%s:%d:) " M "\n", \
+        __FILE__, __LINE__, ##__VA_ARGS__)
 
 #define check(A, M, ...) if(!(A)) { log_err(M, ##__VA_ARGS__); errno=0; goto \
-		error; }
+        error; }
 
 #define sentinel(M, ...) { log_err(M, ##__VA_ARGS__); errno=0; goto error; }
 
 #define check_mem(A) check((A), "Out of memory.")
 
 #define check_debug(A, M, ...) if(!(A)) {debug(M, ##__VA_ARGS__); errno=0; \
-	goto error;}
+    goto error;}
 
 #endif

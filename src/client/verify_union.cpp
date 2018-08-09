@@ -29,7 +29,7 @@ bool VerifyUnion::verify_union() {
     using namespace::bn;
     Utils utils;
     Fp12 e1, e2, e3, e4;
-    for(int i = 0; i < U.size(); i++) {
+    for(unsigned int i = 0; i < U.size(); i++) {
         const mie::Vuint temp(utils.zToString(U[i]));
         Ec1 gsgi = pk->pubs_g1[1] + pk->g1 * temp;
 //        PUT(i);
@@ -51,7 +51,7 @@ bool VerifyUnion::verify_union() {
 //    PUT(digest_U);
 //    PUT(indices.size());
     opt_atePairing(e4, pk->g2, digest_U);
-    for(int i = 0; i < indices.size(); i++) {
+    for(unsigned int i = 0; i < indices.size(); i++) {
 //        PUT(i);
         opt_atePairing(e3, *W2[indices[i]], AuthD[indices[i]]);
 //        PUT(*W2[indices[i]]);

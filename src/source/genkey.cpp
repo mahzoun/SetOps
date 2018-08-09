@@ -4,28 +4,20 @@
 
 #include "source/genkey.h"
 #define SETS_MAX_SIZE 10000
+#define NODEBUG
 
 Key::Key(NTL::ZZ p) {
+    NTL::ZZ_p::init(p);
+    NTL::ZZ_p temp(0);
+    random(temp);
+    this->sk = new SecretKey(temp);
+    log_info("Secret Key Generated");
     genkey(p);
 }
 
 void Key::genkey(NTL::ZZ p){
-    create_secret_key(sk, p);
     create_public_key(sk, p);
-}
-
-void Key::create_secret_key(SecretKey *key, NTL::ZZ p) {
-    try {
-        NTL::ZZ_p::init(p);
-        key = new SecretKey;
-        NTL::ZZ_p temp(0);
-        random(temp);
-        key->sk = temp;
-        sk = key;
-    }
-    catch (std::exception& e) {
-        std::cout<<e.what() << '\n';
-    }
+    log_info("Public Key Generated");
 }
 
 SecretKey* Key::get_secret_key(){
@@ -41,6 +33,14 @@ void Key::create_public_key(SecretKey* sk, NTL::ZZ p) {
     catch (std::exception& e) {
         std::cout<<e.what() << '\n';
     }
+}
+
+SecretKey::SecretKey() {
+    this->sk = 0;
+}
+
+SecretKey::SecretKey(NTL::ZZ_p s) {
+    this->sk = s;
 }
 
 PublicKey* Key::get_public_key() {

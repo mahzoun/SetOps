@@ -16,7 +16,6 @@ bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs) {
 }
 
 void Intersection::xgcdTree() {
-    std::vector<int> w[SETS_MAX_NO];
     q[0] = 1;
     for (int i = 0; i < dataStructure->m - 1; i++) {
         XGCD(polyD, polyS, polyT, p[i], p[i + 1]);
@@ -49,17 +48,21 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey *pk, DataSt
 void Intersection::intersect() {
     Utils utils;
     std::set<NTL::ZZ_p, ZZ_p_compare> intersect;
+    debug("Intersect the sets %d and %d", indices[0], indices[1]);
     set_intersection(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(),
                      dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
                      std::inserter(intersect, intersect.begin()), cmp);
     I = intersect;
+
     for (unsigned int i = 2; i < indices.size(); i++) {
         intersect.clear();
         set_intersection(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), I.begin(), I.end(),
                          std::inserter(intersect, intersect.begin()), cmp);
+        debug("Intersect the sets I and %d", indices[i]);
         I = intersect;
     }
     *digest_I = utils.compute_digest_pub(I, pk->g1, pk);
+    DEBUG("Digest of Intersection set is: ", *digest_I);
 }
 
 void Intersection::subset_witness() {
@@ -82,6 +85,7 @@ void Intersection::subset_witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[indices[i]] = digest;
+        DEBUGINDEX("Subset witness for ", indices[i], *W[indices[i]]);
     }
 }
 
@@ -98,6 +102,7 @@ void Intersection::completeness_witness() {
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[indices[i]]) = digest1;
+        DEBUGINDEX("Completeness witness for ", indices[i], *Q[indices[i]]);
     }
 }
 
@@ -113,6 +118,7 @@ Union::Union(const std::vector<int> indices, PublicKey *pk, DataStructure *dataS
 
 void Union::unionSets() {
     std::set<NTL::ZZ_p, ZZ_p_compare> setsunion;
+    debug("Union the sets %d and %d", indices[0], indices[1]);
     set_union(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(),
               dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
               std::inserter(setsunion, setsunion.begin()), cmp);
@@ -121,6 +127,7 @@ void Union::unionSets() {
         set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(),
                   std::inserter(setsunion, setsunion.begin()), cmp);
         U = setsunion;
+        debug("Union the sets U and %d", indices[i]);
     }
 }
 
@@ -129,6 +136,7 @@ void Union::membership_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w, U_tmp;
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
+    U_tmp.clear();
     for (it = U.begin(); it != U.end(); it++)
         U_tmp.push_back(*it);
     for (unsigned int i = 0; i < U_tmp.size(); i++) {
@@ -158,7 +166,7 @@ void Union::membership_witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W1[i] = digest;
-//        std::cout<<"W1[" << i << "]\t" << *W1[i] << "\n";
+        DEBUGINDEX("Memberiship witness for ", i, *W1[i]);
     }
 }
 
@@ -182,7 +190,7 @@ void Union::superset_witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W2[indices[i]] = digest;
-//        std::cout<<"W2[" << i << "]\t" << *W2[i] << "\n";
+        DEBUGINDEX("Superset witness for ", indices[i], *W2[indices[i]]);
     }
 }
 
@@ -198,6 +206,7 @@ Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure)
 }
 
 void Subset::subset() {
+    debug("Subet query: Is %d subset of %d?", index[1], index[0]);
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator first1, last1, first2, last2;
     first1 = dataStructure->D[index[0]].begin();
     last1 = dataStructure->D[index[0]].end();
@@ -207,6 +216,7 @@ void Subset::subset() {
         if (first1 == last1 || cmp(*first2, *first1)) {
             answer = false;
             y = *first2;
+            debug("%d is not subset of %d", index[1], index[0]);
             return;
         }
         if (!cmp(*first1, *first2))
@@ -214,6 +224,7 @@ void Subset::subset() {
         ++first1;
     }
     answer = true;
+    debug("%d is subset of %d", index[1], index[0]);
 }
 
 void Subset::positiveWitness() {
@@ -237,6 +248,7 @@ void Subset::positiveWitness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *W = digest;
+    DEBUG2INDEX("Subset witness for sets", index[0], index[1], *W);
 }
 
 void Subset::negativeWitness() {
@@ -262,7 +274,7 @@ void Subset::negativeWitness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *W = digest;
-
+    DEBUG("Membership Witness of y", *W);
     w.clear();
     for (auto p:dataStructure->D[index[0]])
         w.push_back(p);
@@ -284,6 +296,7 @@ void Subset::negativeWitness() {
             digest1 = digest1 + pk->pubs_g2[j] * temp;
         }
         *Q[i] = digest1;
+        DEBUGINDEX("(Subset Query) Completeness witness for set ", i, *Q[i]);
     }
 }
 
@@ -302,10 +315,12 @@ Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructur
 }
 
 void Difference::difference() {
+    debug("calculate difference of %d and %d", index[0], index[1]);
     set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
                    dataStructure->D[index[1]].begin(), dataStructure->D[index[1]].end(),
                    std::inserter(D, D.begin()), cmp);
 
+    debug("difference size is %d", D.size());
     set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
                    D.begin(), D.end(),
                    std::inserter(I, I.begin()), cmp);
@@ -329,7 +344,7 @@ void Difference::witness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *Wd = digest;
-//    PUT(*Wd);
+    DEBUG("Witness of difference result", *Wd);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
         w.clear();
         set_difference(dataStructure->D[index[i]].begin(), dataStructure->D[index[i]].end(),
@@ -348,7 +363,7 @@ void Difference::witness() {
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
-//        PUT(*W[i]);
+        DEBUGINDEX("Membership witness of difference in ", i, *W[i]);
     }
     XGCD(polyD, q[0], q[1], p[0], p[1]);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
@@ -359,7 +374,7 @@ void Difference::witness() {
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         *Q[i] = digest1;
-//        PUT(*Q[i]);
+        DEBUGINDEX("Completeness witness of difference in ", i, *Q[i]);
     }
 }
 

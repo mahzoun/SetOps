@@ -9,7 +9,7 @@
 #include "client/verify_union.h"
 #include "client/verify_subset.h"
 #include "client/verify_difference.h"
-
+#define NODEBUG
 #define SET_SIZE 10000
 #define SETS_NO 10
 
@@ -53,7 +53,7 @@ void test(int size, Key *k) {
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>(t2 - t1).count();
-    std::cout << "Query Time:\t" << duration << "\n";
+    log_info("Intersection query time:\t%d", duration);
     //verify tree
     VerifyTree *verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
@@ -66,43 +66,70 @@ void test(int size, Key *k) {
     bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>(t2 - t1).count();
-    std::cout << "Verify Time:\t" << duration << "\n";
-    std::cout << "Intersection result is: \t" << b << "\n";
+    log_info("Intersection verification time:\t%d", duration);
+    log_info("Intersection verification result:\t%x", b);
 
+    t1 = high_resolution_clock::now();
     Union *un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
     un->superset_witness();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Union query time:\t%d", duration);
 
+    t1 = high_resolution_clock::now();
     VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD,
                                                dataStructure->m, v, un->set_indices);
     verifyUnion->verify_union();
-    std::cout << "Union result is: \t" << (verifyUnion->membershipwitness and verifyUnion->membershipwitness) << "\n";
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Union verification time:\t%d", duration);
+    b = verifyUnion->membershipwitness and verifyUnion->membershipwitness;
+    log_info("Union verification result:\t%x", b);
 
+    t1 = high_resolution_clock::now();
     Subset *subset = new Subset(2, 3, k->get_public_key(), dataStructure);
     subset->subset();
     if (subset->answer)
         subset->positiveWitness();
     else
         subset->negativeWitness();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Subset query time:\t%d", duration);
 
+    t1 = high_resolution_clock::now();
     VerifySubset *verifySubset = new VerifySubset(k->get_public_key(), dataStructure, subset->Q, subset->W,
                                                   subset->answer,
                                                   subset->index[0], subset->index[1], subset->y);
     verifySubset->verify_subset();
-    std::cout << "Subset result is: \t" << verifySubset->verified_subset << "\n";
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Subset verification time:\t%d", duration);
+    b = verifySubset->verified_subset;
+    log_info("Subset verification result:\t%x", b);
+
+
     int index[2];
     index[0] = 0;
     index[1] = 1;
+    t1 = high_resolution_clock::now();
     Difference *difference = new Difference(index, k->get_public_key(), dataStructure);
     difference->difference();
     difference->witness();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Difference query time:\t%d", duration);
 
+    t1 = high_resolution_clock::now();
     VerifyDifference *verifyDifference = new VerifyDifference(k->get_public_key(), dataStructure, difference->D,
                                                               difference->I, difference->W, difference->Wd,
                                                               difference->Q, difference->index);
     verifyDifference->verify_difference();
-    std::cout << "difference result is: \t" << verifyDifference->verified_witness << "\n";
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    log_info("Difference verification time:\t%d", duration);
+    b = verifyDifference->verified_witness;
+    log_info("Difference verification result:\t%x", b);
 }
 
 int main() {
@@ -114,7 +141,7 @@ int main() {
     Key *k = new Key(p);
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
-    std::cout << "Key generation time:\t" << duration << "\n";
+    log_info("Key generation time:\t%d", duration);
 
 //    for(int test_size = 10; test_size <= SET_SIZE*100 ; test_size *= 2)
     test(10, k);
