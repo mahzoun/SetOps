@@ -32,7 +32,6 @@ void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKe
         NTL::ZZ_p temp1 = sk->sk + element;
         const mie::Vuint temp(utils.zToString(temp1));
         AuthD[index] *= temp;
-        AuthD[index] = utils.compute_digest(D[index], pk->g1, sk);
         DEBUGINDEX("Authenticated value of ", index, AuthD[index]);
         merkleTree->update(this, pk, sk, index);
 //        treeDigest(pk, sk);
