@@ -38,6 +38,7 @@ public:
     NTL::ZZ_pX p[SETS_MAX_NO], q[SETS_MAX_NO], polyA, polyB, polyS, polyT, polyD;
     Intersection();
     Intersection(std::vector<int>, PublicKey*, DataStructure*);
+    ~Intersection();
     void xgcdTree();
     void intersect();
     void subset_witness();
@@ -54,6 +55,7 @@ public:
     NTL::ZZ_pX p;
     Union();
     Union(std::vector<int>, PublicKey*, DataStructure*);
+    ~Union();
     void unionSets();
     void membership_witness();
     void superset_witness();
@@ -70,6 +72,7 @@ public:
     NTL::ZZ_pX p[SMALL_QUERY_SIZE], q[SMALL_QUERY_SIZE], polyD;
     Subset();
     Subset(int, int, PublicKey*, DataStructure*);
+    ~Subset();
     void subset();
     void positiveWitness();
     void negativeWitness();
@@ -85,6 +88,7 @@ public:
     NTL::ZZ_pX p[SMALL_QUERY_SIZE], q[SMALL_QUERY_SIZE], polyD;
     Difference();
     Difference(int[], PublicKey*, DataStructure*);
+    ~Difference();
     void difference();
     void witness();
 };

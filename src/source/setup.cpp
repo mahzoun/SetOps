@@ -11,6 +11,13 @@ DataStructure::DataStructure(int size, Key *key){
     setup(key->get_public_key(), key->get_secret_key());
 }
 
+DataStructure::~DataStructure(){
+    PUT(merkleTree->size);
+    if(merkleTree) {
+        delete (merkleTree);
+    }
+}
+
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
     this->merkleTree = new MerkleTree(m, this, pk, sk);

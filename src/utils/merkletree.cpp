@@ -14,12 +14,17 @@ MerkleTree::MerkleTree(int size, DataStructure *dataStructure, PublicKey *pk, Se
     for(int i = 0; i < size; i++){
         bn::Ec1 x = pk->g1;
         merkleNode[0][i] = new MerkleNode(x);
+        debug("merke node %d %d created", 0, i);
     }
     debug("MerkleTree Created successfully with %d leafs", size);
 }
 
 MerkleTree::~MerkleTree(){
-    delete(merkleNode);
+    for(int i = 0; i < size; i++)
+        for(int j = 0; j < size; j++)
+            if(merkleNode[i][j]){
+                delete(merkleNode[i][j]);
+            }
 }
 
 void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk){
@@ -40,19 +45,24 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
         if(len%2 == 0) {
             for (int i = 0; i < len/2; i++) {
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][2 * i], merkleNode[depth - 1][2 * i + 1]);
+                debug("merke node %d %d created", depth, i);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
+                delete(temp);
                 debug("Hash value of node %d in depth %d is %s", i, depth, merkleNode[depth][i]->hash_);
             }
         }
         else{
             for (int i = 0; i < len/2; i++) {
                 merkleNode[depth][i] = new MerkleNode(merkleNode[depth - 1][i], merkleNode[depth - 1][i + 1]);
+                debug("merke node %d %d created", depth, i);
                 char* temp = utils.concat(merkleNode[depth - 1][2 * i]->hash(), merkleNode[depth - 1][2 * i + 1]->hash());
+                delete(temp);
                 merkleNode[depth][i]->hash_ = utils.sha256(temp);
                 debug("Hash value of node %d in depth %d is %s", i, depth, merkleNode[depth][i]->hash_);
             }
             merkleNode[depth][len/2] = new MerkleNode(nullptr, merkleNode[depth - 1][len - 1]);
+            debug("merke node %d %d created", depth, len/2);
             merkleNode[depth][len/2]->hash_ = utils.sha256(merkleNode[depth - 1][len - 1]->hash());
             debug("Hash value of node %d in depth %d is %s", len, depth, merkleNode[depth][len/2]->hash_);
         }
@@ -77,6 +87,7 @@ void MerkleTree::update(DataStructure *dataStructure, PublicKey *pk, SecretKey *
         char *temp = utils.concat(merkleNode[depth - 1][2 * index]->hash(),
                                   merkleNode[depth - 1][2 * index + 1]->hash());
         merkleNode[depth][index]->hash_ = utils.sha256(temp);
+        delete(temp);
         debug("Hash value of node %d in depth %d is %s", index, depth, merkleNode[depth][index]->hash_);
         len /= 2;
     }

@@ -17,50 +17,35 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     }
     int len = dataStructure->m;
     int depth = 0;
-    MerkleTree *tmp = new MerkleTree(dataStructure->m, dataStructure, pk, sk);
     NTL::ZZ_p s = sk->sk;
-    for (int i = 0; i < dataStructure->m; i++) {
-        NTL::ZZ_p val = s + i;
-        const mie::Vuint temp(utils.zToString(val));
-        tmp->merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
-        tmp->merkleNode[0][i]->hash_ = utils.sha256(utils.Ec1ToString(tmp->merkleNode[0][i]->value_));
-//        std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
-    }
     while (len > 1) {
         depth++;
         if (len % 2 == 0) {
             for (int i = 0; i < len / 2; i++) {
-                tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][2 * i],
-                                                           tmp->merkleNode[depth - 1][2 * i + 1]);
-                char *temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(),
-                                          tmp->merkleNode[depth - 1][2 * i + 1]->hash());
-                tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
-//                std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
-                if (strcmp((char *) tmp->merkleNode[depth][i]->hash_,
-                           (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0) {
+                char *temp = utils.concat(dataStructure->merkleTree->merkleNode[depth - 1][2 * i]->hash(),
+                                          dataStructure->merkleTree->merkleNode[depth - 1][2 * i + 1]->hash());
+                unsigned char* res = utils.sha256(temp);
+                if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0)
                     return;
-                }
-
+                delete(temp);
+                delete(res);
             }
         } else {
             for (int i = 0; i < len / 2; i++) {
-                tmp->merkleNode[depth][i] = new MerkleNode(tmp->merkleNode[depth - 1][i],
-                                                           tmp->merkleNode[depth - 1][i + 1]);
-                char *temp = utils.concat(tmp->merkleNode[depth - 1][2 * i]->hash(),
-                                          tmp->merkleNode[depth - 1][2 * i + 1]->hash());
-                tmp->merkleNode[depth][i]->hash_ = utils.sha256(temp);
-//                std::cout<< len << "\t" << i << "\t" << depth << "\t" << tmp->merkleNode[depth][i]->hash() << "\n";
-                if (strcmp((char *) tmp->merkleNode[depth][i]->hash_,
-                           (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0) {
+                char *temp = utils.concat(dataStructure->merkleTree->merkleNode[depth - 1][2 * i]->hash(),
+                                          dataStructure->merkleTree->merkleNode[depth - 1][2 * i + 1]->hash());
+                unsigned char* res = utils.sha256(temp);
+                if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0)
                     return;
-                }
+                delete(temp);
+                delete(res);
             }
-            tmp->merkleNode[depth][len / 2] = new MerkleNode(nullptr, tmp->merkleNode[depth - 1][len - 1]);
-            tmp->merkleNode[depth][len / 2]->hash_ = utils.sha256(tmp->merkleNode[depth - 1][len - 1]->hash());
-            if (strcmp((char *) tmp->merkleNode[depth][len / 2]->hash_,
-                       (char *) dataStructure->merkleTree->merkleNode[depth][len / 2]->hash_) != 0) {
+            char *temp = dataStructure->merkleTree->merkleNode[depth - 1][len - 1]->hash();
+            unsigned char* res = utils.sha256(temp);
+            if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][len / 2]->hash_) != 0)
                 return;
-            }
+            delete(temp);
+            delete(res);
         }
         len /= 2;
     }

@@ -34,7 +34,6 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     c.SetLength(array.size());
     for(unsigned int i = 0 ; i < array.size(); i++)
         c[i] = conv<ZZ_p>(-array[i]);
-
     BuildFromRoots(poly, c);
     for(unsigned int i = 0; i < array.size() + 1; i++){
         const mie::Vuint temp(zToString(poly[i]));

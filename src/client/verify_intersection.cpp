@@ -22,6 +22,17 @@ VerifyIntersection::VerifyIntersection(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_c
         this->AuthD[i] = AuthD[i];
 }
 
+VerifyIntersection::~VerifyIntersection() {
+    if (pk)
+        delete (pk);
+    for (int i = 0; i < m; i++) {
+        if (W[i])
+            delete W[i];
+        if (Q[i])
+            delete Q[i];
+    }
+}
+
 bool VerifyIntersection::verify_intersection() {
     using namespace::bn;
     Fp12 e1, e2, e3, e4, e5, e6, e7;

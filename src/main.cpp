@@ -12,13 +12,13 @@
 
 #define NODEBUG
 #define SET_SIZE 10000
-#define SETS_NO 2
+#define SETS_NO 4
 
-void test_intersection(int size, int intersection_size, Key *k) {
+
+void test_intersection(int round, int size, int intersection_size, Key *k) {
     using namespace std::chrono;
     high_resolution_clock::time_point t1, t3;
     high_resolution_clock::time_point t2, t4;
-
     t3 = high_resolution_clock::now();
     //generate sets
     DataStructure *dataStructure = new DataStructure(SETS_NO, k);
@@ -31,15 +31,14 @@ void test_intersection(int size, int intersection_size, Key *k) {
     }
 
     std::cout << size << "\t";
-    for (int set_index = 1; set_index < dataStructure->m; set_index++)
+    for (int set_index = 0; set_index < dataStructure->m; set_index++)
         for (int i = 1; i <= size - intersection_size; i++) {
             NTL::ZZ_p j = NTL::random_ZZ_p();
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
-            dataStructure->insert(0, j, k->get_public_key(), k->get_secret_key());
         }
 
     t4 = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(t4 - t3).count();
+    auto duration = duration_cast<milliseconds>(t4 - t3).count();
     std::cout << duration << "\t";
 
     //query intersection
@@ -53,16 +52,16 @@ void test_intersection(int size, int intersection_size, Key *k) {
     t1 = high_resolution_clock::now();
     intersection->subset_witness();
     t2 = high_resolution_clock::now();
-    duration = duration_cast<microseconds>(t2 - t1).count();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
     std::cout << duration << "\t";
 
     t1 = high_resolution_clock::now();
     intersection->completeness_witness();
     t2 = high_resolution_clock::now();
     t4 = high_resolution_clock::now();
-    duration = duration_cast<microseconds>(t2 - t1).count();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
     std::cout << duration << "\t";
-    duration = duration_cast<microseconds>(t4 - t3).count();
+    duration = duration_cast<milliseconds>(t4 - t3).count();
     std::cout << duration << "\n";
 //    log_info("Intersection query time:\t%d", duration);
     //verify tree
@@ -79,7 +78,6 @@ void test_intersection(int size, int intersection_size, Key *k) {
     duration = duration_cast<milliseconds>(t2 - t1).count();
 //    log_info("Intersection verification time:\t%d", duration);
 //    log_info("Intersection verification result:\t%x", b);
-
 }
 
 void test(int size, Key *k) {
@@ -211,10 +209,13 @@ int main() {
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     log_info("Key generation time:\t%d", duration);
 
-    for (int test_size = 10; test_size <= SET_SIZE; test_size *= 2)
-        test_intersection(test_size, test_size / 10, k);
-
-//    test(10000, k);
-
+//    std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
+//    for (int test_size = 10; test_size <= 10; test_size +=500)
+//        for(int i = 0; i < 10; i++)
+//            test_intersection(0, test_size, test_size / 10, k);
+//
+    for(int i = 0; i < 1000; i++)
+        test(10, k);
+    delete k;
     return 0;
 }

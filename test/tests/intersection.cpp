@@ -60,11 +60,12 @@ protected:
     }
 
     void TearDown(){
-//        delete(k);
-//        delete(dataStructure);
-//        delete(intersection);
-//        delete(verifyIntersection);
 //        delete(verifyTree);
+//        delete(verifyIntersection);
+//        delete(intersection);
+//        delete(dataStructure);
+//        delete(k);
+        PUT("f2");
     }
 };
 

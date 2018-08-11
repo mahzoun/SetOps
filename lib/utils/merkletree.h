@@ -43,10 +43,10 @@ public:
             hash_ = new unsigned char[SHA256_DIGEST_LENGTH];
     }
 
-//    ~MerkleNode() {
-//        if (hash_)
-//            delete[](hash_);
-//    }
+    ~MerkleNode() {
+        if (hash_)
+            delete[](hash_);
+    }
 
     bool verify();
 

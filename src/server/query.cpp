@@ -18,13 +18,19 @@ bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs) {
 void Intersection::xgcdTree() {
     q[0] = 1;
     for (int i = 0; i < dataStructure->m - 1; i++) {
-        XGCD(polyD, polyS, polyT, p[i], p[i + 1]);
-        q[i] *= polyS;
-        q[i + 1] = polyT;
-        p[i + 1] = polyD;
-        if (!IsZero(q[i] * q[i + 1]))
-            for (int j = i - 1; j >= 0; j--)
-                q[j] *= q[i];
+        try {
+            XGCD(polyD, polyS, polyT, p[i], p[i + 1]);
+            q[i] *= polyS;
+            q[i + 1] = polyT;
+            p[i + 1] = polyD;
+            if (!IsZero(q[i] * q[i + 1]))
+                for (int j = i - 1; j >= 0; j--)
+                    q[j] *= q[i];
+        }
+        catch (exception &e) {
+            std::cerr << q[i] << "\t" << q[i + 1] << "\t" << p[i + 1] << "\n";
+            std::cerr << e.what() << "\n";
+        }
     }
 
 }
@@ -43,6 +49,21 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey *pk, DataSt
     polyS = ZZ_pX(INIT_MONO, 0);
     polyT = ZZ_pX(INIT_MONO, 0);
     polyD = ZZ_pX(INIT_MONO, 0);
+}
+
+Intersection::~Intersection() {
+    if (pk)
+        delete (pk);
+    if (dataStructure)
+        delete (dataStructure);
+    for(int i = 0; i < SETS_MAX_NO; i++)
+        if(W[i])
+            delete W[i];
+    for(int i = 0; i < SETS_MAX_NO; i++)
+        if(Q[i])
+            delete Q[i];
+    if (digest_I)
+        delete (digest_I);
 }
 
 void Intersection::intersect() {
@@ -110,10 +131,23 @@ Union::Union(const std::vector<int> indices, PublicKey *pk, DataStructure *dataS
     this->indices = indices;
     this->pk = pk;
     this->dataStructure = dataStructure;
-    for (int i = 0; i < SETS_MAX_NO; i++) {
-        this->W1[i] = new bn::Ec2;
+    for (int i = 0; i < SETS_MAX_NO; i++)
         this->W2[i] = new bn::Ec2;
-    }
+    for (int i = 0; i < SETS_MAX_SIZE; i++)
+        this->W1[i] = new bn::Ec2;
+}
+
+Union::~Union() {
+    for (int i = 0; i < SETS_MAX_SIZE; i++)
+        if (W1[i])
+            delete (W1[i]);
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        if (W2[i])
+            delete (W2[i]);
+    if(pk)
+        delete(pk);
+    if(dataStructure)
+        delete(dataStructure);
 }
 
 void Union::unionSets() {
@@ -203,6 +237,18 @@ Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure)
     this->W = new bn::Ec2;
     for (int i = 0; i < 2; i++)
         this->Q[i] = new bn::Ec2;
+}
+
+Subset::~Subset() {
+    if (pk)
+        delete pk;
+    if (dataStructure)
+        delete dataStructure;
+    if (W)
+        delete W;
+    for (int i = 0; i < 2; i++)
+        if (Q[i])
+            delete Q[i];
 }
 
 void Subset::subset() {
@@ -312,6 +358,17 @@ Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructur
     this->digest_D = new bn::Ec1;
     this->Wd = new bn::Ec2;
     polyD = ZZ_pX(INIT_MONO, 0);
+}
+
+Difference::~Difference() {
+   for(int i = 0; i < SMALL_QUERY_SIZE; i++){
+       if(W[i])
+           delete W[i];
+       if(Q[i])
+           delete Q[i];
+   }
+   delete digest_D;
+   delete Wd;
 }
 
 void Difference::difference() {

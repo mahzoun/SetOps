@@ -27,6 +27,7 @@ public:
     bn::Ec1 AuthD[SETS_MAX_NO];
     bool subsetwitness, completenesswitness;
     VerifyIntersection(PublicKey*, std::set<NTL::ZZ_p, ZZ_p_compare>, bn::Ec2*[], bn::Ec1*[], bn::Ec1[], int, std::vector<int>);
+    ~VerifyIntersection();
     bool verify_intersection();
 };
 

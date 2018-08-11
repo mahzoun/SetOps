@@ -5,6 +5,7 @@
 #include "source/genkey.h"
 
 #define SETS_MAX_SIZE 10000
+#define MAX_SIZE_LG 20
 #define NODEBUG
 
 Key::Key(NTL::ZZ p) {
@@ -19,6 +20,14 @@ Key::Key(NTL::ZZ p) {
 void Key::genkey(NTL::ZZ p) {
     create_public_key(sk, p);
     log_info("Public Key Generated");
+}
+
+Key::~Key() {
+    if (sk)
+        delete (sk);
+    if (pk)
+        delete (pk);
+
 }
 
 SecretKey *Key::get_secret_key() {
@@ -60,6 +69,10 @@ PublicKey::PublicKey(NTL::ZZ p) {
     g2 = gt2;
 }
 
+PublicKey::~PublicKey() {
+//    delete();
+}
+
 void PublicKey::setup_bilinear(SecretKey *sk, bn::Ec1, bn::Ec2) {
     using namespace bn;
     using namespace NTL;
@@ -68,6 +81,7 @@ void PublicKey::setup_bilinear(SecretKey *sk, bn::Ec1, bn::Ec2) {
     const int q = SETS_MAX_SIZE;
     const mie::Vuint secret_key(utils.zToString(s));
     pubs_g1.push_back(g1);
+
     for (int i = 1; i < q + 1; i++) {
         pubs_g1.push_back(pubs_g1[i - 1] * secret_key);
     }
