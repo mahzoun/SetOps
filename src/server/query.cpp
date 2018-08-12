@@ -173,13 +173,14 @@ void Union::membership_witness() {
     U_tmp.clear();
     for (it = U.begin(); it != U.end(); it++)
         U_tmp.push_back(*it);
-    for (unsigned int i = 0; i < U_tmp.size(); i++) {
+    int idx = 0;
+    for (it = U.begin(); it != U.end(); it++) {
         w.clear();
         std::vector<NTL::ZZ_p> tmp;
-        tmp.push_back(U_tmp[i]);
+        tmp.push_back(*it);
         int superset = 0;
         for (unsigned int j = 0; j < indices.size(); j++) {
-            if (dataStructure->D[indices[j]].find(U_tmp[i]) != dataStructure->D[indices[j]].end()) {
+            if (dataStructure->D[indices[j]].find(*it) != dataStructure->D[indices[j]].end()) {
                 set_indices.push_back(j);
                 superset = indices[j];
                 break;
@@ -199,8 +200,9 @@ void Union::membership_witness() {
             mie::Vuint temp(utils.zToString(p[j]));
             digest = digest + pk->pubs_g2[j] * temp;
         }
-        *W1[i] = digest;
-        DEBUGINDEX("Memberiship witness for ", i, *W1[i]);
+        *W1[idx] = digest;
+        idx++;
+        DEBUGINDEX("Memberiship witness for ", idx, *W1[idx]);
     }
 }
 

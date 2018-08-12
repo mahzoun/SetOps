@@ -108,7 +108,6 @@ unsigned char* Utils::sha256(char *string)
 {
     //TODO return value is octect :)
     unsigned char *outputBuffer = new unsigned char[65];
-    //TODO fix length
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     SHA256_Init(&sha256);

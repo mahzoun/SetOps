@@ -12,7 +12,6 @@ DataStructure::DataStructure(int size, Key *key){
 }
 
 DataStructure::~DataStructure(){
-    PUT(merkleTree->size);
     if(merkleTree) {
         delete (merkleTree);
     }
