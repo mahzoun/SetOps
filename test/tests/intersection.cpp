@@ -65,7 +65,6 @@ protected:
 //        delete(intersection);
 //        delete(dataStructure);
 //        delete(k);
-        PUT("f2");
     }
 };
 
@@ -80,7 +79,7 @@ TEST_F(IntersectionTest, TwoSets) {
 
 TEST_F(IntersectionTest, WrongsubsetWitness) {
     SetUp(size/10, SETS_NUM);
-    intersection->W[0] += 1;
+    *(intersection->W[0]) *= 2;
     verifyIntersection = new VerifyIntersection(k->get_public_key(), intersection->I,
             intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
     bool b = verifyIntersection->verify_intersection();
@@ -92,7 +91,7 @@ TEST_F(IntersectionTest, WrongsubsetWitness) {
 
 TEST_F(IntersectionTest, WrongCompletenessWitness) {
     SetUp(size/10, SETS_NUM);
-    intersection->Q[0] += 1;
+    *(intersection->Q[0]) *= 2;
     verifyIntersection = new VerifyIntersection(k->get_public_key(), intersection->I,
             intersection->W, intersection->Q, dataStructure->AuthD, dataStructure->m, intersection->indices);
     bool b = verifyIntersection->verify_intersection();

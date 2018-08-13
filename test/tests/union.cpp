@@ -117,15 +117,11 @@ TEST_F(UnionTest, MultipleSetsEvenindices) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
     }
-//    for (int i = 0; i < 6; i++)
-//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
     v.clear();
     for (int set_index = 0; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
-//    std::cout<< "Tree Verification:\n";
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-//    std::cout<< "Union Verification:\n";
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
@@ -156,15 +152,11 @@ TEST_F(UnionTest, MultipleSetsOddindices) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
     }
-//    for (int i = 0; i < 6; i++)
-//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
     v.clear();
     for (int set_index = 1; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
-//    std::cout<< "Tree Verification:\n";
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-//    std::cout<< "Union Verification:\n";
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
@@ -194,15 +186,11 @@ TEST_F(UnionTest, MultipleSets3kIndices) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
     }
-//    for (int i = 0; i < 6; i++)
-//        std::cerr << "AuthD[" << i << "]:\t" << dataStructure->AuthD[i] << "\n";
     v.clear();
     for (int set_index = 0; set_index < dataStructure->m; set_index += 3)
         v.push_back(set_index);
-//    std::cout<< "Tree Verification:\n";
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-//    std::cout<< "Union Verification:\n";
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
