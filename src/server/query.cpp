@@ -10,8 +10,8 @@ using namespace NTL;
 
 bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs) {
     Utils utils;
-    char *x = utils.zToString(rhs);
-    char *y = utils.zToString(lhs);
+    const char *x = utils.zToString(rhs);
+    const char *y = utils.zToString(lhs);
     return strcmp(x, y) > 0;
 }
 
@@ -52,15 +52,11 @@ Intersection::Intersection(const std::vector<int> indices, PublicKey *pk, DataSt
 }
 
 Intersection::~Intersection() {
-    if (pk)
-        delete (pk);
-    if (dataStructure)
-        delete (dataStructure);
-    for(int i = 0; i < SETS_MAX_NO; i++)
-        if(W[i])
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        if (W[i])
             delete W[i];
-    for(int i = 0; i < SETS_MAX_NO; i++)
-        if(Q[i])
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        if (Q[i])
             delete Q[i];
     if (digest_I)
         delete (digest_I);
@@ -102,7 +98,9 @@ void Intersection::subset_witness() {
         Ec2 digest = pk->g2 * 0;
         int size = p[indices[i]].rep.length();
         for (int j = 0; j < size; j++) {
-            mie::Vuint temp(utils.zToString(p[indices[i]][j]));
+            const char *str = utils.zToString(p[indices[i]][j]);
+            mie::Vuint temp(str);
+            free((char*)str);
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[indices[i]] = digest;
@@ -119,7 +117,9 @@ void Intersection::completeness_witness() {
         polyS = q[indices[i]];
         int poly_size = polyS.rep.length();
         for (int j = 0; j < poly_size; j++) {
-            const mie::Vuint temp(utils.zToString(polyS[j]));
+            const char *str = utils.zToString(polyS[j]);
+            const mie::Vuint temp(str);
+            free((char *)str);
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         (*Q[indices[i]]) = digest1;
@@ -144,10 +144,6 @@ Union::~Union() {
     for (int i = 0; i < SETS_MAX_NO; i++)
         if (W2[i])
             delete (W2[i]);
-    if(pk)
-        delete(pk);
-    if(dataStructure)
-        delete(dataStructure);
 }
 
 void Union::unionSets() {
@@ -197,7 +193,9 @@ void Union::membership_witness() {
         Ec2 digest = pk->g2 * 0;
         int size = p.rep.length();
         for (int j = 0; j < size; j++) {
-            mie::Vuint temp(utils.zToString(p[j]));
+            const char *str = utils.zToString(p[j]);
+            mie::Vuint temp(str);
+            delete[] str;
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W1[idx] = digest;
@@ -222,7 +220,9 @@ void Union::superset_witness() {
         Ec2 digest = pk->g2 * 0;
         int size = p.rep.length();
         for (int j = 0; j < size; j++) {
-            mie::Vuint temp(utils.zToString(p[j]));
+            const char *str = utils.zToString(p[j]);
+            mie::Vuint temp(str);
+            delete[] str;
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W2[indices[i]] = digest;
@@ -292,7 +292,9 @@ void Subset::positiveWitness() {
     Ec2 digest = pk->g2 * 0;
     int size = p[1].rep.length();
     for (int j = 0; j < size; j++) {
-        mie::Vuint temp(utils.zToString(p[1][j]));
+        const char *str = utils.zToString(p[1][j]);
+        mie::Vuint temp(str);
+        delete[] str;
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *W = digest;
@@ -318,7 +320,9 @@ void Subset::negativeWitness() {
     Ec2 digest = pk->g2 * 0;
     int size = p[0].rep.length();
     for (int j = 0; j < size; j++) {
-        mie::Vuint temp(utils.zToString(p[0][j]));
+        const char *str = utils.zToString(p[0][j]);
+        mie::Vuint temp(str);
+        delete[] str;
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *W = digest;
@@ -340,7 +344,9 @@ void Subset::negativeWitness() {
         Ec2 digest1 = pk->g2 * 0;
         int poly_size = q[i].rep.length();
         for (int j = 0; j < poly_size; j++) {
-            const mie::Vuint temp(utils.zToString(q[i][j]));
+            const char *str = utils.zToString(q[i][j]);
+            const mie::Vuint temp(str);
+            delete[] str;
             digest1 = digest1 + pk->pubs_g2[j] * temp;
         }
         *Q[i] = digest1;
@@ -363,14 +369,14 @@ Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructur
 }
 
 Difference::~Difference() {
-   for(int i = 0; i < SMALL_QUERY_SIZE; i++){
-       if(W[i])
-           delete W[i];
-       if(Q[i])
-           delete Q[i];
-   }
-   delete digest_D;
-   delete Wd;
+    for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
+        if (W[i])
+            delete W[i];
+        if (Q[i])
+            delete Q[i];
+    }
+    delete digest_D;
+    delete Wd;
 }
 
 void Difference::difference() {
@@ -399,7 +405,9 @@ void Difference::witness() {
     Ec2 digest = pk->g2 * 0;
     int size = p[0].rep.length();
     for (int j = 0; j < size; j++) {
-        mie::Vuint temp(utils.zToString(p[0][j]));
+        const char *str = utils.zToString(p[0][j]);
+        mie::Vuint temp(str);
+        delete[] str;
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *Wd = digest;
@@ -418,7 +426,9 @@ void Difference::witness() {
         Ec2 digest = pk->g2 * 0;
         int size = p[i].rep.length();
         for (int j = 0; j < size; j++) {
-            mie::Vuint temp(utils.zToString(p[i][j]));
+            const char *str = utils.zToString(p[i][j]);
+            mie::Vuint temp(str);
+            delete[] str;
             digest = digest + pk->pubs_g2[j] * temp;
         }
         *W[i] = digest;
@@ -429,7 +439,9 @@ void Difference::witness() {
         Ec1 digest1 = pk->g1 * 0;
         int poly_size = q[i].rep.length();
         for (int j = 0; j < poly_size; j++) {
-            const mie::Vuint temp(utils.zToString(q[i][j]));
+            const char *str = utils.zToString(q[i][j]);
+            const mie::Vuint temp(str);
+            delete[]str;
             digest1 = digest1 + pk->pubs_g1[j] * temp;
         }
         *Q[i] = digest1;

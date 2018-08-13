@@ -23,14 +23,6 @@ VerifyIntersection::VerifyIntersection(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_c
 }
 
 VerifyIntersection::~VerifyIntersection() {
-    if (pk)
-        delete (pk);
-    for (int i = 0; i < m; i++) {
-        if (W[i])
-            delete W[i];
-        if (Q[i])
-            delete Q[i];
-    }
 }
 
 bool VerifyIntersection::verify_intersection() {

@@ -24,28 +24,40 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
             for (int i = 0; i < len / 2; i++) {
                 char *temp = utils.concat(dataStructure->merkleTree->merkleNode[depth - 1][2 * i]->hash(),
                                           dataStructure->merkleTree->merkleNode[depth - 1][2 * i + 1]->hash());
-                unsigned char* res = utils.sha256(temp);
-                if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0)
+                unsigned char *res = new unsigned char[65];
+                utils.sha256(res, temp);
+                if (strcmp((char *) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0) {
+                    delete[] res;
+                    delete[] temp;
                     return;
-                delete(temp);
-                delete(res);
+                }
+                delete[] res;
+                delete[] temp;
             }
         } else {
             for (int i = 0; i < len / 2; i++) {
                 char *temp = utils.concat(dataStructure->merkleTree->merkleNode[depth - 1][2 * i]->hash(),
                                           dataStructure->merkleTree->merkleNode[depth - 1][2 * i + 1]->hash());
-                unsigned char* res = utils.sha256(temp);
-                if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0)
+                unsigned char *res = new unsigned char[65];
+                utils.sha256(res, temp);
+                if (strcmp((char *) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0) {
+                    delete[] res;
+                    delete[] temp;
                     return;
-                delete(temp);
-                delete(res);
+                }
+                delete[] temp;
+                delete[] res;
             }
             char *temp = dataStructure->merkleTree->merkleNode[depth - 1][len - 1]->hash();
-            unsigned char* res = utils.sha256(temp);
-            if (strcmp((char*) res, (char *) dataStructure->merkleTree->merkleNode[depth][len / 2]->hash_) != 0)
+            unsigned char *res = new unsigned char[65];
+            utils.sha256(res, temp);
+            if (strcmp((char *) res, (char *) dataStructure->merkleTree->merkleNode[depth][len / 2]->hash_) != 0) {
+                delete[] res;
+                delete[] temp;
                 return;
-            delete(temp);
-            delete(res);
+            }
+            delete[] temp;
+            delete[] res;
         }
         len /= 2;
     }

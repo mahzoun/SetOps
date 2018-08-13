@@ -30,18 +30,12 @@ bool VerifyUnion::verify_union() {
     Utils utils;
     Fp12 e1, e2, e3, e4;
     for(unsigned int i = 0; i < U.size(); i++) {
-        const mie::Vuint temp(utils.zToString(U[i]));
+        const char* Ui_str = utils.zToString(U[i]);
+        const mie::Vuint temp(Ui_str);
+        delete[] Ui_str;
         Ec1 gsgi = pk->pubs_g1[1] + pk->g1 * temp;
-//        PUT(i);
-//        PUT(*W1[i]);
-//        PUT(set_indices[i]);
-//        PUT(indices[set_indices[i]]);
-//        PUT(AuthD[indices[set_indices[i]]]);
-//        PUT(gsgi);
         opt_atePairing(e1, *W1[i], gsgi);
         opt_atePairing(e2, pk->g2, AuthD[indices[set_indices[i]]]);
-//        PUT(e1);
-//        PUT(e2);
         if( e1 != e2){
             membershipwitness = false;
             return false;

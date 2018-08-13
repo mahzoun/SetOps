@@ -35,7 +35,7 @@ public:
     bn::Ec1 compute_digest_pub(std::vector<NTL::ZZ_p> , const bn::Ec1, PublicKey *);
     char* Ec1ToString(bn::Ec1);
     char* concat(const char*, const char*);
-    unsigned char* sha256(char*);
+    void sha256(unsigned char*, char*);
     NTL::ZZ_p StringToz(char*);
     char* zToString(NTL::ZZ_p&);
     char* zToString(const NTL::ZZ_p&);

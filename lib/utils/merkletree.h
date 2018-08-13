@@ -29,27 +29,23 @@ public:
     MerkleNode *left_, *right_;
     unsigned char *hash_;
     bn::Ec1 value_;
-    unsigned char *computeHash() const;
     MerkleNode(bn::Ec1 &value){
         value_ = value;
         left_ = nullptr;
         right_ = nullptr;
-        hash_ = new unsigned char[SHA256_DIGEST_LENGTH];
+        hash_ = new unsigned char[65];
     }
 
     MerkleNode(MerkleNode *left, MerkleNode *right) {
             left_ = left;
             right_ = right;
-            hash_ = new unsigned char[SHA256_DIGEST_LENGTH];
+            hash_ = new unsigned char[65];
     }
 
     ~MerkleNode() {
         if (hash_)
-            delete[](hash_);
+            delete[] hash_;
     }
-
-    bool verify();
-
 
     char *hash() const {
         return (char*)hash_;

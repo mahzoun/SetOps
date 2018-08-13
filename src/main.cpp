@@ -12,7 +12,7 @@
 
 #define NODEBUG
 #define SET_SIZE 10000
-#define SETS_NO 4
+#define SETS_NO 2
 
 
 void test_intersection(int round, int size, int intersection_size, Key *k) {
@@ -21,22 +21,19 @@ void test_intersection(int round, int size, int intersection_size, Key *k) {
     high_resolution_clock::time_point t2, t4;
     t3 = high_resolution_clock::now();
     //generate sets
-    DataStructure *dataStructure = new DataStructure(SETS_NO, k);
-
+    DataStructure *dataStructure = new DataStructure(SETS_NO, k); //TODO memleak
     for (int i = 1; i <= intersection_size; i++) {
         NTL::ZZ_p j = NTL::random_ZZ_p();
         for (int set_index = 0; set_index < dataStructure->m; set_index++) {
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
     }
-
     std::cout << size << "\t";
     for (int set_index = 0; set_index < dataStructure->m; set_index++)
         for (int i = 1; i <= size - intersection_size; i++) {
             NTL::ZZ_p j = NTL::random_ZZ_p();
             dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
         }
-
     t4 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(t4 - t3).count();
     std::cout << duration << "\t";
@@ -76,6 +73,10 @@ void test_intersection(int round, int size, int intersection_size, Key *k) {
     bool b = verifyIntersection->verify_intersection();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>(t2 - t1).count();
+    delete verifyIntersection;
+    delete verifyTree;
+    delete intersection;
+    delete dataStructure;
 //    log_info("Intersection verification time:\t%d", duration);
 //    log_info("Intersection verification result:\t%x", b);
 }
@@ -268,16 +269,15 @@ int main() {
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     log_info("Key generation time:\t%d", duration);
+    std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
+    for (int test_size = 10; test_size <= 10; test_size +=500)
+        for(int i = 0; i < 100; i++)
+            test_intersection(0, test_size, test_size / 10, k);
 
-   // std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
-   // for (int test_size = 10; test_size <= 10; test_size +=500)
-       // for(int i = 0; i < 10; i++)
-           // test_intersection(0, test_size, test_size / 10, k);
-
-   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-   for (int test_size = 0; test_size <= 1000; test_size +=200)
-       for(int i = 0; i < 10; i++)
-           test_union(i, test_size, test_size / 10, k);
+//   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
+//   for (int test_size = 0; test_size <= 1000; test_size +=200)
+//       for(int i = 0; i < 10; i++)
+//           test_union(i, test_size, test_size / 10, k);
     // for(int i = 0; i < 1000; i++)
         // test(10, k);
     delete k;

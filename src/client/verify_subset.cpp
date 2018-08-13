@@ -47,13 +47,12 @@ bool VerifySubset::verifyNegetive() {
     using namespace bn;
     Utils utils;
     Fp12 e1, e2, e3, e4, e5;
-    const mie::Vuint temp(utils.zToString(y));
+    const char* y_str = utils.zToString(y);
+    const mie::Vuint temp(y_str);
+    delete []y_str;
     Ec1 gygs = pk->pubs_g1[1] + pk->g1 * temp;
     opt_atePairing(e1, *W, gygs);
     opt_atePairing(e2, pk->g2, dataStructure->AuthD[J]);
-//    PUT(e1);
-//    PUT(e2);
-//    PUT(gygs);
     if (e1 != e2) {
         verified_subset = false;
         return false;
@@ -61,11 +60,6 @@ bool VerifySubset::verifyNegetive() {
     opt_atePairing(e5, pk->g2, pk->g1);
     opt_atePairing(e3, *Q[1], gygs);
     opt_atePairing(e4, *Q[0], dataStructure->AuthD[I]);
-//    PUT(e5);
-//    PUT(e3 * e4);
-//    PUT(*Q[0]);
-//    PUT(*Q[1]);
-//    PUT(gygs);
     if (e3 * e4 != e5) {
         verified_subset = false;
         return false;

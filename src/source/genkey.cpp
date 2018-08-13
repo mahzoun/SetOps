@@ -27,7 +27,6 @@ Key::~Key() {
         delete (sk);
     if (pk)
         delete (pk);
-
 }
 
 SecretKey *Key::get_secret_key() {
@@ -79,7 +78,9 @@ void PublicKey::setup_bilinear(SecretKey *sk, bn::Ec1, bn::Ec2) {
     Utils utils;
     ZZ_p s = sk->sk;
     const int q = SETS_MAX_SIZE;
-    const mie::Vuint secret_key(utils.zToString(s));
+    const char* s_str = utils.zToString(s);
+    const mie::Vuint secret_key(s_str);
+    free((char*)s_str);
     pubs_g1.push_back(g1);
 
     for (int i = 1; i < q + 1; i++) {
