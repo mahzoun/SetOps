@@ -35,7 +35,7 @@ bool VerifyUnion::verify_union() {
         delete[] Ui_str;
         Ec1 gsgi = pk->pubs_g1[1] + pk->g1 * temp;
         opt_atePairing(e1, *W1[i], gsgi);
-        opt_atePairing(e2, pk->g2, AuthD[indices[set_indices[i]]]);
+        opt_atePairing(e2, pk->g2, AuthD[set_indices[i]]);
         if( e1 != e2){
             membershipwitness = false;
             return false;

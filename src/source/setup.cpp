@@ -36,6 +36,8 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
 void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKey *sk){
     Utils utils;
     try {
+        set_index[element] = index;
+//        std::cerr << "insert\t" << element << "\t into set \t" << index << "\n";
         D[index].insert(element);
         NTL::ZZ_p temp1 = sk->sk + element;
         const char* temp1_str = utils.zToString(temp1);

@@ -138,6 +138,10 @@ void test_union(int round, int size, int intersection_size, Key *k) {
     duration = duration_cast<milliseconds>(t2 - t1).count();
     std::cout << duration << "\n";
     bool b = verifyUnion->membershipwitness and verifyUnion->membershipwitness;
+    delete verifyTree;
+    delete verifyUnion;
+    delete un;
+    delete dataStructure;
 //    log_info("Union verification time:\t%d", duration);
 //    log_info("Union verification result:\t%x", b);
 }
@@ -269,15 +273,15 @@ int main() {
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     log_info("Key generation time:\t%d", duration);
-    std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
-    for (int test_size = 10; test_size <= 10; test_size +=500)
-        for(int i = 0; i < 10; i++)
-            test_intersection(0, test_size, test_size / 10, k);
+//    std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
+//    for (int test_size = 10; test_size <= 10; test_size +=500)
+//        for(int i = 0; i < 10; i++)
+//            test_intersection(0, test_size, test_size / 10, k);
 
-//   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-//   for (int test_size = 0; test_size <= 1000; test_size +=200)
-//       for(int i = 0; i < 10; i++)
-//           test_union(i, test_size, test_size / 10, k);
+   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
+   for (int test_size = 0; test_size <= 1000; test_size +=200)
+       for(int i = 0; i < 10; i++)
+           test_union(i, test_size, test_size / 10, k);
     // for(int i = 0; i < 1000; i++)
         // test(10, k);
     delete k;

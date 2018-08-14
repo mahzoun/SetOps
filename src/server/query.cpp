@@ -167,31 +167,28 @@ void Union::unionSets() {
 
 void Union::membership_witness() {
     Utils utils;
-    std::vector<NTL::ZZ_p> w, U_tmp;
+    std::vector<NTL::ZZ_p> w;
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
-    U_tmp.clear();
-    for (it = U.begin(); it != U.end(); it++)
-        U_tmp.push_back(*it);
     int idx = 0;
     for (it = U.begin(); it != U.end(); it++) {
         w.clear();
         std::vector<NTL::ZZ_p> tmp;
         tmp.push_back(*it);
-        int superset = 0;
-        for (unsigned int j = 0; j < indices.size(); j++) {
-            if (dataStructure->D[indices[j]].find(*it) != dataStructure->D[indices[j]].end()) {
-                set_indices.push_back(j);
-                superset = indices[j];
-                break;
-            }
-        }
+        int superset = dataStructure->set_index[*it];
+        set_indices.push_back(superset);
+//        for (unsigned int j = 0; j < indices.size(); j++) {
+//            if (dataStructure->D[indices[j]].find(*it) != dataStructure->D[indices[j]].end()) {
+//                set_indices.push_back(j);
+//                superset = indices[j];
+//                break;
+//            }
+//        }
         set_difference(dataStructure->D[superset].begin(), dataStructure->D[superset].end(), tmp.begin(), tmp.end(),
                        std::inserter(w, w.begin()), cmp);
         c.SetLength(w.size());
         for (unsigned int j = 0; j < w.size(); j++) {
             c[j] = -w[j];
         }
-
         BuildFromRoots(p, c);
         Ec2 digest = pk->g2 * 0;
         int size = p.rep.length();
