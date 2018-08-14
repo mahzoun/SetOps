@@ -10,9 +10,12 @@ using namespace NTL;
 
 bool cmp(const NTL::ZZ_p &lhs, const NTL::ZZ_p &rhs) {
     Utils utils;
-    const char *x = utils.zToString(rhs);
-    const char *y = utils.zToString(lhs);
-    return strcmp(x, y) > 0;
+    char *x = utils.zToString(rhs);
+    char *y = utils.zToString(lhs);
+    bool b = strcmp(x, y) > 0;
+    free(x);
+    free(y);
+    return b;
 }
 
 void Intersection::xgcdTree() {

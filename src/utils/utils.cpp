@@ -10,9 +10,12 @@ using namespace bn;
 
 bool ZZ_p_compare::operator()(const NTL::ZZ_p &rhs, const NTL::ZZ_p &lhs) const{
     Utils utils;
-    string s1 = utils.zToString(rhs);
-    string s2 = utils.zToString(lhs);
-    return s1 < s2;
+    char* s1 = utils.zToString(rhs);
+    char* s2 = utils.zToString(lhs);
+    bool b = strcmp(s1, s2) < 0;
+    free(s1);
+    free(s2);
+    return b;
 }
 
 char* Utils::Ec1ToString(Ec1 z){
@@ -35,7 +38,9 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
         c[i] = conv<ZZ_p>(-array[i]);
     BuildFromRoots(poly, c);
     for(unsigned int i = 0; i < array.size() + 1; i++){
-        const mie::Vuint temp(zToString(poly[i]));
+        char* str = zToString(poly[i]);
+        const mie::Vuint temp(str);
+        free(str);
         digest = digest + pk->pubs_g1[i] * temp;
     }
     return digest;

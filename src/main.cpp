@@ -271,7 +271,7 @@ int main() {
     log_info("Key generation time:\t%d", duration);
     std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
     for (int test_size = 10; test_size <= 10; test_size +=500)
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 10; i++)
             test_intersection(0, test_size, test_size / 10, k);
 
 //   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
