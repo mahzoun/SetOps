@@ -111,7 +111,7 @@ void Utils::sha256(unsigned char* outputBuffer, char *string) {
     SHA256_Final(hash, &sha256);
     int i = 0;
     for (i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        sprintf((char *) outputBuffer + (i * 2), "%02o", hash[i]);
+        snprintf((char *) outputBuffer + (i * 2), SHA256_DIGEST_LENGTH,"%02o", hash[i]);
     }
     outputBuffer[64] = 0;
 }

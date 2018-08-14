@@ -33,13 +33,13 @@ public:
         value_ = value;
         left_ = nullptr;
         right_ = nullptr;
-        hash_ = new unsigned char[65];
+        hash_ = new unsigned char[256];
     }
 
     MerkleNode(MerkleNode *left, MerkleNode *right) {
             left_ = left;
             right_ = right;
-            hash_ = new unsigned char[65];
+            hash_ = new unsigned char[256];
     }
 
     ~MerkleNode() {

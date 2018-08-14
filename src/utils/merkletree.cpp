@@ -9,9 +9,12 @@ MerkleTree::MerkleTree(){
    this->size = SETS_MAX_NO;
 }
 
-MerkleTree::MerkleTree(int size, DataStructure *dataStructure, PublicKey *pk, SecretKey *sk){
+MerkleTree::MerkleTree(int size, DataStructure *dataStructure, PublicKey *pk, SecretKey *sk) {
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        for (int j = 0; j < SETS_MAX_NO; j++)
+            merkleNode[i][j] = nullptr;
     this->size = size;
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         bn::Ec1 x = pk->g1;
         merkleNode[0][i] = new MerkleNode(x);
         debug("merke node %d %d created", 0, i);

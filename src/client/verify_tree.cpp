@@ -24,7 +24,7 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
             for (int i = 0; i < len / 2; i++) {
                 char *temp = utils.concat(dataStructure->merkleTree->merkleNode[depth - 1][2 * i]->hash(),
                                           dataStructure->merkleTree->merkleNode[depth - 1][2 * i + 1]->hash());
-                unsigned char *res = new unsigned char[65];
+                unsigned char *res = new unsigned char[256];
                 utils.sha256(res, temp);
                 if (strcmp((char *) res, (char *) dataStructure->merkleTree->merkleNode[depth][i]->hash_) != 0) {
                     delete[] res;

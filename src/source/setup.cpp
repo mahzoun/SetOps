@@ -16,9 +16,9 @@ DataStructure::DataStructure(int size, Key *key){
 }
 
 DataStructure::~DataStructure(){
-//    if(merkleTree) {
-//        delete merkleTree;
-//    }
+    if(merkleTree) {
+        delete merkleTree;
+    }
 }
 
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
