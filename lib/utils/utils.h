@@ -24,7 +24,6 @@ class PublicKey;
 class ZZ_p_compare {
 public:
     bool operator()(const NTL::ZZ_p&, const NTL::ZZ_p&) const;
-//    bool operator<(NTL::ZZ_p&, NTL::ZZ_p&) const;
 };
 
 class Utils {
