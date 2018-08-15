@@ -43,8 +43,14 @@ protected:
         catch (std::exception &e) {
             std::cerr << e.what() << "\n";
         }
+    }
 
-
+    void TearDown() {
+        delete (verifyTree);
+        delete (verifyUnion);
+        delete (un);
+        delete (dataStructure);
+        delete (k);
     }
 };
 
@@ -73,7 +79,7 @@ TEST_F(UnionTest, WrongMembershipWitness) {
     un->superset_witness();
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    un->W1[0] += 1;
+    *(un->W1[0]) *= 2;
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
                                   un->set_indices);
     bool b = verifyUnion->verify_union();
@@ -91,7 +97,7 @@ TEST_F(UnionTest, WrongSupersetWitness) {
     un->superset_witness();
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    un->W2[0] += 1;
+    *(un->W2[0]) *= 2;
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
                                   un->set_indices);
     bool b = verifyUnion->verify_union();

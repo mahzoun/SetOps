@@ -142,11 +142,9 @@ Union::Union(const std::vector<int> indices, PublicKey *pk, DataStructure *dataS
 
 Union::~Union() {
     for (int i = 0; i < SETS_MAX_SIZE; i++)
-        if (W1[i])
-            delete (W1[i]);
+        delete (W1[i]);
     for (int i = 0; i < SETS_MAX_NO; i++)
-        if (W2[i])
-            delete (W2[i]);
+        delete (W2[i]);
 }
 
 void Union::unionSets() {
