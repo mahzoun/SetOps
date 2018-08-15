@@ -8,6 +8,16 @@
 #define MAX_SIZE_LG 20
 #define NODEBUG
 
+Key::Key() {
+    NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
+    NTL::ZZ_p::init(p);
+    NTL::ZZ_p temp(0);
+    random(temp);
+    this->sk = new SecretKey(temp);
+    log_info("Secret Key Generated");
+    genkey(p);
+}
+
 Key::Key(NTL::ZZ p) {
     NTL::ZZ_p::init(p);
     NTL::ZZ_p temp(0);
