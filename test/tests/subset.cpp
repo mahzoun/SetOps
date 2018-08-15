@@ -44,6 +44,13 @@ protected:
 
 
     }
+    void TearDown() {
+//        PUT(verifySubset->verified_subset);
+//        delete (verifySubset);
+//        delete (subset);
+        delete (dataStructure);
+        delete (k);
+    }
 };
 
 TEST_F(SubsetTest, PositiveAnswer) {
@@ -60,6 +67,8 @@ TEST_F(SubsetTest, PositiveAnswer) {
     verifySubset->verify_subset();
     EXPECT_TRUE(subset->answer);
     EXPECT_TRUE(verifySubset->verified_subset);
+    delete verifySubset;
+    delete subset;
 }
 
 TEST_F(SubsetTest, NegativeAnswer) {
@@ -76,6 +85,8 @@ TEST_F(SubsetTest, NegativeAnswer) {
     verifySubset->verify_subset();
     EXPECT_FALSE(subset->answer);
     EXPECT_TRUE(verifySubset->verified_subset);
+    delete verifySubset;
+    delete subset;
 }
 
 
@@ -93,6 +104,8 @@ TEST_F(SubsetTest, SameSets) {
     verifySubset->verify_subset();
     EXPECT_TRUE(subset->answer);
     EXPECT_TRUE(verifySubset->verified_subset);
+    delete verifySubset;
+    delete subset;
 }
 
 

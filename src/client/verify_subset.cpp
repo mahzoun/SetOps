@@ -47,9 +47,9 @@ bool VerifySubset::verifyNegetive() {
     using namespace bn;
     Utils utils;
     Fp12 e1, e2, e3, e4, e5;
-    const char* y_str = utils.zToString(y);
+    char* y_str = utils.zToString(y);
     const mie::Vuint temp(y_str);
-    delete []y_str;
+    free(y_str);
     Ec1 gygs = pk->pubs_g1[1] + pk->g1 * temp;
     opt_atePairing(e1, *W, gygs);
     opt_atePairing(e2, pk->g2, dataStructure->AuthD[J]);

@@ -42,6 +42,10 @@ protected:
 
 
     }
+    void TearDown() {
+        delete (dataStructure);
+        delete (k);
+    }
 };
 
 TEST_F(DifferenceTest, TwoSets1) {
@@ -59,6 +63,8 @@ TEST_F(DifferenceTest, TwoSets1) {
     verifyDifference->verify_difference();
     verifyDifference->verify_difference();
     EXPECT_TRUE(verifyDifference->verified_witness);
+    delete (verifyDifference);
+    delete (difference);
 }
 
 TEST_F(DifferenceTest, TwoSets2) {
@@ -76,4 +82,6 @@ TEST_F(DifferenceTest, TwoSets2) {
     verifyDifference->verify_difference();
     verifyDifference->verify_difference();
     EXPECT_TRUE(verifyDifference->verified_witness);
+    delete (verifyDifference);
+    delete (difference);
 }
