@@ -32,7 +32,10 @@ public:
     bn::Ec1 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> , const bn::Ec1, PublicKey *);
     bn::Ec1 compute_digest(std::vector<NTL::ZZ_p>, const bn::Ec1, SecretKey *);
     bn::Ec1 compute_digest_pub(std::vector<NTL::ZZ_p> , const bn::Ec1, PublicKey *);
+    bn::Ec2 compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare>, const bn::Ec2, SecretKey *);
+    bn::Ec2 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> , const bn::Ec2, PublicKey *);
     char* Ec1ToString(bn::Ec1);
+    char* Ec2ToString(bn::Ec2);
     char* concat(const char*, const char*);
     void sha256(unsigned char*, char*);
     NTL::ZZ_p StringToz(char*);

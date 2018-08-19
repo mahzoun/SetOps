@@ -28,7 +28,6 @@ class PublicKey{
 public:
     std::vector<bn::Ec1> pubs_g1;
     std::vector<bn::Ec2> pubs_g2;
-    std::vector<NTL::ZZ_p> pubs_s;
     bn::Ec1 g1;
     bn::Ec2 g2;
     PublicKey(NTL::ZZ p);

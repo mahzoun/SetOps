@@ -26,6 +26,8 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
         DEBUGINDEX("Authenticated value for set ", i , AuthD[i]);
+        AuthD2[i] = utils.compute_digest(D[i], pk->g2, sk);
+        DEBUGINDEX("Authenticated value for set ", i , AuthD2[i]);
     }
     merkleTree->build(this, pk, sk);
     this->depth = merkleTree->depth;

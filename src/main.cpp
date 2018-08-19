@@ -113,33 +113,26 @@ void test_union(int round, int size, int intersection_size, Key *k) {
         v.push_back(set_index);
     t3 = high_resolution_clock::now();
     Union *un = new Union(v, k->get_public_key(), dataStructure);
+    t1 = high_resolution_clock::now();
     un->unionSets();
-    t1 = high_resolution_clock::now();
-    un->membership_witness();
     t2 = high_resolution_clock::now();
     duration = duration_cast<milliseconds>(t2 - t1).count();
     std::cout << duration << "\t";
-
-    t1 = high_resolution_clock::now();
-    un->superset_witness();
-    t2 = high_resolution_clock::now();
     t4 = high_resolution_clock::now();
-    duration = duration_cast<milliseconds>(t2 - t1).count();
-    std::cout << duration << "\t";
     duration = duration_cast<milliseconds>(t4 - t3).count();
     std::cout << duration << "\t";
-    t1 = high_resolution_clock::now();
-    VerifyTree *verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD,
-                                               dataStructure->m, v, un->set_indices);
-    verifyUnion->verify_union();
-    t2 = high_resolution_clock::now();
-    duration = duration_cast<milliseconds>(t2 - t1).count();
-    std::cout << duration << "\n";
-    bool b = verifyUnion->membershipwitness and verifyUnion->membershipwitness;
-    delete verifyTree;
-    delete verifyUnion;
+//    t1 = high_resolution_clock::now();
+//    VerifyTree *verifyTree = new VerifyTree;
+//    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+//    VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD,
+//                                               dataStructure->m, v, un->set_indices);
+//    verifyUnion->verify_union();
+//    t2 = high_resolution_clock::now();
+//    duration = duration_cast<milliseconds>(t2 - t1).count();
+//    std::cout << duration << "\n";
+//    bool b = verifyUnion->membershipwitness and verifyUnion->membershipwitness;
+//    delete verifyTree;
+//    delete verifyUnion;
     delete un;
     delete dataStructure;
 //    log_info("Union verification time:\t%d", duration);
@@ -261,15 +254,15 @@ int main() {
 //            test_intersection(0, test_size, test_size / 10, k);
 
 //   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-//   for (int test_size = 0; test_size <= 400; test_size +=200)
-//       for(int i = 0; i < 10; i++)
-//           test_union(i, test_size, test_size / 10, k);
+   for (int test_size = 0; test_size <= 400; test_size +=200)
+       for(int i = 0; i < 10; i++)
+           test_union(i, test_size, test_size / 10, k);
 //    for (int test_size = 0; test_size <= 400; test_size +=200)
 //        for(int i = 0; i < 10; i++)
 //            test_subset(i, test_size, test_size / 10, k);
-    for (int test_size = 0; test_size <= 400; test_size +=200)
-        for(int i = 0; i < 10; i++)
-            test_difference(i, test_size, test_size / 10, k);
+//    for (int test_size = 0; test_size <= 400; test_size +=200)
+//        for(int i = 0; i < 10; i++)
+//            test_difference(i, test_size, test_size / 10, k);
     delete k;
     return 0;
 }
