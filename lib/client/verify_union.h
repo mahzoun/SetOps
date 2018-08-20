@@ -14,19 +14,20 @@
 #include "server/query.h"
 #include "utils/utils.h"
 #include "utils/merkletree.h"
+#include "client/verify_intersection.h"
 
 class VerifyUnion {
 public:
     int m;
     PublicKey *pk;
-    std::vector<int> indices, set_indices;
+    std::vector<int> indices;
     bn::Ec1 digest_U;
     std::set<NTL::ZZ_p, ZZ_p_compare> union_ans;
     std::vector<NTL::ZZ_p> U;
-    bn::Ec2 *W1[SETS_MAX_SIZE], *W2[SETS_MAX_NO];
-    bn::Ec1 AuthD[SETS_MAX_NO];
-    bool membershipwitness, supersetnesswitness;
-    VerifyUnion(PublicKey*, std::set<NTL::ZZ_p, ZZ_p_compare>, bn::Ec2*[], bn::Ec2*[], bn::Ec1[], int, std::vector<int>, std::vector<int>);
+    std::vector<std::vector<QueryNode>> tree;
+
+    VerifyUnion(PublicKey *, std::set<NTL::ZZ_p, ZZ_p_compare>, std::vector<std::vector<QueryNode>>&, int, std::vector<int>&);
+    bool verified_intersection();
     bool verify_union();
 };
 

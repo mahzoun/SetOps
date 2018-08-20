@@ -139,17 +139,12 @@ Union::Union(const std::vector<int> indices, PublicKey *pk, DataStructure *dataS
     for (int i = 0; i < dataStructure->m; i++) {
         QueryNode tmp1;
         tree[0].push_back(tmp1);
-        int j = 0;
         for (auto x:dataStructure->D[i]) {
-            tree[0][j].SET.insert(x);
-            j++;
+            tree[0][i].SET.insert(x);
             tree[0].push_back(tmp1);
         }
     }
 }
-
-//Union::~Union() {
-//}
 
 void Union::unionSets() {
     Utils utils;
@@ -187,7 +182,6 @@ void Union::setup_node(int depth, int length) {
     set_intersection(tree[depth - 1][length * 2].SET.begin(), tree[depth - 1][length * 2].SET.end(),
                      tree[depth - 1][length * 2 + 1].SET.begin(), tree[depth - 1][length * 2 + 1].SET.end(),
                      std::inserter(tree[depth][length].I, tree[depth][length].I.begin()), cmp);
-
     tree[depth][length].HU = utils.compute_digest_pub(tree[depth][length].U, pk->g2, pk);
     tree[depth][length].HI = utils.compute_digest_pub(tree[depth][length].I, pk->g1, pk);
     tree[depth][length].SET = U;
@@ -199,7 +193,7 @@ void Union::setup_node(int depth, int length) {
                    tree[depth][length].I.begin(), tree[depth][length].I.end(), std::inserter(w1, w1.begin()), cmp);
 
     set_difference(tree[depth - 1][length * 2 + 1].SET.begin(), tree[depth - 1][length * 2 + 1].SET.end(),
-                   tree[depth][length].I.begin(), tree[depth][length].I.end(), std::inserter(w1, w1.begin()), cmp);
+                   tree[depth][length].I.begin(), tree[depth][length].I.end(), std::inserter(w2, w2.begin()), cmp);
 
     c.SetLength(w1.size());
     for (unsigned int j = 0; j < w1.size(); j++) {
