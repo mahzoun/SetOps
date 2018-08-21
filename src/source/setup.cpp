@@ -24,16 +24,16 @@ DataStructure::~DataStructure() {
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
     NTL::ZZ_p s = sk->sk;
-    const char *a_str = utils.zToString(sk->a);
-    const mie::Vuint a(a_str);
+//    const char *a_str = utils.zToString(sk->a);
+//    const mie::Vuint a(a_str);
     for (int i = 0; i < m; i++) {
         AuthD[i] = utils.compute_digest(D[i], pk->g1, sk);
         DEBUGINDEX("Authenticated value for set ", i, AuthD[i]);
-        AuthD2[i] = utils.compute_digest(D[i], pk->g2, sk);
-        AuthD2p[i] = AuthD2[i] * a;
-        DEBUGINDEX("Authenticated value for set ", i, AuthD2[i]);
+//        AuthD2[i] = utils.compute_digest(D[i], pk->g2, sk);
+//        AuthD2p[i] = AuthD2[i] * a;
+//        DEBUGINDEX("Authenticated value for set ", i, AuthD2[i]);
     }
-    free((char *) a_str);
+//    free((char *) a_str);
     merkleTree->build(this, pk, sk);
 }
 

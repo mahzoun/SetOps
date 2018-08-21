@@ -153,8 +153,8 @@ void Union::unionSets() {
     for (int i = 0; i < len; i++) {
         bn::Ec1 f1 = utils.compute_digest_pub(dataStructure->D[i], pk->g1, pk);
         bn::Ec2 f2 = utils.compute_digest_pub(dataStructure->D[i], pk->g2, pk);
-        tree[0][i].F1 = f1;
-        tree[0][i].F2 = f2;
+        tree[depth][i].F1 = f1;
+        tree[depth][i].F2 = f2;
     }
     while (len > 1) {
         depth++;
@@ -184,14 +184,13 @@ void Union::setup_node(int depth, int length) {
                      std::inserter(tree[depth][length].I, tree[depth][length].I.begin()), cmp);
 
     tree[depth][length].HU = utils.compute_digest_pub(tree[depth][length].U, pk->g2, pk);
+    tree[depth][length].HUp = utils.compute_digest_puba(tree[depth][length].U, pk->g2, pk);
     tree[depth][length].HI = utils.compute_digest_pub(tree[depth][length].I, pk->g1, pk);
+    tree[depth][length].HIp = utils.compute_digest_puba(tree[depth][length].I, pk->g2, pk);
     tree[depth][length].SET = tree[depth][length].U;
 
     tree[depth][length].F1 = utils.compute_digest_pub(tree[depth][length].SET, pk->g1, pk);
     tree[depth][length].F2 = tree[depth][length].HU;
-
-//    std::cout << tree[depth][length].SET.size() << "\t" << tree[depth][length].U.size() << "\t"
-//              << tree[depth][length].I.size() << "\n";
 
     std::vector<NTL::ZZ_p> w1, w2;
     set_difference(tree[depth - 1][length * 2].SET.begin(), tree[depth - 1][length * 2].SET.end(),

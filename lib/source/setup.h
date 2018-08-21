@@ -41,8 +41,8 @@ public:
 
     std::set<NTL::ZZ_p, ZZ_p_compare> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
-    bn::Ec2 AuthD2[SETS_MAX_NO];
-    bn::Ec2 AuthD2p[SETS_MAX_NO];
+//    bn::Ec2 AuthD2[SETS_MAX_NO];
+//    bn::Ec2 AuthD2p[SETS_MAX_NO];
     MerkleTree *merkleTree;
 private:
     void setup(PublicKey *, SecretKey *);

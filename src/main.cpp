@@ -252,8 +252,8 @@ int main() {
 //            test_intersection(0, test_size, test_size / 10, k);
 
 //   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-   for (int test_size = 100; test_size <= 100; test_size +=500)
-//       for(int i = 0; i < 10; i++)
+   for (int test_size = 0; test_size <= 1000; test_size +=100)
+       for(int i = 0; i < 10; i++)
            test_union(0, test_size, test_size/10, k);
 //    for (int test_size = 0; test_size <= 400; test_size +=200)
 //        for(int i = 0; i < 10; i++)

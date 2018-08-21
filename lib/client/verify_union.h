@@ -29,6 +29,7 @@ public:
     VerifyUnion(PublicKey *, std::set<NTL::ZZ_p, ZZ_p_compare>, std::vector<std::vector<QueryNode>>&, int, std::vector<int>&);
     bool verified_intersection();
     bool verified_union();
+    bool verified_set();
     bool verify_union();
 };
 

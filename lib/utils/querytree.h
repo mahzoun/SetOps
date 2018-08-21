@@ -26,9 +26,9 @@ class QueryNode {
 public:
     std::set<NTL::ZZ_p, ZZ_p_compare> SET, U, I;
     bn::Ec1 F1;
-    bn::Ec2 F2, F2p;
+    bn::Ec2 F2;
     bn::Ec1 HI;
-    bn::Ec2 HU;
+    bn::Ec2 HU, HUp, HIp;
     bn::Ec1 Q[SMALL_QUERY_SIZE];
     bn::Ec2 W[SMALL_QUERY_SIZE];
 };

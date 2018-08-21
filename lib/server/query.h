@@ -67,16 +67,10 @@ public:
 
     Union(std::vector<int>, PublicKey *, DataStructure *);
 
-//    ~Union();
-    void _union();
-
     void setup_node(int, int);
 
     void unionSets();
 
-    void membership_witness();
-
-    void superset_witness();
 };
 
 class Subset : Query {

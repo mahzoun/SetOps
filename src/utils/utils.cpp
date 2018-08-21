@@ -67,44 +67,6 @@ bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::E
     return digest;
 }
 
-bn::Ec1 Utils::compute_digest_pub(std::vector<NTL::ZZ_p> array, const bn::Ec1 g1, PublicKey *pk) {
-    Ec1 digest = g1 * 0;
-    if (array.size() == 0)
-        return digest;
-
-    ZZ_pX f, poly;
-    poly = ZZ_pX(INIT_MONO, array.size());
-    vec_ZZ_p c;
-    c.SetLength(array.size());
-    for (unsigned int i = 0; i < array.size(); i++)
-        c[i] = conv<ZZ_p>(-array[i]);
-
-    BuildFromRoots(poly, c);
-    for (unsigned int i = 0; i < array.size() + 1; i++) {
-        const mie::Vuint temp(zToString(poly[i]));
-        digest = digest + pk->pubs_g1[i] * temp;
-    }
-    return digest;
-}
-
-bn::Ec1 Utils::compute_digest(std::vector<NTL::ZZ_p> array, const bn::Ec1 g1, SecretKey *sk) {
-    Ec1 digest = g1 * 1;
-
-    if (array.size() == 0)
-        return digest;
-
-    ZZ_p temp1 = conv<ZZ_p>(1);
-
-    for (unsigned int i = 0; i < array.size(); i++) {
-        temp1 *= (sk->sk) + array[i];
-
-    }
-
-    const mie::Vuint temp(zToString(temp1));
-    digest = g1 * temp;
-    return digest;
-}
-
 bn::Ec2 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection, const bn::Ec2 g2, PublicKey *pk) {
     std::vector<NTL::ZZ_p> array(intersection.begin(), intersection.end());
     Ec2 digest = g2 * 0;
@@ -127,18 +89,25 @@ bn::Ec2 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     return digest;
 }
 
-bn::Ec2 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::Ec2 g2, SecretKey *sk) {
-    Ec2 digest = g2 * 1;
-    if (set.size() == 0)
-        return digest;
+bn::Ec2 Utils::compute_digest_puba(std::set<NTL::ZZ_p, ZZ_p_compare> intersection, const bn::Ec2 g2, PublicKey *pk) {
+    std::vector<NTL::ZZ_p> array(intersection.begin(), intersection.end());
+    Ec2 digest = g2 * 0;
+    if (array.size() == 0)
+        return pk->pubs_ga2[0];
 
-    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
-    ZZ_p temp1 = conv<ZZ_p>(1);
-
-    for (it = set.begin(); it != set.end(); it++)
-        temp1 *= (sk->sk) + *it;
-    const mie::Vuint temp(zToString(temp1));
-    digest = g2 * temp;
+    ZZ_pX f, poly;
+    poly = ZZ_pX(INIT_MONO, array.size());
+    vec_ZZ_p c;
+    c.SetLength(array.size());
+    for (unsigned int i = 0; i < array.size(); i++)
+        c[i] = conv<ZZ_p>(-array[i]);
+    BuildFromRoots(poly, c);
+    for (unsigned int i = 0; i < array.size() + 1; i++) {
+        char *str = zToString(poly[i]);
+        const mie::Vuint temp(str);
+        free(str);
+        digest = digest + pk->pubs_ga2[i] * temp;
+    }
     return digest;
 }
 
