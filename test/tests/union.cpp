@@ -58,52 +58,24 @@ TEST_F(UnionTest, TwoSets) {
     SetUp(SETS_NUM);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
-    EXPECT_TRUE(verifyUnion->membershipwitness);
-    EXPECT_TRUE(verifyUnion->supersetnesswitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
-TEST_F(UnionTest, WrongMembershipWitness) {
+TEST_F(UnionTest, WrongAccWitnessLeaf) {
     SetUp(SETS_NUM);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
     verifyTree = new VerifyTree;
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    *(un->W1[0]) *= 2;
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
+    un->tree[0][0].F2 *= 2;
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_FALSE(b);
-    EXPECT_FALSE(verifyUnion->membershipwitness);
-    EXPECT_FALSE(verifyUnion->supersetnesswitness);
-    EXPECT_TRUE(verifyTree->verifiedtree);
-}
-
-TEST_F(UnionTest, WrongSupersetWitness) {
-    SetUp(SETS_NUM);
-    un = new Union(v, k->get_public_key(), dataStructure);
-    un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
-    verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
-    *(un->W2[0]) *= 2;
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
-    bool b = verifyUnion->verify_union();
-    EXPECT_FALSE(b);
-    EXPECT_TRUE(verifyUnion->membershipwitness);
-    EXPECT_FALSE(verifyUnion->supersetnesswitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
@@ -130,14 +102,9 @@ TEST_F(UnionTest, MultipleSetsEvenindices) {
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
-    EXPECT_TRUE(verifyUnion->membershipwitness);
-    EXPECT_TRUE(verifyUnion->supersetnesswitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
@@ -165,14 +132,9 @@ TEST_F(UnionTest, MultipleSetsOddindices) {
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
-    EXPECT_TRUE(verifyUnion->membershipwitness);
-    EXPECT_TRUE(verifyUnion->supersetnesswitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
 
@@ -199,13 +161,8 @@ TEST_F(UnionTest, MultipleSets3kIndices) {
     verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
-    un->membership_witness();
-    un->superset_witness();
-    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
-                                  un->set_indices);
+    verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
-    EXPECT_TRUE(verifyUnion->membershipwitness);
-    EXPECT_TRUE(verifyUnion->supersetnesswitness);
     EXPECT_TRUE(verifyTree->verifiedtree);
 }
