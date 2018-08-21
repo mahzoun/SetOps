@@ -182,11 +182,16 @@ void Union::setup_node(int depth, int length) {
     set_intersection(tree[depth - 1][length * 2].SET.begin(), tree[depth - 1][length * 2].SET.end(),
                      tree[depth - 1][length * 2 + 1].SET.begin(), tree[depth - 1][length * 2 + 1].SET.end(),
                      std::inserter(tree[depth][length].I, tree[depth][length].I.begin()), cmp);
+
     tree[depth][length].HU = utils.compute_digest_pub(tree[depth][length].U, pk->g2, pk);
     tree[depth][length].HI = utils.compute_digest_pub(tree[depth][length].I, pk->g1, pk);
-    tree[depth][length].SET = U;
+    tree[depth][length].SET = tree[depth][length].U;
+
     tree[depth][length].F1 = utils.compute_digest_pub(tree[depth][length].SET, pk->g1, pk);
     tree[depth][length].F2 = tree[depth][length].HU;
+
+//    std::cout << tree[depth][length].SET.size() << "\t" << tree[depth][length].U.size() << "\t"
+//              << tree[depth][length].I.size() << "\n";
 
     std::vector<NTL::ZZ_p> w1, w2;
     set_difference(tree[depth - 1][length * 2].SET.begin(), tree[depth - 1][length * 2].SET.end(),

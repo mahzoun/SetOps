@@ -17,7 +17,7 @@ VerifyUnion::VerifyUnion(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> ans, s
 bool VerifyUnion::verify_union() {
     using namespace ::bn;
     Utils utils;
-    bool b = verified_intersection();
+    bool b = verified_intersection() and verified_union();
     return b;
 }
 
@@ -40,6 +40,21 @@ bool VerifyUnion::verified_intersection() {
                 e3 *= e4;
             }
             if (e3 != e5) {
+                result = false;
+            }
+        }
+    }
+    return result;
+}
+
+bool VerifyUnion::verified_union() {
+    bool result = true;
+    bn::Fp12 e1, e2;
+    for (int i = 1; i < tree.size(); i++) {
+        for (int j = 0; j < tree[i].size(); j++) {
+            opt_atePairing(e1, tree[i - 1][j * 2].F2, tree[i - 1][j * 2 + 1].F1);
+            opt_atePairing(e2, tree[i][j].HU, tree[i][j].HI);
+            if (e1 != e2) {
                 result = false;
             }
         }
