@@ -13,7 +13,9 @@ Key::Key() {
     NTL::ZZ_p::init(p);
     NTL::ZZ_p temp(0);
     random(temp);
-    this->sk = new SecretKey(temp);
+    NTL::ZZ_p temp1(0);
+    random(temp1);
+    this->sk = new SecretKey(temp, temp1);
     log_info("Secret Key Generated");
     genkey(p);
 }
@@ -22,7 +24,9 @@ Key::Key(NTL::ZZ p) {
     NTL::ZZ_p::init(p);
     NTL::ZZ_p temp(0);
     random(temp);
-    this->sk = new SecretKey(temp);
+    NTL::ZZ_p temp1(0);
+    random(temp1);
+    this->sk = new SecretKey(temp, temp1);
     log_info("Secret Key Generated");
     genkey(p);
 }
@@ -58,8 +62,9 @@ SecretKey::SecretKey() {
     this->sk = 0;
 }
 
-SecretKey::SecretKey(NTL::ZZ_p s) {
+SecretKey::SecretKey(NTL::ZZ_p s, NTL::ZZ_p a) {
     this->sk = s;
+    this->a = a;
 }
 
 PublicKey *Key::get_public_key() {
@@ -88,16 +93,22 @@ void PublicKey::setup_bilinear(SecretKey *sk, bn::Ec1, bn::Ec2) {
     Utils utils;
     ZZ_p s = sk->sk;
     const int q = SETS_MAX_SIZE;
-    const char* s_str = utils.zToString(s);
+    const char *s_str = utils.zToString(s);
     const mie::Vuint secret_key(s_str);
-    free((char*)s_str);
+    free((char *) s_str);
+    const char *a_str = utils.zToString(sk->a);
+    const mie::Vuint a(a_str);
+    free((char *) a_str);
     pubs_g1.push_back(g1);
-
+    pubs_ga1.push_back(g1 * a);
     for (int i = 1; i < q + 1; i++) {
         pubs_g1.push_back(pubs_g1[i - 1] * secret_key);
+        pubs_ga1.push_back(pubs_g1[i] * a);
     }
     pubs_g2.push_back(g2);
+    pubs_ga2.push_back(g2 * a);
     for (int i = 1; i < q + 1; i++) {
         pubs_g2.push_back(pubs_g2[i - 1] * secret_key);
+        pubs_ga2.push_back(pubs_g2[i] * a);
     }
 }
