@@ -251,33 +251,51 @@ void Union::setup_node(int depth, int length) {
     tree[depth][length].Q[1] = digest1;
 }
 
-//void Union::unionSets() {
-//    std::set<NTL::ZZ_p, ZZ_p_compare> setsunion;
-//    debug("Union the sets %d and %d", indices[0], indices[1]);
-//    set_union(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(),
-//              dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
-//              std::inserter(setsunion, setsunion.begin()), cmp);
-//    U = setsunion;
-//    for (unsigned int i = 2; i < indices.size(); i++) {
-//        set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(),
-//                  std::inserter(setsunion, setsunion.begin()), cmp);
-//        U = setsunion;
-//        debug("Union the sets U and %d", indices[i]);
-//    }
-//}
-//
-//
-//void Union::membership_witness() {
-//    Utils utils;
-//    std::vector<NTL::ZZ_p> w;
-//    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
-//    int idx = 0;
-//    for (it = U.begin(); it != U.end(); it++) {
-//        w.clear();
-//        std::vector<NTL::ZZ_p> tmp;
-//        tmp.push_back(*it);
-//        int superset = dataStructure->set_index[*it];
-//        set_indices.push_back(superset);
+Union2::Union2(const std::vector<int> indices, PublicKey *pk, DataStructure *dataStructure) {
+    this->indices = indices;
+    this->pk = pk;
+    this->dataStructure = dataStructure;
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        this->W2[i] = new bn::Ec2;
+    for (int i = 0; i < SETS_MAX_SIZE; i++)
+        this->W1[i] = new bn::Ec2;
+}
+
+Union2::~Union2() {
+    for (int i = 0; i < SETS_MAX_SIZE; i++)
+        delete (W1[i]);
+    for (int i = 0; i < SETS_MAX_NO; i++)
+        delete (W2[i]);
+}
+
+
+void Union2::unionSets() {
+    std::set<NTL::ZZ_p, ZZ_p_compare> setsunion;
+    debug("Union the sets %d and %d", indices[0], indices[1]);
+    set_union(dataStructure->D[indices[0]].begin(), dataStructure->D[indices[0]].end(),
+              dataStructure->D[indices[1]].begin(), dataStructure->D[indices[1]].end(),
+              std::inserter(setsunion, setsunion.begin()), cmp);
+    U = setsunion;
+    for (unsigned int i = 2; i < indices.size(); i++) {
+        set_union(dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(), U.begin(), U.end(),
+                  std::inserter(setsunion, setsunion.begin()), cmp);
+        U = setsunion;
+        debug("Union the sets U and %d", indices[i]);
+    }
+}
+
+
+void Union2::membership_witness() {
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
+    std::set<NTL::ZZ_p, ZZ_p_compare>::iterator it;
+    int idx = 0;
+    for (it = U.begin(); it != U.end(); it++) {
+        w.clear();
+        std::vector<NTL::ZZ_p> tmp;
+        tmp.push_back(*it);
+        int superset = dataStructure->set_index[*it];
+        set_indices.push_back(superset);
 //        for (unsigned int j = 0; j < indices.size(); j++) {
 //            if (dataStructure->D[indices[j]].find(*it) != dataStructure->D[indices[j]].end()) {
 //                set_indices.push_back(j);
@@ -285,52 +303,52 @@ void Union::setup_node(int depth, int length) {
 //                break;
 //            }
 //        }
-//        set_difference(dataStructure->D[superset].begin(), dataStructure->D[superset].end(), tmp.begin(), tmp.end(),
-//                       std::inserter(w, w.begin()), cmp);
-//        c.SetLength(w.size());
-//        for (unsigned int j = 0; j < w.size(); j++) {
-//            c[j] = -w[j];
-//        }
-//        BuildFromRoots(p, c);
-//        Ec2 digest = pk->g2 * 0;
-//        int size = p.rep.length();
-//        for (int j = 0; j < size; j++) {
-//            char *str = utils.zToString(p[j]);
-//            mie::Vuint temp(str);
-//            free(str);
-//            digest = digest + pk->pubs_g2[j] * temp;
-//        }
-//        *W1[idx] = digest;
-//        idx++;
-//        DEBUGINDEX("Memberiship witness for ", idx, *W1[idx]);
-//    }
-//}
-//
-//void Union::superset_witness() {
-//    Utils utils;
-//    std::vector<NTL::ZZ_p> w;
-//    for (unsigned int i = 0; i < indices.size(); i++) {
-//        w.clear();
-//        set_difference(U.begin(), U.end(), dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(),
-//                       std::inserter(w, w.begin()), cmp);
-//        c.SetLength(w.size());
-//        for (unsigned int j = 0; j < w.size(); j++) {
-//            c[j] = -w[j];
-//        }
-//        BuildFromRoots(p, c);
-//
-//        Ec2 digest = pk->g2 * 0;
-//        int size = p.rep.length();
-//        for (int j = 0; j < size; j++) {
-//            char *str = utils.zToString(p[j]);
-//            const mie::Vuint temp(str);
-//            free(str);
-//            digest = digest + pk->pubs_g2[j] * temp;
-//        }
-//        *W2[indices[i]] = digest;
-//        DEBUGINDEX("Superset witness for ", indices[i], *W2[indices[i]]);
-//    }
-//}
+        set_difference(dataStructure->D[superset].begin(), dataStructure->D[superset].end(), tmp.begin(), tmp.end(),
+                       std::inserter(w, w.begin()), cmp);
+        c.SetLength(w.size());
+        for (unsigned int j = 0; j < w.size(); j++) {
+            c[j] = -w[j];
+        }
+        BuildFromRoots(p, c);
+        Ec2 digest = pk->g2 * 0;
+        int size = p.rep.length();
+        for (int j = 0; j < size; j++) {
+            char *str = utils.zToString(p[j]);
+            mie::Vuint temp(str);
+            free(str);
+            digest = digest + pk->pubs_g2[j] * temp;
+        }
+        *W1[idx] = digest;
+        idx++;
+        DEBUGINDEX("Memberiship witness for ", idx, *W1[idx]);
+    }
+}
+
+void Union2::superset_witness() {
+    Utils utils;
+    std::vector<NTL::ZZ_p> w;
+    for (unsigned int i = 0; i < indices.size(); i++) {
+        w.clear();
+        set_difference(U.begin(), U.end(), dataStructure->D[indices[i]].begin(), dataStructure->D[indices[i]].end(),
+                       std::inserter(w, w.begin()), cmp);
+        c.SetLength(w.size());
+        for (unsigned int j = 0; j < w.size(); j++) {
+            c[j] = -w[j];
+        }
+        BuildFromRoots(p, c);
+
+        Ec2 digest = pk->g2 * 0;
+        int size = p.rep.length();
+        for (int j = 0; j < size; j++) {
+            char *str = utils.zToString(p[j]);
+            const mie::Vuint temp(str);
+            free(str);
+            digest = digest + pk->pubs_g2[j] * temp;
+        }
+        *W2[indices[i]] = digest;
+        DEBUGINDEX("Superset witness for ", indices[i], *W2[indices[i]]);
+    }
+}
 
 Subset::Subset(int I, int J, PublicKey *publicKey, DataStructure *dataStructure) {
     this->index[0] = I;

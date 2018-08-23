@@ -20,9 +20,6 @@ class VerifyUnion {
 public:
     int m;
     PublicKey *pk;
-    std::vector<int> indices;
-    bn::Ec1 digest_U;
-    std::set<NTL::ZZ_p, ZZ_p_compare> union_ans;
     std::vector<NTL::ZZ_p> U;
     std::vector<std::vector<QueryNode>> tree;
 
@@ -30,6 +27,22 @@ public:
     bool verified_intersection();
     bool verified_union();
     bool verified_set();
+    bool verify_union();
+};
+
+
+class VerifyUnion2{
+public:
+    int m;
+    PublicKey *pk;
+    std::vector<int> indices, set_indices;
+    bn::Ec1 digest_U;
+    std::set<NTL::ZZ_p, ZZ_p_compare> union_ans;
+    std::vector<NTL::ZZ_p> U;
+    bn::Ec2 *W1[SETS_MAX_SIZE], *W2[SETS_MAX_NO];
+    bn::Ec1 AuthD[SETS_MAX_NO];
+    bool membershipwitness, supersetnesswitness;
+    VerifyUnion2(PublicKey*, std::set<NTL::ZZ_p, ZZ_p_compare>, bn::Ec2*[], bn::Ec2*[], bn::Ec1[], int, std::vector<int>, std::vector<int>);
     bool verify_union();
 };
 

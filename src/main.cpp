@@ -137,6 +137,73 @@ void test_union(int round, int size, int intersection_size, Key *k) {
     log_info("Union verification result:\t%x", b);
 }
 
+void test_union2(int round, int size, int intersection_size, Key *k) {
+    using namespace std::chrono;
+    high_resolution_clock::time_point t1, t3;
+    high_resolution_clock::time_point t2, t4;
+    t3 = high_resolution_clock::now();
+    //generate sets
+    DataStructure *dataStructure = new DataStructure(SETS_NO, k);
+
+    for (int i = 1; i <= intersection_size; i++) {
+        NTL::ZZ_p j = NTL::random_ZZ_p();
+        for (int set_index = 0; set_index < dataStructure->m; set_index++) {
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+
+    std::cout << size << "\t";
+    for (int set_index = 0; set_index < dataStructure->m; set_index++) {
+        for (int i = 1; i <= size - intersection_size; i++) {
+            NTL::ZZ_p j = NTL::random_ZZ_p();
+            dataStructure->insert(set_index, j, k->get_public_key(), k->get_secret_key());
+        }
+    }
+
+
+    t4 = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(t4 - t3).count();
+    std::cout << duration << "\t";
+
+    //query intersection
+    std::vector<int> v;
+    for (int set_index = 0; set_index < dataStructure->m; set_index++)
+        v.push_back(set_index);
+    t3 = high_resolution_clock::now();
+    Union2 *un = new Union2(v, k->get_public_key(), dataStructure);
+    un->unionSets();
+    t1 = high_resolution_clock::now();
+    un->membership_witness();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    std::cout << duration << "\t";
+
+    t1 = high_resolution_clock::now();
+    un->superset_witness();
+    t2 = high_resolution_clock::now();
+    t4 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    std::cout << duration << "\t";
+    duration = duration_cast<milliseconds>(t4 - t3).count();
+    std::cout << duration << "\t";
+    t1 = high_resolution_clock::now();
+    VerifyTree *verifyTree = new VerifyTree;
+    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    VerifyUnion2 *verifyUnion = new VerifyUnion2(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD,
+                                               dataStructure->m, v, un->set_indices);
+    verifyUnion->verify_union();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<milliseconds>(t2 - t1).count();
+    std::cout << duration << "\n";
+    bool b = verifyUnion->membershipwitness and verifyUnion->membershipwitness;
+    delete verifyTree;
+    delete verifyUnion;
+    delete un;
+    delete dataStructure;
+    log_info("Union verification time:\t%d", duration);
+    log_info("Union verification result:\t%x", b);
+}
+
 void test_difference(int round, int size, int intersection_size, Key *k) {
     using namespace std::chrono;
     high_resolution_clock::time_point t1, t3;
@@ -252,9 +319,9 @@ int main() {
 //            test_intersection(0, test_size, test_size / 10, k);
 
 //   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-   for (int test_size = 0; test_size <= 1000; test_size +=100)
-       for(int i = 0; i < 10; i++)
-           test_union(0, test_size, test_size/10, k);
+   for (int test_size = 10; test_size <= 10; test_size +=100)
+//       for(int i = 0; i < 10; i++)
+           test_union2(0, test_size, test_size/10, k);
 //    for (int test_size = 0; test_size <= 400; test_size +=200)
 //        for(int i = 0; i < 10; i++)
 //            test_subset(i, test_size, test_size / 10, k);

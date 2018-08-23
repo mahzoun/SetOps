@@ -37,6 +37,7 @@ ADD_EXECUTABLE(
         test.cpp
         intersection.cpp
         union.cpp
+        union2.cpp
         subset.cpp
         difference.cpp
         ${CMAKE_SOURCE_DIR}/ate-pairing/lib/libzm.a
