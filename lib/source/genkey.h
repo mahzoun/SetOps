@@ -19,16 +19,17 @@
 
 class SecretKey{
 public:
-    NTL::ZZ_p sk;
+    NTL::ZZ_p sk, a;
     SecretKey();
-    SecretKey(NTL::ZZ_p);
+    SecretKey(NTL::ZZ_p, NTL::ZZ_p);
 };
 
 class PublicKey{
 public:
     std::vector<bn::Ec1> pubs_g1;
     std::vector<bn::Ec2> pubs_g2;
-    std::vector<NTL::ZZ_p> pubs_s;
+    std::vector<bn::Ec1> pubs_ga1;
+    std::vector<bn::Ec2> pubs_ga2;
     bn::Ec1 g1;
     bn::Ec2 g2;
     PublicKey(NTL::ZZ p);

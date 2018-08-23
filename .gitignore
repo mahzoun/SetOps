@@ -31,10 +31,11 @@
 *.out
 *.app
 
+*.cbp
 *.log
 *.bin
 .idea
-
+doc*/
 ate-pairing/
 xbyak/
 cmake-build-debug/
