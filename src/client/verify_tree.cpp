@@ -9,15 +9,25 @@ VerifyTree::VerifyTree() {
 
 void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
-    for (unsigned int i = 0; i < v.size(); i++) {
-        if (!verifyNode(pk, sk, dataStructure, v)) {
-            verifiedtree = false;
-            return;
-        }
-    }
     int len = dataStructure->m;
     int depth = 0;
     NTL::ZZ_p s = sk->sk;
+    for(int i = 0; i < v.size(); i++){
+        NTL::ZZ_p val = s + v[i];
+        const char *val_str = utils.zToString(val);
+        const mie::Vuint temp(val_str);
+        free((char*)val_str);
+        bn::Ec1 value_ = dataStructure->AuthD[v[i]] * temp;
+        char* ec1str = utils.Ec1ToString(value_);
+        unsigned char *hash_ = new unsigned char[256];
+        utils.sha256(hash_, ec1str);
+        if (strcmp((char *) hash_, (char *) dataStructure->merkleTree->merkleNode[0][v[i]]->hash_) != 0) {
+            delete[] hash_;
+            return;
+        }
+        delete[] hash_;
+        free(ec1str);
+    }
     while (len > 1) {
         depth++;
         if (len % 2 == 0) {
@@ -62,19 +72,4 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
         len /= 2;
     }
     verifiedtree = true;
-}
-
-bool VerifyTree::verifyNode(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
-    Fp12 e1, e2;
-    for(unsigned int i = 0; i < v.size(); i++) {
-        Ec1 acci = dataStructure->AuthD[v[i]];
-        Ec1 dh = dataStructure->merkleTree->merkleNode[0][v[i]]->value_;
-        Ec2 gsgi = pk->pubs_g2[1] + pk->g2 * v[i];
-        opt_atePairing(e1, pk->g2, dh);
-        opt_atePairing(e2, gsgi, acci);
-        if(e1 != e2) {
-            return false;
-        }
-    }
-    return true;
 }
