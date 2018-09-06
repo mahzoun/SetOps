@@ -1,7 +1,7 @@
 # setops
  SetOps is a C++ library which allowing a data owner to outsource set operations on a collection of sets to an untrusted server where the correctness of operations can be verified publicly.
  
-##Authors.
+## Authors.
 
 [Dimitrios Papadopoulos](https://www.cse.ust.hk/~dipapado/) <br>
 [Mohammad Mahzoun](http://mahzoun.me/)
@@ -26,5 +26,5 @@ Download and install 2 and 3 from above list in the same directory as SetOps.
 
 TODO: Add API documentation.
 
-###License
+### License
 [Apache License 2.0](https://github.com/mahzoun/setops/blob/master/LICENSE)
