@@ -46,6 +46,24 @@ After creating a datastructure, a collection of `SETS_NO` sets will be created. 
 dataStructure->insert(i, j, pk, sk);
 // The NTL::ZZ_p j will be inserted to set i. pk and sk are public key and secret key
 ```
+
+### Intersection
+To query the intersection of sets, a client should do as follow:
+```cpp
+Intersection *intersection = new Intersection(indices, pk, dataStructure);
+intersection->intersect();
+intersection->subset_witness();
+intersection->completeness_witness();
+```
+The intersection result will be `intersection->I`.
+The client can verify the result as follow:
+```cpp
+VerifyTree *verifyTree = new VerifyTree;
+verifyTree->verifyTree(pk, dataStructure, indices);
+VerifyIntersection *verifyIntersection = new VerifyIntersection(intersection->I, intersection->W, intersection->Q,
+                                                                dataStructure->AuthD, dataStructure->m, incdices);
+bool b = verifyIntersection->verify_intersection();
+```
 <br>
 TODO: Add API documentation.
 
