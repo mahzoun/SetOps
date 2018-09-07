@@ -17,6 +17,7 @@
 #include "utils/dbg.h"
 #include <cstdlib>
 
+// Secret key class contains s, which is a random ZZ_p element
 class SecretKey{
 public:
     NTL::ZZ_p sk, a;
@@ -24,6 +25,7 @@ public:
     SecretKey(NTL::ZZ_p, NTL::ZZ_p);
 };
 
+//Public key contains the power of g1^s and g2^s where g1 and g2 are generators from ate-pairing library
 class PublicKey{
 public:
     std::vector<bn::Ec1> pubs_g1;
@@ -39,7 +41,7 @@ public:
 
 };
 
-
+//Key class which creates secret key and public key
 class Key{
 public:
     PublicKey* get_public_key();

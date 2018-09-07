@@ -71,6 +71,9 @@ PublicKey *Key::get_public_key() {
     return pk;
 }
 
+/*
+ * bn namespace is for curve initialization
+ */
 PublicKey::PublicKey(NTL::ZZ p) {
     using namespace bn;
     CurveParam cp = CurveFp254BNb;
@@ -87,6 +90,9 @@ PublicKey::~PublicKey() {
 //    delete();
 }
 
+/*
+ * Setup bilinear creates the powers of g1^s and g2^s
+ */
 void PublicKey::setup_bilinear(SecretKey *sk, bn::Ec1, bn::Ec2) {
     using namespace bn;
     using namespace NTL;
