@@ -11,7 +11,7 @@ of the system relies on known cryptographic assumptions such as bilinear q-stron
 Hellman.
 
 ## Build instruction
-SetOps use following libraries to run:
+SetOps uses following libraries to run:
 1. [openssl](https://www.openssl.org/)
 2. [ate-paring](https://github.com/herumi/ate-pairing)
 3. [xbyak](https://github.com/herumi/xbyak)
