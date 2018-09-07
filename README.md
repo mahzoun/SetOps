@@ -19,7 +19,7 @@ SetOps use following libraries to run:
 5. [gmp](https://gmplib.org/manual/C_002b_002b-Interface-General.html)
 
 
-Note: 2 and 3 from above list should be in the same directory as SetOps.
+Note: 2 and 3 from above list should be placed in the same directory as SetOps.
 <br>
 * To compile SetOps, do as follow:<br>
 ```cmake CmakeLists.txt```
@@ -28,7 +28,25 @@ Note: 2 and 3 from above list should be in the same directory as SetOps.
 ```make tests```
 
 ## Usage
+Generate keys:
+```asm
+NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
+NTL::ZZ_p::init(p);
+Key *k = new Key(p); 
+//k->sk is secret key and k->pk is public key
+```
 
+Create the data structure:
+```asm
+DataStructure *dataStructure = new DataStructure(SETS_NO, k);
+// SETS_NO is number of sets and k is the key
+```
+After creating a datastructure, a collection of `SETS_NO` sets will be created. Elements can be inserted to sets as follow:
+```asm
+dataStructure->insert(i, j, pk, sk);
+// The NTL::ZZ_p j will be inserted to set i. pk and sk are public key and secret key
+```
+<br>
 TODO: Add API documentation.
 
 ## Authors
