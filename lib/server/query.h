@@ -31,6 +31,12 @@ public:
     DataStructure *dataStructure;
 };
 
+/*
+ * The intersection class contains all functions and data needed to answer query
+ * I is the result of intersection
+ * indices is a vector of all sets in the query
+ * W array contains subset witnesses and Q contains completeness witnesses
+ */
 class Intersection : Query {
 public:
     std::set<NTL::ZZ_p, ZZ_p_compare> I;
@@ -46,15 +52,25 @@ public:
 
     ~Intersection();
 
+    // Compute the bezout coefficients
     void xgcdTree();
 
+    // Compute intersection
     void intersect();
 
+    // Compute subset witnesses
     void subset_witness();
 
+    // Compute completeness witnesses
     void completeness_witness();
 };
 
+/*
+ * The union class contains all functions and data needed to answer query
+ * U is the result of intersection
+ * indices is a vector of all sets in the query
+ * tree is a 2D vector containing the pointer to nodes of the tree
+ */
 class Union : Query {
 public:
     std::vector<int> indices, set_indices;
@@ -67,25 +83,35 @@ public:
 
     Union(std::vector<int>, PublicKey *, DataStructure *);
 
+    // calculate accumulation values for each set
     void setup_node(int, int);
 
+    // answer the query
     void unionSets();
 
 };
 
-class Union2: Query {
+class Union2 : Query {
 public:
     std::set<NTL::ZZ_p, ZZ_p_compare> U;
+    // set_indices stores the index of set for each member of U
     std::vector<int> indices, set_indices;
     NTL::vec_ZZ_p c;
+    // W1 is membership witness and W2 is superset
     bn::Ec2 *W1[SETS_MAX_SIZE];
     bn::Ec2 *W2[SETS_MAX_NO];
     NTL::ZZ_pX p;
+
     Union2();
-    Union2(std::vector<int>, PublicKey*, DataStructure*);
+
+    Union2(std::vector<int>, PublicKey *, DataStructure *);
+
     ~Union2();
+
     void unionSets();
+
     void membership_witness();
+
     void superset_witness();
 };
 
