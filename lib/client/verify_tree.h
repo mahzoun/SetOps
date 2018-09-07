@@ -15,6 +15,9 @@
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 
+/*
+ * The class to verify the integrity of the sets by using a Merkle tree
+ */
 class VerifyTree {
 public:
     static int m;

@@ -28,7 +28,8 @@ VerifyIntersection::~VerifyIntersection() {
 
 bool VerifyIntersection::verify_intersection() {
     using namespace ::bn;
-    Fp12 e1, e2, e3, e4, e5, e6, e7;
+    Fp12 e1, e2, e3, e4, e5;
+    // check subset witness
     for (unsigned int i = 0; i < indices.size(); i++) {
         opt_atePairing(e1, *W[indices[i]], digest_I);
         opt_atePairing(e2, pk->g2, AuthD[indices[i]]);
@@ -38,6 +39,7 @@ bool VerifyIntersection::verify_intersection() {
         }
     }
     subsetwitness = true;
+    //check completeness witness
     e3 = 1;
     opt_atePairing(e5, pk->g2, pk->g1);
     for (unsigned int i = 0; i < indices.size(); i++) {

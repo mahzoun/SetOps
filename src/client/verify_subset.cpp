@@ -24,18 +24,12 @@ void VerifySubset::verify_subset() {
         verified_subset = verifyNegetive();
 }
 
+// to verify positive answer, we have to check the correctness of subset witness as follow
 bool VerifySubset::verifyPositive() {
     using namespace bn;
     Fp12 e1, e2;
-//    PUT(I);
-//    PUT(J);
-//    PUT(*W);
-//    PUT(dataStructure->AuthD[J]);
-//    PUT(dataStructure->AuthD[I]);
     opt_atePairing(e1, *W, dataStructure->AuthD[J]);
     opt_atePairing(e2, pk->g2, dataStructure->AuthD[I]);
-//    PUT(e1);
-//    PUT(e2);
     if (e1 != e2) {
         verified_subset = false;
         return false;
@@ -43,11 +37,14 @@ bool VerifySubset::verifyPositive() {
     return true;
 }
 
+/*
+ * verify negative answer by checking that there is a member in J (y) which has empty intersection with I
+ */
 bool VerifySubset::verifyNegetive() {
     using namespace bn;
     Utils utils;
     Fp12 e1, e2, e3, e4, e5;
-    char* y_str = utils.zToString(y);
+    char *y_str = utils.zToString(y);
     const mie::Vuint temp(y_str);
     free(y_str);
     Ec1 gygs = pk->pubs_g1[1] + pk->g1 * temp;

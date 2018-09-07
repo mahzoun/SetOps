@@ -12,12 +12,14 @@ VerifyUnion::VerifyUnion(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> ans, s
     m = size;
 }
 
+//verification for the first type of union
 bool VerifyUnion::verify_union() {
     using namespace ::bn;
     bool b = verified_intersection() and verified_union() and verified_set();
     return b;
 }
 
+//check for each node, the correctness of the proof of intersection
 bool VerifyUnion::verified_intersection() {
     bool result = true;
     bn::Fp12 e1, e2, e3, e4, e5;
@@ -44,6 +46,7 @@ bool VerifyUnion::verified_intersection() {
     return result;
 }
 
+//check for each node, the correctness of the proof of union
 bool VerifyUnion::verified_union() {
     bool result = true;
     bn::Fp12 e1, e2;
@@ -59,6 +62,7 @@ bool VerifyUnion::verified_union() {
     return result;
 }
 
+//it's not needed, just checking the hash used by the method in https://eprint.iacr.org/2013/724.pdf
 bool VerifyUnion::verified_set() {
     bool result = true;
     bn::Fp12 e1, e2;
@@ -101,10 +105,13 @@ VerifyUnion2::VerifyUnion2(PublicKey *pk, std::set<NTL::ZZ_p, ZZ_p_compare> unio
     this->set_indices = set_indices;
 }
 
+
+//check union correctness
 bool VerifyUnion2::verify_union() {
     using namespace ::bn;
     Utils utils;
     Fp12 e1, e2, e3, e4;
+    // check each member of U is in one set
     for (unsigned int i = 0; i < U.size(); i++) {
         char *Ui_str = utils.zToString(U[i]);
         const mie::Vuint temp(Ui_str);
@@ -119,6 +126,7 @@ bool VerifyUnion2::verify_union() {
     }
     membershipwitness = true;
     opt_atePairing(e4, pk->g2, digest_U);
+    //check each set is subset of Union
     for (unsigned int i = 0; i < indices.size(); i++) {
         opt_atePairing(e3, *W2[indices[i]], AuthD[indices[i]]);
         if (e3 != e4) {

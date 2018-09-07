@@ -4,6 +4,7 @@
 
 #ifndef BILINEAR_VERIFY_INTERSECTION_H
 #define BILINEAR_VERIFY_INTERSECTION_H
+
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
 #include <NTL/ZZVec.h>
@@ -15,6 +16,11 @@
 #include "utils/utils.h"
 #include "utils/merkletree.h"
 
+/*
+ *  digest_I is the digest of intersection
+ *  W is subset witness
+ *  Q is completeness witness
+ */
 class VerifyIntersection {
 public:
     static int m;
@@ -26,8 +32,12 @@ public:
     bn::Ec1 *Q[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
     bool subsetwitness, completenesswitness;
-    VerifyIntersection(PublicKey*, std::set<NTL::ZZ_p, ZZ_p_compare>, bn::Ec2*[], bn::Ec1*[], bn::Ec1[], int, std::vector<int>);
+
+    VerifyIntersection(PublicKey *, std::set<NTL::ZZ_p, ZZ_p_compare>, bn::Ec2 *[], bn::Ec1 *[], bn::Ec1[], int,
+                       std::vector<int>);
+
     ~VerifyIntersection();
+
     bool verify_intersection();
 };
 

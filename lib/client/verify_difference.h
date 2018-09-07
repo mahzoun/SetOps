@@ -14,7 +14,11 @@
 #include "source/genkey.h"
 #include "server/query.h"
 #include "utils/utils.h"
-
+/*
+ * Verify difference
+ * D is the difference and I is W_i \ D
+ * *W and *Q are the witnesses to show that I is the intersection
+ */
 class VerifyDifference {
 public:
     PublicKey *pk;

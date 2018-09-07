@@ -26,37 +26,33 @@ bool VerifyDifference::verify_difference() {
     using namespace ::bn;
     verified_witness = false;
     Fp12 e1, e2, e3, e4, e5, e6, e7;
+    // check if D is subset of D[i]
     opt_atePairing(e1, *Wd, digest_D);
     opt_atePairing(e2, pk->g2, dataStructure->AuthD[index[0]]);
-//    PUT(e1);
-//    PUT(e2);
     if (e1 != e2) {
         verified_witness = false;
         return false;
     }
+    //prove subset witness (show that I is the intersectio)
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
         opt_atePairing(e1, *W[i], digest_I);
         opt_atePairing(e2, pk->g2, dataStructure->AuthD[index[i]]);
-//        PUT(e1);
-//        PUT(e2);
         if (e1 != e2) {
             verified_witness = false;
             return false;
         }
     }
+    // prove completeness witness
     e3 = 1;
     opt_atePairing(e5, pk->g2, pk->g1);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
         opt_atePairing(e4, *W[i], *Q[i]);
         e3 *= e4;
     }
-//    PUT(e3);
-//    PUT(e5);
     if (e3 != e5) {
         verified_witness = false;
         return false;
     }
     verified_witness = true;
-//    PUT(verified_witness);
     return verified_witness;
 }
