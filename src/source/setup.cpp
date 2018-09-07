@@ -10,6 +10,9 @@ DataStructure::DataStructure() {
     this->merkleTree = nullptr;
 }
 
+/*
+ * Create a merkle tree on top of sets when creating datastructure
+ */
 DataStructure::DataStructure(int size, Key *key) {
     debug("Generating datastructure with %d sets", size);
     this->m = size;
@@ -20,7 +23,9 @@ DataStructure::DataStructure(int size, Key *key) {
 DataStructure::~DataStructure() {
     delete merkleTree;
 }
-
+/*
+ * setup will compute accumulation value for each set and calculate merkle tree nodes
+ */
 void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     Utils utils;
     NTL::ZZ_p s = sk->sk;
@@ -37,6 +42,11 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
     merkleTree->build(this, pk, sk);
 }
 
+
+/*
+ * insert updates the accumulation value and update the merkle tree
+ * to update accumulation valuel we multiply it by (sk + element)
+ */
 void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKey *sk) {
     Utils utils;
     try {

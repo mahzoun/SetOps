@@ -20,11 +20,15 @@
 #include "utils/merkletree.h"
 
 #define SETS_MAX_NO 2000
-#define MERKLE_TREE_DEG 2
-
 
 class MerkleTree;
 
+/*
+ * DataStructure class is a class in source which contains set collection and basic algorithms on set like
+ * insertion and deletion
+ * The accumulation value for each set is a member of EC and stores in AuthD array
+ * Sets are std::set<ZZ_p, cmp> which cmp is a comparison function between ZZ_p elements
+ */
 class DataStructure {
 public:
     int m;
@@ -41,8 +45,6 @@ public:
 
     std::set<NTL::ZZ_p, ZZ_p_compare> D[SETS_MAX_NO];
     bn::Ec1 AuthD[SETS_MAX_NO];
-//    bn::Ec2 AuthD2[SETS_MAX_NO];
-//    bn::Ec2 AuthD2p[SETS_MAX_NO];
     MerkleTree *merkleTree;
 private:
     void setup(PublicKey *, SecretKey *);
