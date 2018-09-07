@@ -1,20 +1,18 @@
 # SetOps
-##Overview
+## Overview
 SetOps is a C++ library which allows a data owner to outsource set operations on a collection of sets to an untrusted server where the correctness of operations can be verified publicly based on the algorithms described [1](https://eprint.iacr.org/2013/724.pdf) and [2](https://eprint.iacr.org/2010/455.pdf).
 SetOps library consists of three main components, a
-source which owns a dynamic sets of a specified domain, a powerful server which handles
+source which owns set collection, a server which handles
 queries on the sets and clients which are interested to query operations and verify the
 answer without accessing to any secret data. SetOps supports primitive set operations
 like intersection, union, subset and set difference on large sets and benefits the small proof
-size and fast verification time, both of which depends only on the number of sets. These
-operations are building blocks of more complicated systems. In fact, the primitive set
-queries can extend to handle database queries or many other applications. The security
+size and fast verification time, both of which depends only on the number of sets. The security
 of the system relies on known cryptographic assumptions such as bilinear q-strong Diffie-
 Hellman.
 
 ## Build instruction
 SetOps use following libraries to run:
-1. openssl
+1. [openssl](https://www.openssl.org/)
 2. [ate-paring](https://github.com/herumi/ate-pairing)
 3. [xbyak](https://github.com/herumi/xbyak)
 4. [NTL](http://www.shoup.net/ntl/doc/tour.html)
@@ -29,7 +27,7 @@ Note: 2 and 3 from above list should be in the same directory as SetOps.
 * Run tests: <br>
 ```make tests```
 
-##Usage
+## Usage
 
 TODO: Add API documentation.
 
