@@ -29,7 +29,7 @@ Note: 2 and 3 from above list should be placed in the same directory as SetOps.
 
 ## Usage
 Generate keys:
-```asm
+```cpp
 NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
 NTL::ZZ_p::init(p);
 Key *k = new Key(p); 
@@ -37,12 +37,12 @@ Key *k = new Key(p);
 ```
 
 Create the data structure:
-```asm
+```cpp
 DataStructure *dataStructure = new DataStructure(SETS_NO, k);
 // SETS_NO is number of sets and k is the key
 ```
 After creating a datastructure, a collection of `SETS_NO` sets will be created. Elements can be inserted to sets as follow:
-```asm
+```cpp
 dataStructure->insert(i, j, pk, sk);
 // The NTL::ZZ_p j will be inserted to set i. pk and sk are public key and secret key
 ```
