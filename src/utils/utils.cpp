@@ -7,7 +7,7 @@
 using namespace NTL;
 using namespace bn;
 
-
+// return true iff rhs < lhs
 bool ZZ_p_compare::operator()(const NTL::ZZ_p &rhs, const NTL::ZZ_p &lhs) const {
     Utils utils;
     char *s1 = utils.zToString(rhs);
@@ -18,18 +18,21 @@ bool ZZ_p_compare::operator()(const NTL::ZZ_p &rhs, const NTL::ZZ_p &lhs) const 
     return b;
 }
 
+// use string stream to convert Ec1 to string
 char *Utils::Ec1ToString(Ec1 z) {
     std::stringstream buffer;
     buffer << z;
     return strdup(buffer.str().c_str());
 }
 
+// use string stream to convert Ec2 to string
 char *Utils::Ec2ToString(Ec2 z) {
     std::stringstream buffer;
     buffer << z;
     return strdup(buffer.str().c_str());
 }
 
+// compute digest using public key
 bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection, const bn::Ec1 g1, PublicKey *pk) {
     std::vector<NTL::ZZ_p> array(intersection.begin(), intersection.end());
     Ec1 digest = g1 * 0;
@@ -43,6 +46,7 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     for (unsigned int i = 0; i < array.size(); i++)
         c[i] = conv<ZZ_p>(-array[i]);
     BuildFromRoots(poly, c);
+    //compute digest in the following loop
     for (unsigned int i = 0; i < array.size() + 1; i++) {
         char *str = zToString(poly[i]);
         const mie::Vuint temp(str);
@@ -52,6 +56,7 @@ bn::Ec1 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     return digest;
 }
 
+//compute accumulation of a set = g * (s + x1)(s + x2)...(s + xn)
 bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::Ec1 g1, SecretKey *sk) {
     Ec1 digest = g1 * 1;
     if (set.size() == 0)
@@ -67,6 +72,7 @@ bn::Ec1 Utils::compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare> set, const bn::E
     return digest;
 }
 
+// compute digest using public key
 bn::Ec2 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection, const bn::Ec2 g2, PublicKey *pk) {
     std::vector<NTL::ZZ_p> array(intersection.begin(), intersection.end());
     Ec2 digest = g2 * 0;
@@ -80,6 +86,7 @@ bn::Ec2 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     for (unsigned int i = 0; i < array.size(); i++)
         c[i] = conv<ZZ_p>(-array[i]);
     BuildFromRoots(poly, c);
+    //compute digest in the following loop
     for (unsigned int i = 0; i < array.size() + 1; i++) {
         char *str = zToString(poly[i]);
         const mie::Vuint temp(str);
@@ -89,6 +96,7 @@ bn::Ec2 Utils::compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> intersection
     return digest;
 }
 
+// compute digest*a using public key
 bn::Ec2 Utils::compute_digest_puba(std::set<NTL::ZZ_p, ZZ_p_compare> intersection, const bn::Ec2 g2, PublicKey *pk) {
     std::vector<NTL::ZZ_p> array(intersection.begin(), intersection.end());
     Ec2 digest = g2 * 0;
@@ -119,6 +127,8 @@ char *Utils::concat(const char *s1, const char *s2) {
     return result;
 }
 
+//outputBuffer = sha256(string)
+//TODO the value is octect, it should be decimal
 void Utils::sha256(unsigned char *outputBuffer, char *string) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;

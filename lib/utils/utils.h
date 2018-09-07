@@ -19,26 +19,49 @@
 #include "bn.h"
 
 class SecretKey;
+
 class PublicKey;
 
+//class to compare two ZZ_p elements
 class ZZ_p_compare {
 public:
-    bool operator()(const NTL::ZZ_p&, const NTL::ZZ_p&) const;
+    bool operator()(const NTL::ZZ_p &, const NTL::ZZ_p &) const;
 };
 
 class Utils {
 public:
+    //compute the digest of a set with access to secret key
     bn::Ec1 compute_digest(std::set<NTL::ZZ_p, ZZ_p_compare>, const bn::Ec1, SecretKey *);
-    bn::Ec1 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> , const bn::Ec1, PublicKey *);
-    bn::Ec2 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare> , const bn::Ec2, PublicKey *);
-    bn::Ec2 compute_digest_puba(std::set<NTL::ZZ_p, ZZ_p_compare> , const bn::Ec2, PublicKey *);
-    char* Ec1ToString(bn::Ec1);
-    char* Ec2ToString(bn::Ec2);
-    char* concat(const char*, const char*);
-    void sha256(unsigned char*, char*);
-    NTL::ZZ_p StringToz(char*);
-    char* zToString(NTL::ZZ_p&);
-    char* zToString(const NTL::ZZ_p&);
+
+    //compute the digest of a set with no access to secret key (Ec1)
+    bn::Ec1 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare>, const bn::Ec1, PublicKey *);
+
+    //compute the digest of a set with no access to secret key (Ec2)
+    bn::Ec2 compute_digest_pub(std::set<NTL::ZZ_p, ZZ_p_compare>, const bn::Ec2, PublicKey *);
+
+    //compute the digest*a of a set with no access to secret key (Ec2)
+    bn::Ec2 compute_digest_puba(std::set<NTL::ZZ_p, ZZ_p_compare>, const bn::Ec2, PublicKey *);
+
+    //convert elements in Ec1 to string
+    char *Ec1ToString(bn::Ec1);
+
+    //convert elements in Ec2 to string
+    char *Ec2ToString(bn::Ec2);
+
+    //return a char* which is the concatenation of two inputs
+    char *concat(const char *, const char *);
+
+    //compute the hash of second argument and write it to first argument
+    void sha256(unsigned char *, char *);
+
+    //convert strings to ZZ_p
+    NTL::ZZ_p StringToz(char *);
+
+    //convert ZZ_p to char*
+    char *zToString(NTL::ZZ_p &);
+
+    //convert const ZZ_p to char*
+    char *zToString(const NTL::ZZ_p &);
 };
 
 #endif //BILINEAR_UTILS_H

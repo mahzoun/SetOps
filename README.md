@@ -98,6 +98,10 @@ verifyUnion->verify_union;
 
 ### Subset and Set Difference
 You can find examples of these query usages in `main.cpp`
+
+#### Notes
+* undef `NODEBUG` to active debug mode
+
 ## Authors
 
 [Dimitrios Papadopoulos](https://www.cse.ust.hk/~dipapado/) <br>

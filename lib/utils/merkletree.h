@@ -23,13 +23,18 @@
 
 class DataStructure;
 
+/*
+ * A node for tree contains the hash_ and child pointers
+ * value_ used to store the values for leafs and its null for internal nodes
+ */
 class MerkleNode {
 public:
     int col, row;
     MerkleNode *left_, *right_;
     unsigned char *hash_;
     bn::Ec1 value_;
-    MerkleNode(bn::Ec1 &value){
+
+    MerkleNode(bn::Ec1 &value) {
         value_ = value;
         left_ = nullptr;
         right_ = nullptr;
@@ -37,9 +42,9 @@ public:
     }
 
     MerkleNode(MerkleNode *left, MerkleNode *right) {
-            left_ = left;
-            right_ = right;
-            hash_ = new unsigned char[256];
+        left_ = left;
+        right_ = right;
+        hash_ = new unsigned char[256];
     }
 
     ~MerkleNode() {
@@ -48,31 +53,41 @@ public:
     }
 
     char *hash() const {
-        return (char*)hash_;
+        return (char *) hash_;
     }
 
     bool hasChildren() const {
         return left_ || right_;
     }
 
-    const MerkleNode * left() const {
+    const MerkleNode *left() const {
         return left_;
     }
-    const MerkleNode * right() const {
+
+    const MerkleNode *right() const {
         return right_;
     }
 };
 
-class MerkleTree{
+/*
+ * Store the pointer to each node in a 2D array for easier traversal
+ * tree[i][j] is the father of tree[i-1][2j] and tree[i-1][2j+1]
+ */
+class MerkleTree {
 public:
     int size;
     int depth;
     MerkleNode *merkleNode[SETS_MAX_NO][SETS_MAX_NO];
+
     MerkleTree();
-    MerkleTree(int, DataStructure*, PublicKey*, SecretKey*);
+
+    MerkleTree(int, DataStructure *, PublicKey *, SecretKey *);
+
     ~MerkleTree();
-    void build(DataStructure*, PublicKey*, SecretKey*);
-    void update(DataStructure*, PublicKey*, SecretKey*, int);
+
+    void build(DataStructure *, PublicKey *, SecretKey *);
+
+    void update(DataStructure *, PublicKey *, SecretKey *, int);
 };
 
 
