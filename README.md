@@ -93,8 +93,11 @@ VerifyTree *verifyTree = new VerifyTree;
 verifyTree->verifyTree(pk, dataStructure, indices);
 VerifyUnion2 *verifyUnion = new VerifyUnion2(pk, un->U, un->W1, un->W2, dataStructure->AuthD,
                                            dataStructure->m, v, un->set_indices);
-verifyUnion->verify_union();
+verifyUnion->verify_union;
 ```
+
+### Subset and Set Difference
+You can find examples of these query usages in `main.cpp`
 ## Authors
 
 [Dimitrios Papadopoulos](https://www.cse.ust.hk/~dipapado/) <br>
