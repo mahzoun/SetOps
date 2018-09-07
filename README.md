@@ -65,8 +65,36 @@ VerifyIntersection *verifyIntersection = new VerifyIntersection(intersection->I,
 bool b = verifyIntersection->verify_intersection();
 ```
 <br>
-TODO: Add API documentation.
 
+### Union
+The SetOps supports two types of union query, the first one is by [1](https://eprint.iacr.org/2013/724.pdf) and fast. It
+works as follow:
+```cpp
+Union *un = new Union(indices, pk, dataStructure);
+un->unionSets();
+```
+The union is `un->U` and the verification is as follow:
+```cpp
+VerifyTree *verifyTree = new VerifyTree;
+verifyTree->verifyTree(pk, dataStructure, indices);
+VerifyUnion *verifyUnion = new VerifyUnion(pk, un->U, un->tree, dataStructure->m, un->set_indices);
+bool b = verifyUnion->verify_union();
+```
+Second union method by [2](https://eprint.iacr.org/2010/455.pdf) works as follow:
+```cpp
+Union2 *un = new Union2(indices, pk, dataStructure);
+un->unionSets();
+un->membership_witness();
+un->superset_witness();
+```
+The verification of the above query is as follow:
+```cpp
+VerifyTree *verifyTree = new VerifyTree;
+verifyTree->verifyTree(pk, dataStructure, indices);
+VerifyUnion2 *verifyUnion = new VerifyUnion2(pk, un->U, un->W1, un->W2, dataStructure->AuthD,
+                                           dataStructure->m, v, un->set_indices);
+verifyUnion->verify_union();
+```
 ## Authors
 
 [Dimitrios Papadopoulos](https://www.cse.ust.hk/~dipapado/) <br>
