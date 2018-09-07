@@ -115,6 +115,9 @@ public:
     void superset_witness();
 };
 
+/*
+ * check if index[1] is the subset of index[0]
+ */
 class Subset : Query {
 public:
     bool answer;
@@ -138,6 +141,10 @@ public:
     void negativeWitness();
 };
 
+/*
+ * This class contains the functions and data needed to prove difference queries
+ * D is the difference and I is the W_i \ D which we want to prove is the intersection
+ */
 class Difference : Query {
 public:
     std::set<NTL::ZZ_p, ZZ_p_compare> D, I;

@@ -332,7 +332,7 @@ void Union2::membership_witness() {
     }
 }
 
-//Compute superset witness for each set 
+//Compute superset witness for each set
 void Union2::superset_witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w;
@@ -376,6 +376,7 @@ Subset::~Subset() {
         delete Q[i];
 }
 
+//check if J is subset of I
 void Subset::subset() {
     debug("Subet query: Is %d subset of %d?", index[1], index[0]);
     std::set<NTL::ZZ_p, ZZ_p_compare>::iterator first1, last1, first2, last2;
@@ -398,6 +399,7 @@ void Subset::subset() {
     debug("%d is subset of %d", index[1], index[0]);
 }
 
+// compute witness for positive answer
 void Subset::positiveWitness() {
     if (!answer)
         return;
@@ -424,6 +426,7 @@ void Subset::positiveWitness() {
     DEBUG2INDEX("Subset witness for sets", index[0], index[1], *W);
 }
 
+// compute witness for negative answer
 void Subset::negativeWitness() {
     if (answer)
         return;
@@ -448,6 +451,7 @@ void Subset::negativeWitness() {
         free(str);
         digest = digest + pk->pubs_g2[j] * temp;
     }
+    // Prove that y is in J
     *W = digest;
     DEBUG("Membership Witness of y", *W);
     w.clear();
@@ -475,6 +479,7 @@ void Subset::negativeWitness() {
         *Q[i] = digest1;
         DEBUGINDEX("(Subset Query) Completeness witness for set ", i, *Q[i]);
     }
+    // witnesses to show that y is not in I
 }
 
 Difference::Difference(int indices[], PublicKey *pk, DataStructure *dataStructure) {
@@ -502,6 +507,7 @@ Difference::~Difference() {
     delete Wd;
 }
 
+//compute the difference
 void Difference::difference() {
     debug("calculate difference of %d and %d", index[0], index[1]);
     set_difference(dataStructure->D[index[0]].begin(), dataStructure->D[index[0]].end(),
@@ -517,6 +523,7 @@ void Difference::difference() {
 void Difference::witness() {
     Utils utils;
     std::vector<NTL::ZZ_p> w;
+    //compute the digest of D
     for (auto p: I)
         w.push_back(p);
     c.SetLength(w.size());
@@ -534,6 +541,7 @@ void Difference::witness() {
         digest = digest + pk->pubs_g2[j] * temp;
     }
     *Wd = digest;
+    //Prove that W_i \ D is the intersection by computing the witnesses
     DEBUG("Witness of difference result", *Wd);
     for (int i = 0; i < SMALL_QUERY_SIZE; i++) {
         w.clear();
