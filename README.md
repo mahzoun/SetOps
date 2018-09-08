@@ -59,7 +59,7 @@ The intersection result will be `intersection->I`.
 The client can verify the result as follow:
 ```cpp
 VerifyTree *verifyTree = new VerifyTree;
-verifyTree->verifyTree(pk, dataStructure, indices);
+verifyTree->verifyTree(dataStructure, indices);
 VerifyIntersection *verifyIntersection = new VerifyIntersection(intersection->I, intersection->W, intersection->Q,
                                                                 dataStructure->AuthD, dataStructure->m, incdices);
 bool b = verifyIntersection->verify_intersection();
@@ -76,7 +76,7 @@ un->unionSets();
 The union is `un->U` and the verification is as follow:
 ```cpp
 VerifyTree *verifyTree = new VerifyTree;
-verifyTree->verifyTree(pk, dataStructure, indices);
+verifyTree->verifyTree(dataStructure, indices);
 VerifyUnion *verifyUnion = new VerifyUnion(pk, un->U, un->tree, dataStructure->m, un->set_indices);
 bool b = verifyUnion->verify_union();
 ```
@@ -90,7 +90,7 @@ un->superset_witness();
 The verification of the above query is as follow:
 ```cpp
 VerifyTree *verifyTree = new VerifyTree;
-verifyTree->verifyTree(pk, dataStructure, indices);
+verifyTree->verifyTree(dataStructure, indices);
 VerifyUnion2 *verifyUnion = new VerifyUnion2(pk, un->U, un->W1, un->W2, dataStructure->AuthD,
                                            dataStructure->m, v, un->set_indices);
 verifyUnion->verify_union;
