@@ -29,7 +29,6 @@ class DataStructure;
  */
 class MerkleNode {
 public:
-    int col, row;
     MerkleNode *left_, *right_;
     unsigned char *hash_;
     bn::Ec1 value_;
@@ -55,18 +54,6 @@ public:
     char *hash() const {
         return (char *) hash_;
     }
-
-    bool hasChildren() const {
-        return left_ || right_;
-    }
-
-    const MerkleNode *left() const {
-        return left_;
-    }
-
-    const MerkleNode *right() const {
-        return right_;
-    }
 };
 
 /*
@@ -81,13 +68,13 @@ public:
 
     MerkleTree();
 
-    MerkleTree(int, DataStructure *, PublicKey *, SecretKey *);
+    MerkleTree(int, PublicKey *);
 
     ~MerkleTree();
 
-    void build(DataStructure *, PublicKey *, SecretKey *);
+    void build(DataStructure *, SecretKey *);
 
-    void update(DataStructure *, PublicKey *, SecretKey *, int);
+    void update(DataStructure *, int);
 };
 
 

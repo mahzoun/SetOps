@@ -16,7 +16,7 @@ DataStructure::DataStructure() {
 DataStructure::DataStructure(int size, Key *key) {
     debug("Generating datastructure with %d sets", size);
     this->m = size;
-    this->merkleTree = new MerkleTree(m, this, key->get_public_key(), key->get_secret_key());
+    this->merkleTree = new MerkleTree(m, key->get_public_key());
     setup(key->get_public_key(), key->get_secret_key());
 }
 
@@ -39,7 +39,7 @@ void DataStructure::setup(PublicKey *pk, SecretKey *sk) {
 //        DEBUGINDEX("Authenticated value for set ", i, AuthD2[i]);
     }
 //    free((char *) a_str);
-    merkleTree->build(this, pk, sk);
+    merkleTree->build(this, sk);
 }
 
 
@@ -58,7 +58,7 @@ void DataStructure::insert(int index, NTL::ZZ_p element, PublicKey *pk, SecretKe
         free((char *) temp1_str);
         AuthD[index] *= temp;
         DEBUGINDEX("Authenticated value of ", index, AuthD[index]);
-        merkleTree->update(this, pk, sk, index);
+        merkleTree->update(this, index);
     }
     catch (std::exception &e) {
         log_err("Error happened in insert to set function");

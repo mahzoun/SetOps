@@ -9,7 +9,7 @@ MerkleTree::MerkleTree() {
 }
 
 //initialize each pointer in tree to nullptr
-MerkleTree::MerkleTree(int size, DataStructure *dataStructure, PublicKey *pk, SecretKey *sk) {
+MerkleTree::MerkleTree(int size, PublicKey *pk) {
     for (int i = 0; i < SETS_MAX_NO; i++)
         for (int j = 0; j < SETS_MAX_NO; j++)
             merkleNode[i][j] = nullptr;
@@ -30,7 +30,7 @@ MerkleTree::~MerkleTree() {
             }
 }
 
-void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk) {
+void MerkleTree::build(DataStructure *dataStructure, SecretKey *sk) {
     Utils utils;
     NTL::ZZ_p s = sk->sk;
     this->size = dataStructure->m;
@@ -79,7 +79,7 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
 }
 
 //update the path from index to root
-void MerkleTree::update(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk, int index) {
+void MerkleTree::update(DataStructure *dataStructure, int index) {
     Utils utils;
     this->size = dataStructure->m;
     merkleNode[0][index]->value_ = dataStructure->AuthD[index];
