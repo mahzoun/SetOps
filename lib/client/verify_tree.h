@@ -25,7 +25,7 @@ public:
     bool verifiedtree;
     std::set<int> I;
     VerifyTree();
-    void verifyTree(PublicKey*, SecretKey *sk, DataStructure *, std::vector<int>);
+    void verifyTree(DataStructure *, std::vector<int>);
 };
 
 #endif //BILINEAR_VERIFY_TREE_H

@@ -65,7 +65,7 @@ void test_intersection(int round, int size, int intersection_size, Key *k) {
     //verify intersection
     t1 = high_resolution_clock::now();
     VerifyTree *verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
 //    log_info("Tree verification result:\t%x", verifyTree->verifiedtree);
     VerifyIntersection *verifyIntersection = new VerifyIntersection(k->get_public_key(),
                                                                     intersection->I, intersection->W, intersection->Q,
@@ -123,7 +123,7 @@ void test_union(int round, int size, int intersection_size, Key *k) {
     std::cout << duration << "\t";
     t1 = high_resolution_clock::now();
     VerifyTree *verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     VerifyUnion *verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     t2 = high_resolution_clock::now();
@@ -188,7 +188,7 @@ void test_union2(int round, int size, int intersection_size, Key *k) {
     std::cout << duration << "\t";
     t1 = high_resolution_clock::now();
     VerifyTree *verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     VerifyUnion2 *verifyUnion = new VerifyUnion2(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD,
                                                dataStructure->m, v, un->set_indices);
     verifyUnion->verify_union();

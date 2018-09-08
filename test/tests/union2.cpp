@@ -61,7 +61,7 @@ TEST_F(Union2Test, TwoSets) {
     un->membership_witness();
     un->superset_witness();
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     verifyUnion2 = new VerifyUnion2(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
                                   un->set_indices);
     bool b = verifyUnion2->verify_union();
@@ -78,7 +78,7 @@ TEST_F(Union2Test, WrongMembershipWitness) {
     un->membership_witness();
     un->superset_witness();
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     *(un->W1[0]) *= 2;
     verifyUnion2 = new VerifyUnion2(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
                                   un->set_indices);
@@ -96,7 +96,7 @@ TEST_F(Union2Test, WrongSupersetWitness) {
     un->membership_witness();
     un->superset_witness();
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     *(un->W2[0]) *= 2;
     verifyUnion2 = new VerifyUnion2(k->get_public_key(), un->U, un->W1, un->W2, dataStructure->AuthD, dataStructure->m, v,
                                   un->set_indices);
@@ -127,7 +127,7 @@ TEST_F(Union2Test, MultipleSetsEvenindices) {
     for (int set_index = 0; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union2(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
@@ -162,7 +162,7 @@ TEST_F(Union2Test, MultipleSetsOddindices) {
     for (int set_index = 1; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union2(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();
@@ -196,7 +196,7 @@ TEST_F(Union2Test, MultipleSets3kIndices) {
     for (int set_index = 0; set_index < dataStructure->m; set_index += 3)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union2(v, k->get_public_key(), dataStructure);
     un->unionSets();
     un->membership_witness();

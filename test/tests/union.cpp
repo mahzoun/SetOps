@@ -59,7 +59,7 @@ TEST_F(UnionTest, TwoSets) {
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
     EXPECT_TRUE(b);
@@ -71,7 +71,7 @@ TEST_F(UnionTest, WrongAccWitnessLeaf) {
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un->tree[0][0].F2 *= 2;
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
     bool b = verifyUnion->verify_union();
@@ -99,7 +99,7 @@ TEST_F(UnionTest, MultipleSetsEvenindices) {
     for (int set_index = 0; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
@@ -129,7 +129,7 @@ TEST_F(UnionTest, MultipleSetsOddindices) {
     for (int set_index = 1; set_index < dataStructure->m; set_index += 2)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);
@@ -158,7 +158,7 @@ TEST_F(UnionTest, MultipleSets3kIndices) {
     for (int set_index = 0; set_index < dataStructure->m; set_index += 3)
         v.push_back(set_index);
     verifyTree = new VerifyTree;
-    verifyTree->verifyTree(k->get_public_key(), k->get_secret_key(), dataStructure, v);
+    verifyTree->verifyTree(dataStructure, v);
     un = new Union(v, k->get_public_key(), dataStructure);
     un->unionSets();
     verifyUnion = new VerifyUnion(k->get_public_key(), un->U, un->tree, dataStructure->m, un->set_indices);

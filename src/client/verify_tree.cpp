@@ -10,13 +10,12 @@ VerifyTree::VerifyTree() {
 }
 
 // Verify the integrity of the sets v
-void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStructure, std::vector<int> v) {
+void VerifyTree::verifyTree(DataStructure *dataStructure, std::vector<int> v) {
     Utils utils;
     int len = dataStructure->m;
     int depth = 0;
-    NTL::ZZ_p s = sk->sk;
     // for each set in v, calculate the hash value
-    for (int i = 0; i < v.size(); i++) {
+    for (unsigned int i = 0; i < v.size(); i++) {
         bn::Ec1 value_ = dataStructure->AuthD[v[i]];
         char *ec1str = utils.Ec1ToString(value_);
         unsigned char *hash_ = new unsigned char[256];
