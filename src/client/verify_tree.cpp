@@ -17,14 +17,10 @@ void VerifyTree::verifyTree(PublicKey *pk, SecretKey *sk, DataStructure *dataStr
     NTL::ZZ_p s = sk->sk;
     // for each set in v, calculate the hash value
     for (int i = 0; i < v.size(); i++) {
-        NTL::ZZ_p val = s + v[i];
-        const char *val_str = utils.zToString(val);
-        const mie::Vuint temp(val_str);
-        free((char *) val_str);
-        bn::Ec1 value_ = dataStructure->AuthD[v[i]] * temp;
+        bn::Ec1 value_ = dataStructure->AuthD[v[i]];
         char *ec1str = utils.Ec1ToString(value_);
         unsigned char *hash_ = new unsigned char[256];
-        utils.sha256(hash_, ec1str);
+        utils.sha256(hash_, ec1str, v[i]);
         if (strcmp((char *) hash_, (char *) dataStructure->merkleTree->merkleNode[0][v[i]]->hash_) != 0) {
             delete[] hash_;
             return;

@@ -127,6 +127,17 @@ char *Utils::concat(const char *s1, const char *s2) {
     return result;
 }
 
+void Utils::sha256(unsigned char *outputBuffer, char *string , int index) {
+    char *idx = new char[SET_NO_LEN];
+    char *string1 = new char[strlen(string) + SET_NO_LEN + 1];
+    sprintf(idx, "%d", index);
+    strcpy(string1, string);
+    strcat(string1, idx);
+    sha256(outputBuffer, string1);
+    delete[] string1;
+    delete[] idx;
+}
+
 //outputBuffer = sha256(string)
 //TODO the value is octect, it should be decimal
 void Utils::sha256(unsigned char *outputBuffer, char *string) {

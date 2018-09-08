@@ -18,6 +18,9 @@
 #include "source/genkey.h"
 #include "bn.h"
 
+#define SET_MAX_NO 2000
+#define SET_NO_LEN 12
+
 class SecretKey;
 
 class PublicKey;
@@ -53,6 +56,8 @@ public:
 
     //compute the hash of second argument and write it to first argument
     void sha256(unsigned char *, char *);
+    //compute the hash of second argument and write it to first argument, this function is used by merkle tree to hash leafes
+    void sha256(unsigned char *, char *, int);
 
     //convert strings to ZZ_p
     NTL::ZZ_p StringToz(char *);

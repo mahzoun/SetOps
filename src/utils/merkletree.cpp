@@ -36,13 +36,9 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
     this->size = dataStructure->m;
     //compute the value and hash for each leaf; leaf i is corresponding node for set i
     for (int i = 0; i < size; i++) {
-        NTL::ZZ_p val = s + i;
-        const char *val_str = utils.zToString(val);
-        const mie::Vuint temp(val_str);
-        free((char *) val_str);
-        merkleNode[0][i]->value_ = dataStructure->AuthD[i] * temp;
+        merkleNode[0][i]->value_ = dataStructure->AuthD[i];
         char *ec1str = utils.Ec1ToString(merkleNode[0][i]->value_);
-        utils.sha256(merkleNode[0][i]->hash_, ec1str);
+        utils.sha256(merkleNode[0][i]->hash_, ec1str, i);
         free(ec1str);
     }
 
@@ -85,15 +81,10 @@ void MerkleTree::build(DataStructure *dataStructure, PublicKey *pk, SecretKey *s
 //update the path from index to root
 void MerkleTree::update(DataStructure *dataStructure, PublicKey *pk, SecretKey *sk, int index) {
     Utils utils;
-    NTL::ZZ_p s = sk->sk;
     this->size = dataStructure->m;
-    NTL::ZZ_p val = s + index;
-    char *val_str = utils.zToString(val);
-    const mie::Vuint temp(val_str);
-    free(val_str);
-    merkleNode[0][index]->value_ = dataStructure->AuthD[index] * temp;
+    merkleNode[0][index]->value_ = dataStructure->AuthD[index];
     char *ec1str = utils.Ec1ToString(merkleNode[0][index]->value_);
-    utils.sha256(merkleNode[0][index]->hash_, ec1str);
+    utils.sha256(merkleNode[0][index]->hash_, ec1str, index);
     free(ec1str);
     debug("Hash value of leaf %d in depth %d is updated to %s", index, depth, merkleNode[0][index]->hash_);
     int len = size;

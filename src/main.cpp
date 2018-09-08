@@ -314,14 +314,14 @@ int main() {
     auto duration = duration_cast<milliseconds>(t2 - t1).count();
     log_info("Key generation time:\t%d", duration);
 //    std::cerr<<"size\tsetup\tsubet\tcompleteness\ttotal\n";
-//    for (int test_size = 10; test_size <= 10; test_size +=500)
+    for (int test_size = 10; test_size <= 10; test_size +=500)
 //        for(int i = 0; i < 10; i++)
-//            test_intersection(0, test_size, test_size / 10, k);
+            test_intersection(0, test_size, test_size / 10, k);
 
 //   std::cerr<<"size\tsetup\tmembership\tsuperset_witness\ttotal\n";
-   for (int test_size = 10; test_size <= 10; test_size +=100)
+//   for (int test_size = 10; test_size <= 10; test_size +=100)
 //       for(int i = 0; i < 10; i++)
-           test_union2(0, test_size, test_size/10, k);
+//           test_union2(0, test_size, test_size/10, k);
 //    for (int test_size = 0; test_size <= 400; test_size +=200)
 //        for(int i = 0; i < 10; i++)
 //            test_subset(i, test_size, test_size / 10, k);
