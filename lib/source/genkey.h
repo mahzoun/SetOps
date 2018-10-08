@@ -5,17 +5,17 @@
 #ifndef BILINEAR_GENKEY_H
 #define BILINEAR_GENKEY_H
 
-#include <NTL/ZZ.h>
-#include <NTL/ZZ_p.h>
 #include <openssl/sha.h>
+#include <NTL/ZZ_p.h>
+#include <NTL/ZZ.h>
 #include <exception>
+#include <cstdlib>
 #include <vector>
 #include <string>
-#include "bn.h"
 #include "test_point.hpp"
 #include "utils/utils.h"
 #include "utils/dbg.h"
-#include <cstdlib>
+#include "bn.h"
 
 using namespace std;
 
