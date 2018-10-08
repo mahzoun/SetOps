@@ -5,42 +5,32 @@
 #include "source/genkey.h"
 
 #define SETS_MAX_SIZE 10000
-#define MAX_SIZE_LG 20
 #define NODEBUG
+#define PRIME_NUM "16798108731015832284940804142231733909759579603404752749028378864165570215949"
+
+using namespace NTL;
+using namespace bn;
+using namespace std;
 
 Key::Key() {
-    NTL::ZZ p = NTL::conv<NTL::ZZ>("16798108731015832284940804142231733909759579603404752749028378864165570215949");
-    NTL::ZZ_p::init(p);
-    NTL::ZZ_p temp(0);
-    random(temp);
-    NTL::ZZ_p temp1(0);
-    random(temp1);
-    this->sk = new SecretKey(temp, temp1);
-    log_info("Secret Key Generated");
+    ZZ p = conv<ZZ>(PRIME_NUM);
+    ZZ_p::init(p);
     genkey(p);
 }
 
-Key::Key(NTL::ZZ p) {
-    NTL::ZZ_p::init(p);
-    NTL::ZZ_p temp(0);
-    random(temp);
-    NTL::ZZ_p temp1(0);
-    random(temp1);
-    this->sk = new SecretKey(temp, temp1);
-    log_info("Secret Key Generated");
+Key::Key(ZZ p) {
+    ZZ_p::init(p);
     genkey(p);
 }
 
-void Key::genkey(NTL::ZZ p) {
+void Key::genkey(ZZ p) {
+    create_secret_key();
     create_public_key(sk, p);
-    log_info("Public Key Generated");
 }
 
 Key::~Key() {
-    if (sk)
-        delete (sk);
-    if (pk)
-        delete (pk);
+    delete (sk);
+    delete (pk);
 }
 
 SecretKey *Key::get_secret_key() {
@@ -52,10 +42,19 @@ void Key::create_public_key(SecretKey *sk, NTL::ZZ p) {
         PublicKey *key = new PublicKey(p);
         key->setup_bilinear(sk, key->g1, key->g2);
         pk = key;
+        log_info("Public Key Generated");
     }
-    catch (std::exception &e) {
-        std::cout << e.what() << '\n';
+    catch (exception &e) {
+        cout << e.what() << '\n';
     }
+}
+
+void Key::create_secret_key() {
+    NTL::ZZ_p tempS(0), tempA(0);
+    random(tempS);
+    random(tempA);
+    this->sk = new SecretKey(tempS, tempA);
+    log_info("Secret Key Generated");
 }
 
 SecretKey::SecretKey() {
